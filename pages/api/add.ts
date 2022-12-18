@@ -7,7 +7,7 @@ async function add(req: NextApiRequest, res: NextApiResponse) {
   const database = client.db("db1");
   const phone = database.collection("computer");
   const result = await phone.insertOne(data);
-  res.json({ result });
+  res.json({ data });
 }
 
 export default add;

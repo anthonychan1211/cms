@@ -4,6 +4,7 @@ import styled from "styled-components";
 const StyledPartition = styled.div`
   padding: 5px 40px;
   border-right: 1px solid black;
+  box-sizing: border-box;
   height: 100vh;
   button {
     width: 150px;
@@ -30,48 +31,31 @@ const StyledPartition = styled.div`
 `;
 
 const StyledCollection = styled.div`
-  padding: 10px 30px;
-  border-radius: 8px;
-  box-sizing: border-box;
-  font-size: 15px;
-  :hover {
-    background-color: #eee;
-    cursor: pointer;
-    /* border: 2px solid var(--dark-blue); */
+  * {
+    padding: 10px 30px;
+    width: 150px;
+    height: 50px;
+    border-radius: 8px;
+    font-size: 15px;
+    box-sizing: border-box !important;
+    margin-block: 2px;
+    :hover {
+      cursor: pointer;
+      outline: 2px solid #eee;
+      box-sizing: border-box;
+    }
   }
 `;
 
-const currentCollection = () => {
-  const [collection, setCollection] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await fetch("/api/fetchCollection", {
-        method: "GET",
-      });
-      const data = await result.json();
-      console.log(typeof data);
-      setCollection(data.results);
-    };
-    fetchData();
-  }, []);
-  console.log(collection);
-  console.log(collection.length);
-  const displayCollection = collection.map((data: any) => {
-    return <StyledCollection>{data.name}</StyledCollection>;
-  });
-
+const CurrentCollection = ({ data }: any) => {
   return (
     <StyledPartition>
       <button>+ Add Collection</button>
-      {/* {collection.length > 0 ? (
-        { displayCollection }
-      ) : (
-        <p className="no-collection">Add you first collection!</p>
-      )} */}
-      {displayCollection}
+      <StyledCollection>
+        {data.length > 0 ? data : <p>Add your first collection!</p>}
+      </StyledCollection>
     </StyledPartition>
   );
 };
 
-export default currentCollection;
+export default CurrentCollection;

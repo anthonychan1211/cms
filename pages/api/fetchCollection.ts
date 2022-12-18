@@ -3,12 +3,12 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 async function fetchCollection(req: NextApiRequest, res: NextApiResponse) {
   const client = await clientPromise;
-  const db = client.db("db1");
-  const collections = await db.listCollections().toArray();
 
+  const reqDB = req.query.db;
+  const db = client.db(reqDB as string);
+  const collections = await db.listCollections().toArray();
   const results = JSON.parse(JSON.stringify(collections));
-  console.log(results);
-  res.send({ results });
+  res.json({ results });
 }
 
 export default fetchCollection;

@@ -2,6 +2,7 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import Header from "./components/Header";
 import { createGlobalStyle } from "styled-components";
+import CurrentCollection from "./components/CurrentCollection";
 const GlobalStyles = createGlobalStyle`
   html {
     --light-blue: #c9d3ef;
@@ -28,13 +29,30 @@ const GlobalStyles = createGlobalStyle`
   a:hover{
     text-decoration: underline;
   }
+  button {
+    width: 150px;
+    justify-self: end;
+    align-self: center;
+    border: none;
+    background-color: var(--light-blue);
+    color: var(--black);
+    font-size: 15px;
+    border-radius: 10px;
+    height: 40px;
+    :hover {
+      box-sizing: border-box;
+      box-shadow: 0px 0px 3px black;
+    }
+    :active {
+      box-shadow: none;
+    }
+  }
 `;
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <GlobalStyles />
-      <Header />
       <Component {...pageProps} />
     </>
   );

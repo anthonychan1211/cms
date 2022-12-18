@@ -6,7 +6,7 @@ const StyledHeader = styled.div`
   grid-template-columns: 5fr 1fr 1fr;
   justify-content: space-between;
   padding: 0px 50px;
-  border-bottom: 8px solid black;
+  border-bottom: 8px solid var(--black);
   h1 {
     font-size: 30px;
   }
