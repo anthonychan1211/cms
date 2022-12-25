@@ -1,9 +1,9 @@
-import clientPromise from "../../lib/mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
+import clientPromise from "../../lib/mongodb";
 
-async function queryDocument(req: NextApiRequest, res: NextApiResponse) {
+async function signUp(req: NextApiRequest, res: NextApiResponse) {
   const client = await clientPromise;
-  const reqDoc = req.query.query;
+  const reqDoc = req.body;
   const reqDB = req.query.userDB;
   const db = client.db(reqDB as string);
   const data = await db
@@ -13,4 +13,4 @@ async function queryDocument(req: NextApiRequest, res: NextApiResponse) {
   res.send(data);
 }
 
-export default queryDocument;
+export default signUp;

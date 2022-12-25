@@ -41,19 +41,63 @@ const StyledCollection = styled.div`
     margin-block: 2px;
     :hover {
       cursor: pointer;
-      outline: 2px solid #eee;
+      outline: 2px solid var(--light-grey);
       box-sizing: border-box;
     }
   }
+  button {
+    display: inline;
+    width: 150px;
+    margin: 0;
+    padding: 0;
+  }
 `;
 
-const CurrentCollection = ({ data }: any) => {
+const StyledNewCollection = styled.input`
+  height: 50px;
+  width: 150px;
+  font-size: 15px;
+  padding-inline: 30px;
+  border-radius: 8px;
+`;
+const CurrentCollection = ({ data, userDB }: any) => {
+  const [showAddForm, setShowAddForm] = useState(false);
+  function handleClick() {
+    setShowAddForm(!showAddForm);
+  }
+
+  async function addCollection(e: any) {
+    e.preventDefault();
+    const newCollection = document.querySelector("input").value;
+    console.log(newCollection);
+    const res = await fetch(`http://localhost:3000/api/addCollection`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        newCollection: newCollection,
+        userDB,
+      }),
+    });
+    const data = await res.json();
+    console.log(data);
+
+    window.location.reload();
+    return data;
+  }
   return (
     <StyledPartition>
-      <button>+ Add Collection</button>
+      <button onClick={handleClick}>+ Add Collection</button>
       <StyledCollection>
         {data.length > 0 ? data : <p>Add your first collection!</p>}
       </StyledCollection>
+      {showAddForm ? (
+        <form onSubmit={addCollection} className="add-form">
+          <StyledNewCollection type="text"></StyledNewCollection>
+          <button type="submit">Add</button>
+        </form>
+      ) : null}
     </StyledPartition>
   );
 };

@@ -4,11 +4,15 @@ import Header from "./components/Header";
 import { createGlobalStyle } from "styled-components";
 import CurrentCollection from "./components/CurrentCollection";
 const GlobalStyles = createGlobalStyle`
+:root{
+  --column-number: 0;
+}
   html {
     --light-blue: #c9d3ef;
+
     --dark-blue: #5c6486;
     --black: #414141;
-    --offWhite: #ededed;
+    --light-grey: #eee;
     --bs: 0 12px 24px 0 rgba(0,0,0,0.09);
     box-sizing: border-box;
   }

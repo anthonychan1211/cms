@@ -2,47 +2,84 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 
 const NewEntry = styled.button`
-  margin: 20px 40px;
+  margin-right: 20px;
+  margin-top: 20px;
   float: right;
 `;
-const StyledHeader = styled.div`
+const DeleteCollection = styled.button`
+  margin-top: 20px;
+  margin-right: 40px;
+  float: right;
+  color: white;
+  background-color: #ff0000;
+`;
+const StyledDocument = styled.div`
   display: grid;
-  grid-auto-flow: column;
-  width: 60%;
+  grid-template-columns: repeat(var(--column-number), minmax(auto, 1fr));
+  overflow: hidden;
   text-align: center;
   justify-content: space-evenly;
   margin: 10px 90px;
+  * {
+    border-bottom: 1px solid var(--black);
+    margin: 0;
+    padding-inline: 10px;
+  }
+  .header {
+    background-color: var(--light-blue);
+    border-bottom: 2px solid var(--black);
+  }
+  p {
+    font-size: 15px;
+  }
+  .row {
+    display: contents;
+    :hover * {
+      cursor: pointer;
+      background-color: var(--light-grey);
+    }
+  }
 `;
-const Document = ({ header, values }: any) => {
-  //   console.log(typeof data);
-  //   const mappedData = data.forEach((item: any) => {
-  //     <div>{item.name}</div>;
-  //   });
+const Document = ({ header, values, collectionName }: any) => {
   const mappedHeader =
     header.length > 0
       ? header.map((el: any) => {
-          return <p>{el}</p>;
+          return <p className="header">{el}</p>;
         })
       : "";
-  console.log(values);
+
   const mappedValues =
     values.length > 0
       ? values.map((item: any) => {
           return (
-            <StyledHeader>
+            <div className="row">
               {item.map((el: any) => {
-                return <p>{el}</p>;
+                return <p className="data">{el}</p>;
               })}
-            </StyledHeader>
+            </div>
           );
         })
       : "";
-  console.log(mappedValues);
   return (
     <div>
-      <NewEntry>+ Add New Entry</NewEntry>
-      <StyledHeader>{mappedHeader}</StyledHeader>
-      {mappedValues}
+      {collectionName ? (
+        <div>
+          <DeleteCollection>Delete Collection</DeleteCollection>
+          {mappedHeader ? (
+            <NewEntry>+ Add New Entry</NewEntry>
+          ) : (
+            <NewEntry>+ Add Header</NewEntry>
+          )}
+        </div>
+      ) : null}
+
+      <h1 className="document-collection-name">{collectionName}</h1>
+      {mappedValues ? (
+        <StyledDocument>
+          {mappedHeader}
+          {mappedValues}
+        </StyledDocument>
+      ) : null}
     </div>
   );
 };

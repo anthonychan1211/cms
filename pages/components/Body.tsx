@@ -7,26 +7,37 @@ const StyledBody = styled.div`
   display: grid;
   grid-template-columns: 1fr 5fr;
 `;
-const Body = ({ collections, paramDB }: any) => {
+const Body = ({ collections, userDB }: any) => {
   const [query, setQuery] = useState("");
-  const [header, setHeader] = useState("");
+  const [header, setHeader] = useState<string[]>([]);
   const [doc, setDoc] = useState("");
   const handleClick = (e: any) => {
     const clickedTarget = e.currentTarget;
     for (const child of clickedTarget.parentElement.children) {
       child.style.backgroundColor = "white";
     }
-    clickedTarget.style.backgroundColor = "#eee";
+    clickedTarget.style.backgroundColor = "var(--light-grey)";
     setQuery(clickedTarget.innerText);
   };
+
+  // onClick Effect
   useEffect(() => {
     const data = getDocument(query);
     data.then((res) => {
-      res.forEach((item: any) => {
-        const header = Object.keys(item);
-        setHeader(header);
-      });
-      let values = [];
+      // get header
+      res.length > 0
+        ? res.forEach((item: any) => {
+            const header = Object.keys(item);
+            setHeader(header);
+            // setting header column
+            document.documentElement.style.setProperty(
+              "--column-number",
+              header.length.toString()
+            );
+          })
+        : setHeader([]);
+      // get document data
+      let values: any = [];
       res.forEach((item: any) => {
         values.push(Object.values(item));
       });
@@ -43,7 +54,7 @@ const Body = ({ collections, paramDB }: any) => {
       `http://localhost:3000/api/queryDocument/?` +
         new URLSearchParams({
           query,
-          paramDB,
+          userDB,
         }),
       {
         method: "GET",
@@ -51,14 +62,13 @@ const Body = ({ collections, paramDB }: any) => {
     );
     const data = await res.json();
 
-    // working on showing data
     return data;
   }
 
   return (
     <StyledBody>
-      <CurrentCollection data={mappedCollections} />
-      <Document header={header} values={doc} />
+      <CurrentCollection data={mappedCollections} userDB={userDB} />
+      <Document header={header} values={doc} collectionName={query} />
     </StyledBody>
   );
 };
