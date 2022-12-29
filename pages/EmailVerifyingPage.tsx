@@ -26,7 +26,7 @@ const EmailVerifyingPage = () => {
         console.log(userId, token);
         if (userId && token) {
           const data = await fetch(
-            `http://localhost:3000/api/verifyEmail?` +
+            `/api/verifyEmail?` +
               new URLSearchParams({
                 userId,
                 token,

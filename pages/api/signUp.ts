@@ -39,17 +39,14 @@ async function signUp(req: NextApiRequest, res: NextApiResponse) {
     await tokenCollection.insertOne(emailVerificationToken);
 
     const url = `${process.env.BASE_URI}/?userId=${emailVerificationToken.userEmail}&token=${emailVerificationToken.token}`;
-    const confirmationEmailRes = await fetch(
-      "http://localhost:3000/api/sendConfirmationEmail",
-      {
-        method: "POST",
-        body: JSON.stringify({
-          userEmail: newUser.email,
-          subject: "Verify your email for CMS",
-          text: `Please click the following url to verify your email to activate your account: ${url}`,
-        }),
-      }
-    );
+    const confirmationEmailRes = await fetch("/api/sendConfirmationEmail", {
+      method: "POST",
+      body: JSON.stringify({
+        userEmail: newUser.email,
+        subject: "Verify your email for CMS",
+        text: `Please click the following url to verify your email to activate your account: ${url}`,
+      }),
+    });
     if (confirmationEmailRes.status === 200) {
       const feedBack = await confirmationEmailRes.text();
       console.log(feedBack);
