@@ -164,9 +164,9 @@ const login = () => {
         errorTextBox.style.transform = "translateY(0)";
       }
       if (res.status === 200) {
-        const { feedBack } = await res.json();
+        const feedBack = await res.text();
         if (feedBack) {
-          registerButton.innerText = `Email has sent to ${feedBack.accepted}`;
+          registerButton.innerText = feedBack;
           registerButton.classList.add("shown");
         }
       }

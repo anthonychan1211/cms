@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "../../lib/mongodb";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
-import JWT from "jsonwebtoken";
 
 async function signUp(req: NextApiRequest, res: NextApiResponse) {
   const client = await clientPromise;
@@ -47,14 +46,14 @@ async function signUp(req: NextApiRequest, res: NextApiResponse) {
         body: JSON.stringify({
           userEmail: newUser.email,
           subject: "Verify your email for CMS",
-          text: `Please click the following url to verify your email to activate your account:
-        ${url}`,
+          text: `Please click the following url to verify your email to activate your account: ${url}`,
         }),
       }
     );
     if (confirmationEmailRes.status === 200) {
-      const feedBack = await confirmationEmailRes.json();
-      res.json({ feedBack });
+      const feedBack = await confirmationEmailRes.text();
+      console.log(feedBack);
+      res.send(feedBack);
     } else if (confirmationEmailRes.status >= 400) {
       res.status(400).send("Something is wrong");
     }
