@@ -138,7 +138,7 @@ const login = () => {
       registerButton.innerText = "Loading...";
       registerButton.setAttribute("disabled", "");
       // Api fetching to sign up
-      const res = await fetch("http://localhost:3000/api/signUp", {
+      const res = await fetch("/api/signUp", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
