@@ -7,7 +7,7 @@ const StyledBody = styled.div`
   display: grid;
   grid-template-columns: 1fr 5fr;
 `;
-const Body = ({ collections, userDB }: any) => {
+const Body = ({ collections = [], userDB }: any) => {
   const [query, setQuery] = useState("");
   const [header, setHeader] = useState<string[]>([]);
   const [doc, setDoc] = useState("");
@@ -22,47 +22,54 @@ const Body = ({ collections, userDB }: any) => {
 
   // onClick Effect
   useEffect(() => {
-    const data = getDocument(query);
-    data.then((res) => {
-      // get header
-      res.length > 0
-        ? res.forEach((item: any) => {
-            const header = Object.keys(item);
-            setHeader(header);
-            // setting header column
-            document.documentElement.style.setProperty(
-              "--column-number",
-              header.length.toString()
-            );
-          })
-        : setHeader([]);
-      // get document data
-      let values: any = [];
-      res.forEach((item: any) => {
-        values.push(Object.values(item));
+    if (query) {
+      const data = getDocument(query);
+
+      data.then((res) => {
+        // get header
+        res.length > 0
+          ? res.forEach((item: any) => {
+              const header = Object.keys(item);
+              setHeader(header);
+              // setting header column
+              document.documentElement.style.setProperty(
+                "--column-number",
+                header.length.toString()
+              );
+            })
+          : setHeader([]);
+        // get document data
+        let values: any = [];
+        res.forEach((item: any) => {
+          values.push(Object.values(item));
+        });
+        setDoc(values);
       });
-      setDoc(values);
-    });
+    }
   }, [query]);
 
   const mappedCollections = collections.map((el: any) => (
-    <p onClick={handleClick}>{el.name}</p>
+    <p id={el.name} onClick={handleClick}>
+      {el.name}
+    </p>
   ));
 
   async function getDocument(query: any) {
-    const res = await fetch(
-      `http://localhost:3000/api/queryDocument/?` +
-        new URLSearchParams({
-          query,
-          userDB,
-        }),
-      {
-        method: "GET",
-      }
-    );
-    const data = await res.json();
+    if (query) {
+      const res = await fetch(
+        `http://localhost:3000/api/queryDocument/?` +
+          new URLSearchParams({
+            query,
+            userDB,
+          }),
+        {
+          method: "GET",
+        }
+      );
+      const data = await res.json();
 
-    return data;
+      return data;
+    }
   }
 
   return (

@@ -13,14 +13,14 @@ export default function authMiddleware(
     return;
   }
 
-  try {
-    const token = authorization.replace("Bearer ", "");
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
-    next();
-  } catch (error) {
-    res.status(401).send("Unauthorized");
-  }
+  //   try {
+  //     const token = authorization.replace("Bearer ", "");
+  //     const decoded = jwt.verify(token, provess.env.JWT_SECRET);
+  //     req.user = decoded;
+  //     next();
+  //   } catch (error) {
+  //     res.status(401).send("Unauthorized");
+  //   }
 }
 export const config = {
   matcher: ["/api/login"],

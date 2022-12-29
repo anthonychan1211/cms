@@ -60,7 +60,7 @@ const StyledNewCollection = styled.input`
   padding-inline: 30px;
   border-radius: 8px;
 `;
-const CurrentCollection = ({ data, userDB }: any) => {
+const CurrentCollection = ({ data = [], userDB }: any) => {
   const [showAddForm, setShowAddForm] = useState(false);
   function handleClick() {
     setShowAddForm(!showAddForm);

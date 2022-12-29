@@ -40,7 +40,7 @@ const StyledDocument = styled.div`
     }
   }
 `;
-const Document = ({ header, values, collectionName }: any) => {
+const Document = ({ header = [], values = [], collectionName }: any) => {
   const mappedHeader =
     header.length > 0
       ? header.map((el: any) => {
