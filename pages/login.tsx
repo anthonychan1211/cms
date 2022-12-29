@@ -25,7 +25,7 @@ export default function Home({ data }: any) {
   );
 }
 
-export async function getServerSideProps(context: any) {
+export async function getStaticProps(context: any) {
   const client = await clientPromise;
   const db = client.db(userDB);
   const collections = await db.listCollections().toArray();
