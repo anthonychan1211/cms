@@ -43,11 +43,11 @@ const GlobalStyles = createGlobalStyle`
     font-size: 15px;
     border-radius: 10px;
     height: 40px;
-    :hover {
+    :hover:not([disabled]) {
       box-sizing: border-box;
       box-shadow: 0px 0px 3px black;
     }
-    :active {
+    :active:not([disabled]){
       box-shadow: none;
     }
   }

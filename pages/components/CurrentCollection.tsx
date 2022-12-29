@@ -68,7 +68,7 @@ const CurrentCollection = ({ data, userDB }: any) => {
 
   async function addCollection(e: any) {
     e.preventDefault();
-    const newCollection = document.querySelector("input").value;
+    const newCollection = document.querySelector("input")!.value;
     console.log(newCollection);
     const res = await fetch(`http://localhost:3000/api/addCollection`, {
       method: "POST",
