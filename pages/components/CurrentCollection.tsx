@@ -70,7 +70,7 @@ const CurrentCollection = ({ data = [], userDB }: any) => {
     e.preventDefault();
     const newCollection = document.querySelector("input")!.value;
     console.log(newCollection);
-    const res = await fetch(`http://localhost:3000/api/addCollection`, {
+    const res = await fetch(`/api/addCollection`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -81,7 +81,6 @@ const CurrentCollection = ({ data = [], userDB }: any) => {
       }),
     });
     const data = await res.json();
-    console.log(data);
 
     window.location.reload();
     return data;

@@ -57,7 +57,7 @@ const Body = ({ collections = [], userDB }: any) => {
   async function getDocument(query: any) {
     if (query) {
       const res = await fetch(
-        `http://localhost:3000/api/queryDocument/?` +
+        `/api/queryDocument/?` +
           new URLSearchParams({
             query,
             userDB,
