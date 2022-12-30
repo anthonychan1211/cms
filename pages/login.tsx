@@ -15,8 +15,7 @@ export default function Home({ data }: any) {
     (a: dataObject, b: dataObject) =>
       a.name.charCodeAt(0) - b.name.charCodeAt(0)
   );
-  console.log(data);
-  console.log(sortedData);
+
   return (
     <>
       <Header />

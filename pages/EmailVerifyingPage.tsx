@@ -48,7 +48,7 @@ const EmailVerifyingPage = () => {
       }
     };
     verifyEmailUrl();
-    setTimeout(() => router.push("/login"), 300000);
+    setTimeout(() => router.push("/login"), 3000);
   }, [query]);
 
   return (

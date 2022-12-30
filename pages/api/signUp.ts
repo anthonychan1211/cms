@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "../../lib/mongodb";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
+import sendConfirmationEmail from "./sendConfirmationEmail";
 
 async function signUp(req: NextApiRequest, res: NextApiResponse) {
   const client = await clientPromise;
@@ -37,23 +38,22 @@ async function signUp(req: NextApiRequest, res: NextApiResponse) {
     };
     const tokenCollection = db.collection("token");
     await tokenCollection.insertOne(emailVerificationToken);
-
+    // sending email function
     const url = `${process.env.BASE_URI}/?userId=${emailVerificationToken.userEmail}&token=${emailVerificationToken.token}`;
-    const confirmationEmailRes = await fetch("/api/sendConfirmationEmail", {
-      method: "POST",
-      body: JSON.stringify({
-        userEmail: newUser.email,
-        subject: "Verify your email for CMS",
-        text: `Please click the following url to verify your email to activate your account: ${url}`,
-      }),
-    });
-    if (confirmationEmailRes.status === 200) {
-      const feedBack = await confirmationEmailRes.text();
-      console.log(feedBack);
-      res.send(feedBack);
-    } else if (confirmationEmailRes.status >= 400) {
-      res.status(400).send("Something is wrong");
-    }
+    const result = await sendConfirmationEmail(
+      newUser.email,
+      "Verify your email for CMS",
+      `Please click the following url to verify your email to activate your account: ${url}`
+    );
+    console.log(result, 123);
+    res.status(200).send(`Email has sent to 
+    ${newUser.email}. 
+    Please verify.`);
+    // if (!!result) {
+    //   res.send(message);
+    // } else if (confirmationEmailRes.status >= 400) {
+    //   res.status(400).send("Something is wrong");
+    // }
   }
 }
 

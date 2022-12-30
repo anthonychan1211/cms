@@ -80,6 +80,9 @@ const StyledBody = styled.div`
   .shown {
     background-color: green;
     color: white;
+    padding: 10px;
+    height: fit-content;
+    transition: all 0.3s;
   }
 `;
 const login = () => {
@@ -165,6 +168,7 @@ const login = () => {
       }
       if (res.status === 200) {
         const feedBack = await res.text();
+        console.log(feedBack);
         if (feedBack) {
           registerButton.innerText = feedBack;
           registerButton.classList.add("shown");
