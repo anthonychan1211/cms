@@ -13,7 +13,7 @@ const StyledPage = styled.div`
   }
 `;
 
-const EmailVerifyingPage = () => {
+const emailVerifyingPage = () => {
   const [validUrl, setValidUrl] = useState(true);
   const router = useRouter();
   const { query } = useRouter();
@@ -66,4 +66,4 @@ const EmailVerifyingPage = () => {
   );
 };
 
-export default EmailVerifyingPage;
+export default emailVerifyingPage;
