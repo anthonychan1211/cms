@@ -3,6 +3,7 @@ import clientPromise from "../../lib/mongodb";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
 import sendConfirmationEmail from "./sendConfirmationEmail";
+import sgMail from "@sendgrid/mail";
 
 async function signUp(req: NextApiRequest, res: NextApiResponse) {
   const client = await clientPromise;
@@ -40,15 +41,29 @@ async function signUp(req: NextApiRequest, res: NextApiResponse) {
     await tokenCollection.insertOne(emailVerificationToken);
     // sending email function
     const url = `${process.env.BASE_URI}/?userId=${emailVerificationToken.userEmail}&token=${emailVerificationToken.token}`;
-    const result = await sendConfirmationEmail(
-      newUser.email,
-      "Verify your email for CMS",
-      `Please click the following url to verify your email to activate your account: ${url}`
-    );
-    console.log(result, 123);
-    res.status(200).send(`Email has sent to 
+    // *******************************SendGrid
+    const sgApiKey = process.env.SENDGRID_API_KEY;
+    sgMail.setApiKey(sgApiKey!);
+
+    try {
+      await sgMail.send({
+        to: newUser.email,
+        from: `Anthony Chan <${process.env.SENDER_EMAIL}>`,
+        subject: "Verify your email",
+        text: `Please verify your email by clicking the following link:
+        ${url}`,
+      });
+      res.status(200).send(`Email has sent to 
     ${newUser.email}. 
     Please verify.`);
+    } catch (error: any) {
+      console.error(error);
+
+      if (error.response) {
+        res.status(400).send(error.response.body);
+      }
+    }
+
     // if (!!result) {
     //   res.send(message);
     // } else if (confirmationEmailRes.status >= 400) {
