@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "../../lib/mongodb";
 import JWT from "jsonwebtoken";
+import Cookies from "js-cookie";
 const verifyEmail = async (req: NextApiRequest, res: NextApiResponse) => {
   const userToken = { userId: req.query.userId, token: req.query.token };
   const client = await clientPromise;
@@ -34,7 +35,8 @@ const verifyEmail = async (req: NextApiRequest, res: NextApiResponse) => {
   const jsToken = await JWT.sign({ userEmail: userToken.userId }, secret, {
     expiresIn: 30000000,
   });
-  console.log(jsToken);
+  Cookies.set("jwt", jsToken, { httpOnly: true });
+
   res.status(200).json(jsToken);
 };
 

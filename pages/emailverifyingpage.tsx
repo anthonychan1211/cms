@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
-import Cookies from "js-cookie";
 const StyledPage = styled.div`
   text-align: center;
   margin-top: 100px;
@@ -36,9 +35,7 @@ const emailverifyingpage = () => {
             }
           );
           const result = await data.json();
-          console.log(result);
-          //   save token onto client's browser
-          Cookies.set("jwt", result, { httpOnly: true });
+
           setValidUrl(true);
           return;
         }
