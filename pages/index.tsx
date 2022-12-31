@@ -85,7 +85,7 @@ const StyledBody = styled.div`
     transition: all 0.3s;
   }
 `;
-const login = () => {
+const index = () => {
   // Handle tab swtich
   const [shown, setShown] = useState("Sign In");
   const passwordLength = 6;
@@ -243,4 +243,4 @@ const login = () => {
   );
 };
 
-export default login;
+export default index;

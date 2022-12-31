@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
@@ -13,7 +13,7 @@ const StyledPage = styled.div`
   }
 `;
 
-const emailVerifyingPage = () => {
+const emailverifyingpage = () => {
   const [validUrl, setValidUrl] = useState(true);
   const router = useRouter();
   const { query } = useRouter();
@@ -66,4 +66,4 @@ const emailVerifyingPage = () => {
   );
 };
 
-export default emailVerifyingPage;
+export default emailverifyingpage;
