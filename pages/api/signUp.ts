@@ -13,7 +13,6 @@ async function signUp(req: NextApiRequest, res: NextApiResponse) {
     password: req.body.password,
     verified: false,
   };
-  const secret = process.env.JWT_SECRET as string;
   const db = client.db("cms-user");
   // check if the email has been registered or project name is taken
   const userCollection = db.collection("user");
@@ -34,12 +33,13 @@ async function signUp(req: NextApiRequest, res: NextApiResponse) {
     await userCollection.insertOne(newUser);
     const emailVerificationToken = {
       userEmail: newUser.email,
+      project: newUser.projectName,
       token: crypto.randomBytes(32).toString("hex"),
     };
     const tokenCollection = db.collection("token");
     await tokenCollection.insertOne(emailVerificationToken);
     // sending email function
-    const url = `${process.env.BASE_URI}/?userId=${emailVerificationToken.userEmail}&token=${emailVerificationToken.token}`;
+    const url = `${process.env.BASE_URI}/emailverifyingpage/?userId=${emailVerificationToken.userEmail}&projectName=${emailVerificationToken.project}&token=${emailVerificationToken.token}`;
     // *******************************SendGrid
     const sgApiKey = process.env.SENDGRID_API_KEY;
     sgMail.setApiKey(sgApiKey!);
@@ -62,12 +62,6 @@ async function signUp(req: NextApiRequest, res: NextApiResponse) {
         res.status(400).send(error.response.body);
       }
     }
-
-    // if (!!result) {
-    //   res.send(message);
-    // } else if (confirmationEmailRes.status >= 400) {
-    //   res.status(400).send("Something is wrong");
-    // }
   }
 }
 

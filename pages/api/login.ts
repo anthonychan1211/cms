@@ -1,4 +1,3 @@
-import { ClientRequest } from "http";
 import { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "../../lib/mongodb";
 import bcrypt from "bcrypt";

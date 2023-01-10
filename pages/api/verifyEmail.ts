@@ -1,7 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "../../lib/mongodb";
 import JWT from "jsonwebtoken";
-import Cookies from "js-cookie";
+import cookie from "cookie";
+
 const verifyEmail = async (req: NextApiRequest, res: NextApiResponse) => {
   const userToken = { userId: req.query.userId, token: req.query.token };
   const client = await clientPromise;
@@ -19,7 +20,6 @@ const verifyEmail = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(400).json({ Error: "Invalid Link" });
   } else {
     // if both are correct, then delete the document in token-collection and verify the user in user-collection
-    console.log("found token and user");
     const userCollection = client.db("cms-user").collection("user");
     await userCollection.updateOne(
       { email: userToken.userId },
@@ -32,12 +32,20 @@ const verifyEmail = async (req: NextApiRequest, res: NextApiResponse) => {
 
   // create JWT and send it back the EmailVerifyingPage, use the frontend to add the token to client's browser
   const secret = process.env.JWT_SECRET as string;
-  const jsToken = await JWT.sign({ userEmail: userToken.userId }, secret, {
+  const jsToken = JWT.sign({ userEmail: userToken.userId }, secret, {
     expiresIn: 30000000,
   });
-  Cookies.set("jwt", jsToken, { httpOnly: true });
-
-  res.status(200).json(jsToken);
+  res.setHeader(
+    "Set-Cookie",
+    cookie.serialize("jwt", jsToken, {
+      httpOnly: true,
+      secure: false,
+      maxAge: 60 * 60,
+      sameSite: "strict",
+      path: "/",
+    })
+  );
+  res.status(200).send("Email is verified");
 };
 
 export default verifyEmail;

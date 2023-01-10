@@ -1,27 +1,11 @@
-import jwt from "jsonwebtoken";
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import JWT from "jsonwebtoken";
 
-export default function authMiddleware(
-  req: NextApiRequest,
-  res: NextApiResponse,
-  next: () => void
-) {
-  const { authorization } = req.headers;
+// This function can be marked `async` if using `await` inside
+export function middleware(req: NextRequest) {
+  let token = req.cookies.get("jwt");
 
-  if (!authorization) {
-    res.status(401).send("Unauthorized");
-    return;
-  }
-
-  //   try {
-  //     const token = authorization.replace("Bearer ", "");
-  //     const decoded = jwt.verify(token, provess.env.JWT_SECRET);
-  //     req.user = decoded;
-  //     next();
-  //   } catch (error) {
-  //     res.status(401).send("Unauthorized");
-  //   }
+  if (!token && req.url.includes("/dashboard"))
+    return NextResponse.redirect(process.env.BASE_URI!);
 }
-export const config = {
-  matcher: ["/api/login"],
-};

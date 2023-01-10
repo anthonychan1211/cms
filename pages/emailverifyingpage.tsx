@@ -22,6 +22,7 @@ const emailverifyingpage = () => {
       try {
         const userId = query.userId as string;
         const token = query.token as string;
+        const projectName = query.projectName as string;
         console.log(userId, token);
         if (userId && token) {
           const data = await fetch(
@@ -34,9 +35,9 @@ const emailverifyingpage = () => {
               method: "GET",
             }
           );
-          const result = await data.json();
-
+          const result = await data.text();
           setValidUrl(true);
+          setTimeout(() => router.push(`/dashboard/${projectName}`), 3000);
           return;
         }
       } catch (error) {
@@ -45,7 +46,6 @@ const emailverifyingpage = () => {
       }
     };
     verifyEmailUrl();
-    setTimeout(() => router.push("/login"), 3000);
   }, [query]);
 
   return (
