@@ -8,7 +8,7 @@ const verifyEmail = async (req: NextApiRequest, res: NextApiResponse) => {
   const client = await clientPromise;
   const tokenCollection = client.db("cms-user").collection("token");
   //   check if the user exist and is the token correct
-  const findUserByEmail = tokenCollection.findOne({
+  const findUserByEmail = tokenCollection.findOne({ 
     userEmail: userToken.userId,
   });
   const tokenCorrect = tokenCollection.findOne({
@@ -45,7 +45,7 @@ const verifyEmail = async (req: NextApiRequest, res: NextApiResponse) => {
       path: "/",
     })
   );
-  res.status(200).send("Email is verified");
+  res.status(200).send("Email is verified"  );
 };
 
 export default verifyEmail;

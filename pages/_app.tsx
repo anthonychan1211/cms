@@ -1,8 +1,7 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import Header from "./components/Header";
 import { createGlobalStyle } from "styled-components";
-import CurrentCollection from "./components/CurrentCollection";
+
 const GlobalStyles = createGlobalStyle`
 :root{
   --column-number: 0;

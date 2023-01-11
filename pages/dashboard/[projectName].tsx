@@ -3,9 +3,8 @@ import Body from "../components/Body";
 import Header from "../components/Header";
 import { useRouter } from "next/router";
 import { GetStaticPaths } from "next";
-const userDB = "db2";
 
-export default function Home({ data }: any) {
+export default function Home({ data, user }: any) {
   const router = useRouter();
   const projectName = router.query.projectName as string;
   type dataObject = {
@@ -22,21 +21,27 @@ export default function Home({ data }: any) {
 
   return (
     <>
-      <Header />
+      <Header userName={user.userName} />
       <Body collections={sortedData} userDB={projectName} />
     </>
   );
 }
 
 export async function getStaticProps(context: any) {
-  console.log(context.params);
   const client = await clientPromise;
   const db = client.db(context.params.projectName);
   const collections = await db.listCollections().toArray();
   const data = JSON.parse(JSON.stringify(collections));
-
+  const user = JSON.parse(
+    JSON.stringify(
+      await client
+        .db("cms-user")
+        .collection("user")
+        .findOne({ projectName: context.params.projectName })
+    )
+  );
   return {
-    props: { data },
+    props: { data, user },
   };
 }
 export const getStaticPaths: GetStaticPaths<{ slug: string }> = async () => {

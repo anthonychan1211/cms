@@ -16,10 +16,7 @@ async function signUp(req: NextApiRequest, res: NextApiResponse) {
   const db = client.db("cms-user");
   // check if the email has been registered or project name is taken
   const userCollection = db.collection("user");
-  const isRegister = await userCollection.findOne({
-    email: newUser.email,
-  });
-  if (isRegister != null) {
+  if (await userCollection.findOne({ email: newUser.email })) {
     return res.status(400).send("This email has been registered");
   } else if (
     await userCollection.findOne({ projectName: newUser.projectName })
@@ -32,6 +29,7 @@ async function signUp(req: NextApiRequest, res: NextApiResponse) {
     newUser.password = hashedPassword;
     await userCollection.insertOne(newUser);
     const emailVerificationToken = {
+      userName: newUser.userName,
       userEmail: newUser.email,
       project: newUser.projectName,
       token: crypto.randomBytes(32).toString("hex"),

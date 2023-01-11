@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-
+import { useRouter } from "next/router";
 const StyledLandingPage = styled.div`
   text-align: center;
   margin: 0 auto;
@@ -84,8 +84,16 @@ const StyledBody = styled.div`
     height: fit-content;
     transition: all 0.3s;
   }
+  .resend {
+    font-size: 12px;
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+    display: none;
+  }
 `;
 const index = () => {
+  const router = useRouter();
   // Handle tab swtich
   const [shown, setShown] = useState("Sign In");
   const passwordLength = 6;
@@ -97,6 +105,15 @@ const index = () => {
     }
     clickedItem.style.borderBottom = "none";
     setShown(clickedItem.innerText);
+    const errorTextBox = document.querySelector(".status-error") as HTMLElement;
+    const errorBanner = document.querySelector(".error-banner") as HTMLElement;
+    const inputBox = document.querySelectorAll(
+      "input"
+    ) as NodeListOf<HTMLInputElement>;
+    errorTextBox.innerText = "";
+    errorBanner.style.height = "0";
+    errorTextBox.style.transform = "translateY(-100%)";
+    inputBox.forEach((el) => (el.value = ""));
   };
 
   // Create helper on validating password and email
@@ -172,6 +189,8 @@ const index = () => {
         if (feedBack) {
           registerButton.innerText = feedBack;
           registerButton.classList.add("shown");
+          const resendLink = document.querySelector(".resend") as HTMLElement;
+          resendLink.style.display = "block";
         }
       }
     }
@@ -183,7 +202,31 @@ const index = () => {
       document.querySelector("form")!.email.value,
       document.querySelector("form")!.password.value,
     ];
-    console.log(userEmail, password);
+    const res = await fetch("api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: userEmail,
+        password,
+      }),
+    });
+    if (res.status === 400) {
+      const errorTextBox = document.querySelector(
+        ".status-error"
+      ) as HTMLElement;
+      const errorBanner = document.querySelector(
+        ".error-banner"
+      ) as HTMLElement;
+      errorBanner.style.height = "fit-content";
+      errorTextBox.style.transform = "translateY(0)";
+    }
+    if (res.status === 200) {
+      const { user } = await res.json();
+      console.log(user.projectName);
+      router.push(`/dashboard/${user.projectName}`);
+    }
   };
   return (
     <StyledLandingPage>
@@ -228,7 +271,7 @@ const index = () => {
               <p className="warning" id="password-warning">
                 Please enter a valid password
               </p>
-              <input name="password" type="text" required></input>
+              <input name="password" type="password" required></input>
               <p className="password-requirement" id="password-warning">
                 Password must be at least {passwordLength} characters
               </p>
@@ -236,6 +279,9 @@ const index = () => {
             <button className="register-button" type="submit">
               Register
             </button>
+            <a className="resend" onClick={handleRegister}>
+              Resend Email
+            </a>
           </form>
         )}
       </StyledBody>
