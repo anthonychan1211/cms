@@ -18,8 +18,6 @@ export async function middleware(req: NextRequest) {
         token,
         new TextEncoder().encode(process.env.JWT_SECRET)
       );
-
-      NextResponse.next();
     } catch (err) {
       return NextResponse.redirect(process.env.BASE_URI!);
     }
