@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import CurrentCollection from "./CurrentCollection";
-import Document from "./Document";
 
-const StyledBody = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 5fr;
-`;
+import CurrentCollection from "../CurrentCollection";
+import Document from "../Document";
+import { StyledBody } from "./styles";
+
+/**
+ * The main wrapper for the `dashboard` page component.
+ * @param {Array} collections The user's collections, expected as an array
+ */
 const Body = ({ collections = [], userDB }: any) => {
   const [query, setQuery] = useState("");
   const [header, setHeader] = useState<string[]>([]);

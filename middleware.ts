@@ -14,14 +14,14 @@ export async function middleware(req: NextRequest) {
     }
 
     try {
-      console.log("run");
       const { payload } = await jwtVerify(
         token,
         new TextEncoder().encode(process.env.JWT_SECRET)
       );
-      console.log(payload, 123);
+
+      NextResponse.next();
     } catch (err) {
-      console.log(err);
+      return NextResponse.redirect(process.env.BASE_URI!);
     }
   }
 }

@@ -29,8 +29,9 @@ const login = async (req: NextApiRequest, res: NextApiResponse) => {
       path: "/",
     })
   );
-
-  res.status(200).json({ user });
+  res.status(200).json({
+    successful: `${process.env.BASE_URI}/dashboard/${user.projectName}`,
+  });
 };
 
 export default login;

@@ -1,6 +1,10 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { useRouter } from "next/router";
+import {
+  handleRegister,
+  handleLogIn,
+  handleForgotPassword,
+} from "../util/handlers";
 const StyledLandingPage = styled.div`
   text-align: center;
   margin: 0 auto;
@@ -51,6 +55,8 @@ const StyledBody = styled.div`
     font-size: 12px;
     line-height: 0;
     margin: 0;
+    margin-top: 8px;
+    padding-block: 4px;
     text-align: left;
     display: none;
   }
@@ -89,17 +95,31 @@ const StyledBody = styled.div`
     color: blue;
     text-decoration: underline;
     cursor: pointer;
+    text-align: left;
+    width: fit-content;
     display: none;
+  }
+  .forgot-password {
+    font-size: 12px;
+    color: blue;
+    text-align: left;
+    text-decoration: underline;
+    cursor: pointer;
+    width: fit-content;
   }
 `;
 const index = () => {
-  const router = useRouter();
   // Handle tab swtich
   const [shown, setShown] = useState("Sign In");
-  const passwordLength = 6;
+  const passwordLength = 8;
 
-  const handleClick = (e: any) => {
+  const handleClick = (e: { currentTarget: any }) => {
     const clickedItem = e.currentTarget;
+    if (clickedItem.innerText === "Forgot your password?") {
+      const tag = document.querySelectorAll("h2") as NodeListOf<HTMLElement>;
+      tag.forEach((el) => (el.style.borderBottom = "1px solid black"));
+      return setShown(clickedItem.innerText);
+    }
     for (const child of clickedItem.parentElement.children) {
       child.style.borderBottom = "1px solid black";
     }
@@ -115,119 +135,42 @@ const index = () => {
     errorTextBox.style.transform = "translateY(-100%)";
     inputBox.forEach((el) => (el.value = ""));
   };
+  const [signUpFormData, setsignUpFormData] = useState({
+    userName: "",
+    projectName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [signInFormData, setsignInFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [forgetPasswordFormData, setforgetPasswordFormData] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
-  // Create helper on validating password and email
-  const validateEmail = (email: string) => {
-    return String(email)
-      .toLowerCase()
-      .match(
-        /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/
-      );
-  };
-  const validatePassword = (password: string, length: number) => {
-    return password.length >= length;
-  };
-
-  // handle register function
-  const handleRegister = async (e: any) => {
-    e.preventDefault();
-    // getting form data
-    const [userName, projectName, email, password] = [
-      document.querySelector("form")!.userName.value,
-      document.querySelector("form")!.projectName.value,
-      document.querySelector("form")!.email.value,
-      document.querySelector("form")!.password.value,
-    ];
-    // validate the email and password
-    const [emailWarning, passwordWarning] = [
-      document.querySelector("#email-warning")! as HTMLElement,
-      document.querySelector("#password-warning")! as HTMLElement,
-    ];
-    !validateEmail(email) ? (emailWarning!.style.display = "block") : "";
-
-    !validatePassword(password, passwordLength)
-      ? (passwordWarning!.style.display = "block")
-      : "";
-
-    // if everything is valid, send to backend to check if user exists. If not, create new user.
-    if (validateEmail(email) && validatePassword(password, passwordLength)) {
-      // Button Effect
-      const registerButton = document.querySelector(
-        ".register-button"
-      ) as HTMLElement;
-      registerButton.innerText = "Loading...";
-      registerButton.setAttribute("disabled", "");
-      // Api fetching to sign up
-      const res = await fetch("/api/signUp", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userName,
-          projectName,
-          email,
-          password,
-        }),
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    if (shown === "Sign In") {
+      setsignInFormData({
+        ...signInFormData,
+        [e.target.name]: e.target.value,
       });
-      // catch error
-      if (res.status === 400) {
-        const feedBack = await res.text();
-        const errorTextBox = document.querySelector(
-          ".status-error"
-        ) as HTMLElement;
-        const errorBanner = document.querySelector(
-          ".error-banner"
-        ) as HTMLElement;
-        errorTextBox.innerText = feedBack;
-        errorBanner.style.height = "fit-content";
-        errorTextBox.style.transform = "translateY(0)";
-      }
-      if (res.status === 200) {
-        const feedBack = await res.text();
-        console.log(feedBack);
-        if (feedBack) {
-          registerButton.innerText = feedBack;
-          registerButton.classList.add("shown");
-          const resendLink = document.querySelector(".resend") as HTMLElement;
-          resendLink.style.display = "block";
-        }
-      }
+    } else if (shown === "Register") {
+      setsignUpFormData({
+        ...signUpFormData,
+        [e.target.name]: e.target.value,
+      });
+    } else if (shown === "Forgot your password?") {
+      setforgetPasswordFormData({
+        ...forgetPasswordFormData,
+        [e.target.name]: e.target.value,
+      });
     }
   };
 
-  const handleLogIn = async (e: any) => {
-    e.preventDefault();
-    const [userEmail, password] = [
-      document.querySelector("form")!.email.value,
-      document.querySelector("form")!.password.value,
-    ];
-    const res = await fetch("api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: userEmail,
-        password,
-      }),
-    });
-    if (res.status === 400) {
-      const errorTextBox = document.querySelector(
-        ".status-error"
-      ) as HTMLElement;
-      const errorBanner = document.querySelector(
-        ".error-banner"
-      ) as HTMLElement;
-      errorBanner.style.height = "fit-content";
-      errorTextBox.style.transform = "translateY(0)";
-    }
-    if (res.status === 200) {
-      const { user } = await res.json();
-      console.log(user.projectName);
-      router.push(`/dashboard/${user.projectName}`);
-    }
-  };
   return (
     <StyledLandingPage>
       <h1>CMS</h1>
@@ -245,43 +188,134 @@ const index = () => {
                 <p className="status-error">Email or password is incorrect.</p>
               </div>
               <label htmlFor="email">Email</label>
-              <input name="email" type="text"></input>
+              <input
+                name="email"
+                type="text"
+                value={signInFormData.email}
+                onChange={handleChange}
+              ></input>
 
               <label htmlFor="password">Password</label>
-              <input name="password" type="text"></input>
+              <input
+                name="password"
+                type="text"
+                onChange={handleChange}
+                value={signInFormData.password}
+              ></input>
+              <button onClick={handleClick} className="forgot-password">
+                Forgot your password?
+              </button>
             </div>
             <button type="submit">Sign In</button>
           </form>
-        ) : (
-          <form method="POST" onSubmit={handleRegister}>
+        ) : shown === "Register" ? (
+          <form
+            method="POST"
+            onSubmit={(e) => {
+              handleRegister(e, passwordLength);
+            }}
+          >
             <div className="register-form">
               <div className="error-banner">
                 <p className="status-error"></p>
               </div>
               <label htmlFor="userName">User Name</label>
-              <input name="userName" type="text" required></input>
+              <input
+                name="userName"
+                type="text"
+                onChange={handleChange}
+                value={signUpFormData.userName}
+                required
+              ></input>
               <label htmlFor="projectName">Project Name</label>
-              <input name="projectName" type="text" required></input>
+              <input
+                name="projectName"
+                type="text"
+                onChange={handleChange}
+                value={signUpFormData.projectName}
+                required
+              ></input>
               <label htmlFor="email">Email</label>
               <p className="warning" id="email-warning">
                 Please enter a valid Email
               </p>
-              <input name="email" type="text" required></input>
-              <label htmlFor="password">Password</label>
+              <input
+                name="email"
+                type="text"
+                onChange={handleChange}
+                value={signUpFormData.email}
+                required
+              ></input>
+              <label htmlFor="password">Create New Password</label>
               <p className="warning" id="password-warning">
                 Please enter a valid password
               </p>
-              <input name="password" type="password" required></input>
+              <input
+                name="password"
+                type="password"
+                onChange={handleChange}
+                value={signUpFormData.password}
+                required
+              ></input>
               <p className="password-requirement" id="password-warning">
                 Password must be at least {passwordLength} characters
               </p>
+              <label htmlFor="password">Confirm your Password</label>
+              <p className="warning" id="confirm-password-warning">
+                Please enter the same password.
+              </p>
+              <input
+                name="confirmPassword"
+                type="password"
+                onChange={handleChange}
+                value={signUpFormData.confirmPassword}
+                required
+              ></input>
             </div>
             <button className="register-button" type="submit">
               Register
             </button>
-            <a className="resend" onClick={handleRegister}>
+            <button className="resend" onClick={(e) => handleRegister(e, 8)}>
               Resend Email
-            </a>
+            </button>
+          </form>
+        ) : (
+          <form onSubmit={handleForgotPassword}>
+            <div className="sign-in-form">
+              <div className="error-banner">
+                <p className="status-error">Email is registered.</p>
+              </div>
+              <label htmlFor="email">Email</label>
+              <input
+                name="email"
+                type="text"
+                onChange={handleChange}
+                value={forgetPasswordFormData.email}
+              ></input>
+
+              <label htmlFor="password">Create New Password</label>
+              <input
+                name="password"
+                type="password"
+                onChange={handleChange}
+                value={forgetPasswordFormData.password}
+              ></input>
+              <p className="password-requirement" id="password-warning">
+                Password must be at least {passwordLength} characters
+              </p>
+              <label htmlFor="confirmPassword">Confirm Password</label>
+              <p className="warning">Please enter the same password.</p>
+              <input
+                name="confirmPassword"
+                type="password"
+                onChange={handleChange}
+                value={forgetPasswordFormData.confirmPassword}
+              ></input>
+            </div>
+            <button type="submit">Reset password</button>
+            <button className="resend" onClick={(e) => handleRegister(e, 8)}>
+              Resend Email
+            </button>
           </form>
         )}
       </StyledBody>

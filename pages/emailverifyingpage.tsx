@@ -14,22 +14,25 @@ const StyledPage = styled.div`
 
 const emailverifyingpage = () => {
   const [validUrl, setValidUrl] = useState(true);
+  const [word, setword] = useState("register");
   const router = useRouter();
   const { query } = useRouter();
 
   useEffect(() => {
     const verifyEmailUrl = async () => {
       try {
-        const userId = query.userId as string;
+        const email = query.email as string;
         const token = query.token as string;
         const projectName = query.projectName as string;
-        console.log(userId, token);
-        if (userId && token) {
+        const purpose = query.purpose as string;
+        setword(purpose);
+        if (email && token) {
           const data = await fetch(
             `/api/verifyEmail?` +
               new URLSearchParams({
-                userId,
+                email,
                 token,
+                purpose,
               }),
             {
               method: "GET",
@@ -50,14 +53,20 @@ const emailverifyingpage = () => {
 
   return (
     <>
-      {validUrl ? (
+      {!validUrl ? (
+        <p>Not verified</p>
+      ) : word === "register" ? (
         <StyledPage>
           <img src="greenTick.png"></img>
           <h1>Email has been verified</h1>
           <p>This page is going to redirect...</p>
         </StyledPage>
       ) : (
-        <p>Not verified</p>
+        <StyledPage>
+          <img src="greenTick.png"></img>
+          <h1>Password has been updated</h1>
+          <p>This page is going to redirect...</p>
+        </StyledPage>
       )}
     </>
   );

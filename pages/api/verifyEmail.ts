@@ -4,35 +4,50 @@ import JWT from "jsonwebtoken";
 import cookie from "cookie";
 
 const verifyEmail = async (req: NextApiRequest, res: NextApiResponse) => {
-  const userToken = { userId: req.query.userId, token: req.query.token };
+  const { email, token, purpose } = req.query;
+  console.log(purpose);
   const client = await clientPromise;
   const tokenCollection = client.db("cms-user").collection("token");
   //   check if the user exist and is the token correct
-  const findUserByEmail = tokenCollection.findOne({ 
-    userEmail: userToken.userId,
-  });
   const tokenCorrect = tokenCollection.findOne({
-    token: userToken.token,
+    token,
   });
-  if (!findUserByEmail) {
+  const user = await client
+    .db("cms-user")
+    .collection("user")
+    .findOne({ email });
+  if (!user) {
     return res.status(404).json({ Error: "User Not Found" });
   } else if (!tokenCorrect) {
     return res.status(400).json({ Error: "Invalid Link" });
   } else {
-    // if both are correct, then delete the document in token-collection and verify the user in user-collection
-    const userCollection = client.db("cms-user").collection("user");
-    await userCollection.updateOne(
-      { email: userToken.userId },
-      { $set: { verified: true } }
-    );
+    if (purpose === "register") {
+      console.log(token);
+      // if both are correct, then delete the document in token-collection and verify the user in user-collection
+      await client
+        .db("cms-user")
+        .collection("user")
+        .updateOne({ email }, { $set: { verified: true } });
+      await tokenCollection.deleteOne({ token });
+    } else if (purpose === "changepassword") {
+      const newPassword = user.unverifiedNewPassword;
+      await tokenCollection.deleteOne({ token });
 
-    await tokenCollection.deleteOne({ token: userToken.token });
-    // return res.status(200).json({ Sucess: "Email Verified" });
+      await client
+        .db("cms-user")
+        .collection("user")
+        .updateOne({ email }, { $set: { password: newPassword } });
+
+      await client
+        .db("cms-user")
+        .collection("user")
+        .updateOne({ email }, { $unset: { unverifiedNewPassword: "" } });
+    }
   }
 
   // create JWT and send it back the EmailVerifyingPage, use the frontend to add the token to client's browser
   const secret = process.env.JWT_SECRET as string;
-  const jsToken = JWT.sign({ userEmail: userToken.userId }, secret, {
+  const jsToken = JWT.sign({ email }, secret, {
     expiresIn: 30000000,
   });
   res.setHeader(
@@ -45,7 +60,7 @@ const verifyEmail = async (req: NextApiRequest, res: NextApiResponse) => {
       path: "/",
     })
   );
-  res.status(200).send("Email is verified"  );
+  res.status(200).send("Email is verified");
 };
 
 export default verifyEmail;

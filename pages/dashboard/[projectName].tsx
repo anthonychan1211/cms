@@ -1,6 +1,6 @@
 import clientPromise from "../../lib/mongodb";
-import Body from "../components/Body";
-import Header from "../components/Header";
+import Body from "../../components/Body";
+import Header from "../../components/Header";
 import { useRouter } from "next/router";
 import { GetStaticPaths } from "next";
 
