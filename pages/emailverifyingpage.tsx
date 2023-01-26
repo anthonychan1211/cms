@@ -40,7 +40,7 @@ const emailverifyingpage = () => {
           );
           const result = await data.text();
           setValidUrl(true);
-          setTimeout(() => router.push(`/dashboard/${projectName}`), 3000);
+          setTimeout(() => router.push(`${projectName}`), 3000);
           return;
         }
       } catch (error) {

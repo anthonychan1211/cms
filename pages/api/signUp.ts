@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "../../lib/mongodb";
 import crypto from "crypto";
 import bcrypt from "bcrypt";
-import sgMail from "@sendgrid/mail";
 import { sendEmailHelper } from "../../util/sendEmailHelper";
 
 async function signUp(req: NextApiRequest, res: NextApiResponse) {

@@ -8,11 +8,13 @@ async function addCollection(req: NextApiRequest, res: NextApiResponse) {
     const userDB = data.userDB;
     const client = await clientPromise;
     const database = client.db(userDB);
-    database.createCollection(newCollectionName);
-    res.json({ result: "Collection added!" });
+   
+      await database.createCollection(newCollectionName);
+      res.json({ message: "Collection added!" });
+    
   } catch (err) {
     console.log(err);
-    res.json({ err });
+    res.status(400).json({ err });
   }
 }
 

@@ -4,8 +4,7 @@ import {
   userIsExisted,
   confirmPasswordMatch,
 } from "../util/validation";
-import { signUpFetch, logInFetch } from "../util/fetcher";
-import { useRouter } from "next/router";
+import { signUpFetch, logInFetch, addHeader } from "../util/fetcher";
 import { forgetPassword } from "../util/fetcher";
 import { FormEvent, MouseEvent } from "react";
 
@@ -119,4 +118,73 @@ export async function handleForgotPassword(e: any) {
     const resendLink = document.querySelector(".resend") as HTMLElement;
     resendLink.style.display = "block";
   }
+}
+
+export async function handleDeleteCollection(
+  userDB: string,
+  collectionName: string
+) {
+  const res = await fetch("api/deleteCollection", {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({
+      collectionName,
+      userDB,
+    }),
+  });
+
+  const feedBack = await res.json();
+  window.location.replace(`/${userDB}`);
+}
+
+export function extractHeader(headerObj: {}) {
+  const keys = Object.keys(headerObj as object);
+
+  keys.splice(
+    keys.findIndex((el) => el === "_id"),
+    1
+  );
+  keys.splice(
+    keys.findIndex((el) => el === "Collection"),
+    1
+  );
+
+  return keys;
+}
+
+export async function handleAddHeaderForm(
+  e: { preventDefault: () => void },
+  collectionName: string
+) {
+  e.preventDefault();
+  let properties: string[] = [];
+  let type: Array<string | string[]> = [];
+  const input = document.querySelectorAll(
+    ".propertyName"
+  ) as NodeListOf<HTMLInputElement>;
+  const select = document.querySelectorAll(
+    ".valueType"
+  ) as NodeListOf<HTMLInputElement>;
+  input.forEach((el) => properties.push(el.value));
+  select.forEach((el) => {
+    if (el.value === "Select") {
+      let optionArr: string[] = [];
+      const options = el.parentElement?.querySelectorAll(
+        ".choices"
+      ) as NodeListOf<HTMLInputElement>;
+      options?.forEach((option: HTMLInputElement) =>
+        optionArr.push(option.value)
+      );
+      type.push(optionArr);
+    } else {
+      type.push(el.value);
+    }
+  });
+  const headerObj: any = {
+    Collection: collectionName,
+  };
+  properties.forEach((property, index) => (headerObj[property] = type[index]));
+  return headerObj;
 }

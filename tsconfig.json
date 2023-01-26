@@ -15,6 +15,6 @@
     "isolatedModules": true,
     "jsx": "preserve"
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/api/sendConfirmationEmail.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/api/sendConfirmationEmail.js", "components/AddHeader"],
   "exclude": ["node_modules"]
 }

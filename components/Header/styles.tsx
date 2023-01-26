@@ -1,7 +1,6 @@
-import React from "react";
 import styled from "styled-components";
 
-const StyledHeader = styled.div`
+export const StyledHeader = styled.div`
   display: grid;
   grid-template-columns: 5fr auto 1fr;
   justify-content: space-between;
@@ -34,23 +33,3 @@ const StyledHeader = styled.div`
     font-size: 17px;
   }
 `;
-const Header = ({ userName }: any) => {
-  function nameCapitalize(name: string) {
-    if (name.includes(" ")) {
-      let arr = name.split(" ");
-      return `${arr[0].charAt(0).toUpperCase() + arr[0].slice(1)} ${
-        arr[1].charAt(0).toUpperCase() + arr[1].slice(1)
-      }`;
-    }
-    return name.charAt(0).toUpperCase() + name.slice(1);
-  }
-  return (
-    <StyledHeader>
-      <h1>CMS</h1>
-      <p>Welcome Back, {nameCapitalize(userName)}</p>
-      <button className="add-collection">Log Out</button>
-    </StyledHeader>
-  );
-};
-
-export default Header;

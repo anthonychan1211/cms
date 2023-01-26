@@ -1,6 +1,6 @@
-import clientPromise from "../../lib/mongodb";
-import Body from "../../components/Body";
-import Header from "../../components/Header";
+import clientPromise from "../lib/mongodb";
+import Body from "../components/Body";
+import Header from "../components/Header";
 import { useRouter } from "next/router";
 import { GetStaticPaths } from "next";
 
@@ -32,6 +32,10 @@ export async function getStaticProps(context: any) {
   const db = client.db(context.params.projectName);
   const collections = await db.listCollections().toArray();
   const data = JSON.parse(JSON.stringify(collections));
+  data.splice(
+    data.findIndex((el: { name: string }) => el.name === "Schemas"),
+    1
+  );
   const user = JSON.parse(
     JSON.stringify(
       await client

@@ -30,7 +30,7 @@ const login = async (req: NextApiRequest, res: NextApiResponse) => {
     })
   );
   res.status(200).json({
-    successful: `${process.env.BASE_URI}/dashboard/${user.projectName}`,
+    successful: `${process.env.BASE_URI}${user.projectName}`,
   });
 };
 

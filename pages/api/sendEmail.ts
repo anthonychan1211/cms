@@ -15,7 +15,7 @@ const sendEmail = async (req: NextApiRequest, res: NextApiResponse) => {
   await tokenCollection.insertOne(req.body);
 
   // sending email function
-  const url = `${process.env.BASE_URI}/emailverifyingpage/?purpose=${purpose}&email=${email}&projectName=${project}&token=${token}`;
+  const url = `${process.env.BASE_URI}emailverifyingpage/?purpose=${purpose}&email=${email}&projectName=${project}&token=${token}`;
   const sgApiKey = process.env.SENDGRID_API_KEY;
   sgMail.setApiKey(sgApiKey!);
 
