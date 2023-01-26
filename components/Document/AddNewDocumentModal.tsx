@@ -94,8 +94,9 @@ const AddNewDocumentModal = ({
       );
     }
   });
-  function handleAddDocument(e: { preventDefault: () => void }) {
+  async function handleAddDocument(e: { preventDefault: () => void }) {
     e.preventDefault();
+    const res = await fetch("api/addDocument");
   }
   console.log(newDocument);
   return (

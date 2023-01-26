@@ -18,7 +18,8 @@ export default function Home({ data, user }: any) {
     (a: dataObject, b: dataObject) =>
       a.name.charCodeAt(0) - b.name.charCodeAt(0)
   );
-
+  console.log({ sortedData });
+  console.log("user", user);
   return (
     <>
       <Header userName={user.userName} />
