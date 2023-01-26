@@ -7,14 +7,7 @@ import { GetStaticPaths } from "next";
 export default function Home({ sortedData, user }: any) {
   const router = useRouter();
   const projectName = router.query.projectName as string;
-  type dataObject = {
-    name: string;
-    type: string;
-    options: any;
-    info: {};
-    idIndex: {};
-  };
-
+  console.log(sortedData);
   return (
     <>
       <Header userName={user.userName} />

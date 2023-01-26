@@ -1,13 +1,18 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   StyledPartition,
   StyledCollection,
   StyledNewCollection,
 } from "./styles";
-import { addCollectionFetch, getCollection } from "../../util/fetcher";
-import { useRouter } from "next/router";
-import clientPromise from "../../lib/mongodb";
-const CurrentCollection = ({ collectionsList = [], userDB }: any) => {
+import { addCollectionFetch } from "../../util/fetcher";
+
+const CurrentCollection = ({
+  collectionsList = [],
+  userDB,
+}: {
+  collectionsList: JSX.Element[];
+  userDB: string;
+}): JSX.Element => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [isDuplicated, setIsDuplicated] = useState(false);
   const [newCollectionName, setNewCollectionName] = useState("");
