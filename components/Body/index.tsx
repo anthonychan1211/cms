@@ -24,9 +24,7 @@ const Body = ({
   if (clickedCollection !== chosenCollection) {
     setChosenCollection(clickedCollection);
     if (typeof window === "object" && clickedCollection) {
-      const clicked = document.querySelector(
-        `#${clickedCollection}`
-      ) as HTMLElement;
+      const clicked = document.getElementById(clickedCollection) as HTMLElement;
       Array.from(clicked?.parentElement!.children).forEach((el) =>
         el.classList.remove("open")
       );

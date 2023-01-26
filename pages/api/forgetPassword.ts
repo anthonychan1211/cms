@@ -7,7 +7,7 @@ import { sendEmailHelper } from "../../util/sendEmailHelper";
 const forgetPassword = async (req: NextApiRequest, res: NextApiResponse) => {
   const client = await clientPromise;
   const { email, password } = req.body;
-  // const user = await checkUserExist(email);
+
   const user = await client
     .db("cms-user")
     .collection("user")
@@ -20,7 +20,7 @@ const forgetPassword = async (req: NextApiRequest, res: NextApiResponse) => {
     const emailVerificationToken = {
       purpose: "changepassword",
       email,
-      projectName: user.projectName,
+      project: user.projectName,
       token: crypto.randomBytes(32).toString("hex"),
     };
     const hashed = await bcrypt.hash(password, 10);
@@ -28,8 +28,7 @@ const forgetPassword = async (req: NextApiRequest, res: NextApiResponse) => {
       .db("cms-user")
       .collection("user")
       .updateOne({ email }, { $set: { unverifiedNewPassword: hashed } });
-    const tokenCollection = client.db("cms-user").collection("token");
-    await tokenCollection.insertOne(emailVerificationToken);
+
     const emailSent = await sendEmailHelper(
       emailVerificationToken,
       "changepassword"

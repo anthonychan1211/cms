@@ -24,6 +24,7 @@ const emailverifyingpage = () => {
         const email = query.email as string;
         const token = query.token as string;
         const projectName = query.projectName as string;
+        console.log(projectName);
         const purpose = query.purpose as string;
         setword(purpose);
         if (email && token) {
@@ -40,7 +41,7 @@ const emailverifyingpage = () => {
           );
           const result = await data.text();
           setValidUrl(true);
-          setTimeout(() => router.push(`${projectName}`), 3000);
+          router.push(`${projectName}`);
           return;
         }
       } catch (error) {
