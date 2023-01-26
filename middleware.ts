@@ -10,17 +10,18 @@ export async function middleware(req: NextRequest) {
   }
   let token = req.cookies.get("jwt")?.value as string;
   if (
-    req.url == process.env.BASE_URI ||
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api/login") ||
     pathname.startsWith("/api/sendEmail") ||
     pathname.startsWith("/api/signUp") ||
     pathname.startsWith("/api/verifyEmail")
   ) {
+    console.log("run excluded");
     return NextResponse.next();
   } else if (!token && req.url !== process.env.BASE_URI) {
     return NextResponse.redirect(req.nextUrl.origin);
   } else {
+    console.log("run check");
     try {
       const { payload } = await jwtVerify(
         token,
@@ -36,5 +37,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: "/:projectName*",
+  matcher: "/(.*)",
 };
