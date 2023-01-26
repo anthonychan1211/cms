@@ -19,8 +19,6 @@ export async function middleware(req: NextRequest) {
     pathname.startsWith("/api/verifyEmail") ||
     pathname.startsWith("/favicon.ico")
   ) {
-    console.log(req.url);
-
     return NextResponse.next();
   } else if (!token && req.url !== process.env.BASE_URI) {
     return NextResponse.redirect(req.nextUrl.origin);

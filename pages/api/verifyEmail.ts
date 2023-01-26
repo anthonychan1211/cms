@@ -31,6 +31,8 @@ const verifyEmail = async (req: NextApiRequest, res: NextApiResponse) => {
       await tokenCollection.deleteOne({ token });
     } else if (purpose === "changepassword") {
       const newPassword = user.unverifiedNewPassword;
+      console.log(newPassword);
+      console.log(user);
       await tokenCollection.deleteOne({ token });
 
       await client

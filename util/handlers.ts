@@ -115,8 +115,6 @@ export async function handleForgotPassword(e: any) {
   } else {
     button.innerText = feedBack.success;
     button.classList.add("shown");
-    const resendLink = document.querySelector(".resend") as HTMLElement;
-    resendLink.style.display = "block";
   }
 }
 

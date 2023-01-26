@@ -58,7 +58,7 @@ export async function hashPassword(password: string) {
       password,
     }),
   });
-  console.log(res);
+
   const feedBack = await res.text();
 
   return feedBack;
