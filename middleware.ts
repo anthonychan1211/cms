@@ -9,8 +9,10 @@ export async function middleware(req: NextRequest) {
     iat: number;
   }
   let token = req.cookies.get("jwt")?.value as string;
+  console.log(req.url);
+  console.log(req.nextUrl.origin);
   if (
-    req.url == process.env.BASE_URI ||
+    pathname.startsWith("/") ||
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api/login") ||
     pathname.startsWith("/api/sendEmail") ||
@@ -18,6 +20,8 @@ export async function middleware(req: NextRequest) {
     pathname.startsWith("/api/verifyEmail") ||
     pathname.startsWith("/favicon.ico")
   ) {
+    console.log(req.url);
+
     return NextResponse.next();
   } else if (!token && req.url !== process.env.BASE_URI) {
     return NextResponse.redirect(req.nextUrl.origin);
