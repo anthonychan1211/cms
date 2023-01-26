@@ -179,7 +179,6 @@ const index = () => {
         ...forgetPasswordFormData,
         [e.target.name]: e.target.value,
       });
-      console.log(first);
     }
   };
 
