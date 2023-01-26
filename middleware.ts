@@ -30,12 +30,11 @@ export async function middleware(req: NextRequest) {
         return NextResponse.redirect(process.env.BASE_URI!);
       }
     } catch (err) {
-      console.log("run err");
       return NextResponse.redirect(process.env.BASE_URI!);
     }
   }
 }
 
 export const config = {
-  matcher: "/:path*",
+  matcher: "/:projectName*",
 };
