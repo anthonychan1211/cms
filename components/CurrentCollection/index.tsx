@@ -18,9 +18,9 @@ const CurrentCollection = ({ data = [], userDB }: any) => {
       console.log(data.message);
       setIsDuplicated(false);
       setShowAddForm(false);
-      router.replace(
-        `${router.basePath}${userDB}?collection=${newCollectionName}`
-      );
+      // router.replace(
+      //   `${router.basePath}${userDB}?collection=${newCollectionName}`
+      // );
     } else {
       setIsDuplicated(true);
     }
