@@ -9,8 +9,7 @@ export async function middleware(req: NextRequest) {
     iat: number;
   }
   let token = req.cookies.get("jwt")?.value as string;
-  console.log(req.url);
-  console.log(req.nextUrl.origin);
+
   if (
     pathname.startsWith("/") ||
     pathname.startsWith("/_next") ||
@@ -26,8 +25,6 @@ export async function middleware(req: NextRequest) {
   } else if (!token && req.url !== process.env.BASE_URI) {
     return NextResponse.redirect(req.nextUrl.origin);
   } else {
-    console.log("run check");
-    console.log(req.url);
     try {
       const { payload } = await jwtVerify(
         token,

@@ -134,6 +134,7 @@ const index = () => {
       registerTab.classList.remove("open-tab");
     }
     setShown(e.currentTarget.innerText);
+
     const errorTextBox = document.querySelector(".status-error") as HTMLElement;
     const errorBanner = document.querySelector(".error-banner") as HTMLElement;
     const inputBox = document.querySelectorAll(
@@ -144,6 +145,7 @@ const index = () => {
     errorTextBox.style.transform = "translateY(-100%)";
     inputBox.forEach((el) => (el.value = ""));
   };
+  console.log(shown);
   const [signUpFormData, setsignUpFormData] = useState({
     userName: "",
     projectName: "",
@@ -177,6 +179,7 @@ const index = () => {
         ...forgetPasswordFormData,
         [e.target.name]: e.target.value,
       });
+      console.log(first);
     }
   };
 
@@ -357,7 +360,7 @@ const index = () => {
                   <input
                     type="text"
                     className="form__field"
-                    value={signUpFormData.email}
+                    value={forgetPasswordFormData.email}
                     onChange={handleChange}
                     placeholder="Confirm Password"
                     name="email"
@@ -374,7 +377,7 @@ const index = () => {
                   <input
                     type="password"
                     className="form__field"
-                    value={signUpFormData.password}
+                    value={forgetPasswordFormData.password}
                     onChange={handleChange}
                     placeholder="Password"
                     name="password"
@@ -388,19 +391,12 @@ const index = () => {
                     Password must be at least {passwordLength} characters
                   </p>
                 </div>
-                {/* <label htmlFor="confirmPassword">Confirm Password</label>
-              <p className="warning">Please enter the same password.</p>
-              <input
-                name="confirmPassword"
-                type="password"
-                onChange={handleChange}
-                value={forgetPasswordFormData.confirmPassword}
-              ></input> */}
+
                 <div className="form__group field">
                   <input
                     type="password"
                     className="form__field"
-                    value={signUpFormData.confirmPassword}
+                    value={forgetPasswordFormData.confirmPassword}
                     onChange={handleChange}
                     placeholder="Confirm Password"
                     name="confirmPassword"
