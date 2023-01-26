@@ -15,8 +15,7 @@ const CurrentCollection = ({ collectionsList = [], userDB }: any) => {
   async function addCollection(e: any) {
     e.preventDefault();
     const data = await addCollectionFetch(newCollectionName, userDB);
-    if (data.message === "Collection added!") {
-      console.log(data.message);
+    if (data.status === 200) {
       setIsDuplicated(false);
       setShowAddForm(false);
       window.sessionStorage.setItem("lastSelect", newCollectionName);

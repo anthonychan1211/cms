@@ -25,7 +25,6 @@ async function signUp(req: NextApiRequest, res: NextApiResponse) {
     verified: false,
   };
 
-  await userCollection.insertOne(newUser);
   const emailVerificationToken = {
     email: newUser.email,
     project: newUser.projectName,

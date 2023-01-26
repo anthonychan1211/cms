@@ -57,12 +57,13 @@ const Body = ({
   function handleChooseCollection(chosenCollection: string) {
     setChosenCollection(chosenCollection);
     const clicked = document.getElementById(chosenCollection) as HTMLElement;
-    clicked &&
+    if (collectionsList.length > 0) {
       Array.from(clicked.parentElement!.children).forEach((el) =>
         el.classList.remove("open")
       );
-    clicked?.classList.add("open");
-    window.sessionStorage.setItem("lastSelect", chosenCollection);
+      clicked?.classList.add("open");
+      window.sessionStorage.setItem("lastSelect", chosenCollection);
+    }
   }
   const mappedCollections = collectionsList.map((el) => (
     <button

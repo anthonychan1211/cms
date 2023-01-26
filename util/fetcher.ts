@@ -113,7 +113,7 @@ export async function addCollectionFetch(
       userDB,
     }),
   });
-  return await res.json();
+  return res;
 }
 
 export async function getHeader(query: string, userDB: string) {
