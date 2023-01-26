@@ -80,7 +80,7 @@ export async function forgetPassword(email: string, password: string) {
   return feedBack;
 }
 
-export async function getCollection(query: string, userDB: string) {
+export async function getDocument(query: string, userDB: string) {
   const res = await fetch(
     `api/queryDocument/?` +
       new URLSearchParams({
@@ -144,4 +144,16 @@ export async function addHeader(headerObj: {}, userDB: string) {
   });
 
   const feedBack = await res.json();
+}
+
+export async function getCollection(userDB: string) {
+  const res = await fetch("api/getCollection", {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({ userDB }),
+  });
+  const feedBack = await res.json();
+  return feedBack.collectionList;
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   NewEntry,
   DeleteCollection,
@@ -33,10 +33,10 @@ const DocumentSection = ({
   const headerKey = extractHeader(headerObj);
 
   // set column number
-  if (typeof window === "object") {
+  useEffect(() => {
     const root = document.querySelector(":root") as HTMLElement;
     root.style.setProperty("--column-number", `${headerKey.length}`);
-  }
+  });
   const [addModal, setAddModal] = useState<string>("");
   const mappedHeader = headerKey.map((el: string) => {
     return <p className="header">{el}</p>;

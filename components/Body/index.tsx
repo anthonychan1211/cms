@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getCollection, getHeader } from "../../util/fetcher";
+import { getDocument, getHeader } from "../../util/fetcher";
 import CurrentCollection from "../CurrentCollection";
 import Document from "../Document";
 import { StyledBody } from "./styles";
@@ -8,28 +8,28 @@ import { useRouter } from "next/router";
  * The main wrapper for the `dashboard` page component.
  * @param {Array} collections The user's collections, expected as an array
  */
-const Body = ({ collections, userDB }: { collections: []; userDB: string }) => {
+const Body = ({
+  collectionsList,
+  userDB,
+}: {
+  collectionsList: [];
+  userDB: string;
+}) => {
   const [chosenCollection, setChosenCollection] = useState<string>("");
   const [header, setHeader] = useState({});
   const [doc, setDoc] = useState<string[]>([]);
-  const router = useRouter();
-  const { query } = useRouter();
-  const clickedCollection = query.collection as string;
 
-  if (
-    typeof window === "object" &&
-    clickedCollection &&
-    collections.findIndex((el) => el === clickedCollection) !== -1
-    // clickedCollection !== chosenCollection
-  ) {
-    setChosenCollection(clickedCollection);
-  }
-
+  useEffect(() => {
+    const lastSelect = window.sessionStorage.getItem("lastSelect");
+    if (lastSelect && lastSelect !== chosenCollection) {
+      handleChooseCollection(lastSelect);
+    }
+  }, []);
   // onClick Effect
   useEffect(() => {
-    if (clickedCollection) {
+    if (chosenCollection) {
       // get Header
-      const header = getHeader(clickedCollection, userDB);
+      const header = getHeader(chosenCollection, userDB);
       header.then((res) => {
         if (res) {
           setHeader(res);
@@ -37,7 +37,7 @@ const Body = ({ collections, userDB }: { collections: []; userDB: string }) => {
           setHeader([]);
         }
       });
-      const data = getCollection(clickedCollection, userDB);
+      const data = getDocument(chosenCollection, userDB);
       data.then((res) => {
         // get document data
         let values: any = [];
@@ -47,36 +47,40 @@ const Body = ({ collections, userDB }: { collections: []; userDB: string }) => {
 
         setDoc(values);
       });
-      const clicked = document.getElementById(clickedCollection) as HTMLElement;
+      const clicked = document.getElementById(chosenCollection) as HTMLElement;
       Array.from(clicked?.parentElement!.children).forEach((el) =>
         el.classList.remove("open")
       );
       clicked?.classList.add("open");
     }
-  }, [clickedCollection]);
-  function handleChooseCollection(e: { currentTarget: HTMLElement }) {
-    setChosenCollection(e.currentTarget.innerText);
-    router.replace(
-      `${router.basePath}${userDB}?collection=${e.currentTarget.innerText}`
-    );
+  }, [chosenCollection]);
+  function handleChooseCollection(chosenCollection: string) {
+    setChosenCollection(chosenCollection);
+    const clicked = document.getElementById(chosenCollection) as HTMLElement;
+    clicked &&
+      Array.from(clicked.parentElement!.children).forEach((el) =>
+        el.classList.remove("open")
+      );
+    clicked?.classList.add("open");
+    window.sessionStorage.setItem("lastSelect", chosenCollection);
   }
-  const mappedCollections = collections.map((el: { name: "" }) => (
+  const mappedCollections = collectionsList.map((el) => (
     <button
       className="collection-name"
-      id={el.name}
-      onClick={handleChooseCollection}
+      id={el}
+      onClick={(e) => handleChooseCollection(e.currentTarget.innerText)}
     >
-      {el.name}
+      {el}
     </button>
   ));
 
   return (
     <StyledBody>
-      <CurrentCollection data={mappedCollections} userDB={userDB} />
+      <CurrentCollection collectionsList={mappedCollections} userDB={userDB} />
       <Document
         headerObj={header}
         values={doc}
-        collectionName={clickedCollection}
+        collectionName={chosenCollection}
         userDB={userDB}
       />
     </StyledBody>

@@ -1,16 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   StyledPartition,
   StyledCollection,
   StyledNewCollection,
 } from "./styles";
-import { addCollectionFetch } from "../../util/fetcher";
+import { addCollectionFetch, getCollection } from "../../util/fetcher";
 import { useRouter } from "next/router";
-const CurrentCollection = ({ data = [], userDB }: any) => {
+import clientPromise from "../../lib/mongodb";
+const CurrentCollection = ({ collectionsList = [], userDB }: any) => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [isDuplicated, setIsDuplicated] = useState(false);
   const [newCollectionName, setNewCollectionName] = useState("");
-  const router = useRouter();
+
   async function addCollection(e: any) {
     e.preventDefault();
     const data = await addCollectionFetch(newCollectionName, userDB);
@@ -18,9 +19,8 @@ const CurrentCollection = ({ data = [], userDB }: any) => {
       console.log(data.message);
       setIsDuplicated(false);
       setShowAddForm(false);
-      // router.replace(
-      //   `${router.basePath}${userDB}?collection=${newCollectionName}`
-      // );
+      window.sessionStorage.setItem("lastSelect", newCollectionName);
+      window.location.reload();
     } else {
       setIsDuplicated(true);
     }
@@ -44,7 +44,11 @@ const CurrentCollection = ({ data = [], userDB }: any) => {
         </button>
       )}
       <StyledCollection>
-        {data.length > 0 ? data : <p>Add your first collection!</p>}
+        {collectionsList.length > 0 ? (
+          collectionsList
+        ) : (
+          <p>Add your first collection!</p>
+        )}
       </StyledCollection>
       {showAddForm && (
         <StyledNewCollection onSubmit={addCollection} className="add-form">

@@ -132,7 +132,8 @@ export async function handleDeleteCollection(
   });
 
   const feedBack = await res.json();
-  window.location.replace(`/${userDB}`);
+  window.sessionStorage.removeItem("lastSelect");
+  window.location.reload();
 }
 
 export function extractHeader(headerObj: {}) {

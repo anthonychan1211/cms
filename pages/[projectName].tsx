@@ -4,7 +4,7 @@ import Header from "../components/Header";
 import { useRouter } from "next/router";
 import { GetStaticPaths } from "next";
 
-export default function Home({ data, user }: any) {
+export default function Home({ sortedData, user }: any) {
   const router = useRouter();
   const projectName = router.query.projectName as string;
   type dataObject = {
@@ -14,21 +14,18 @@ export default function Home({ data, user }: any) {
     info: {};
     idIndex: {};
   };
-  const sortedData = data.sort(
-    (a: dataObject, b: dataObject) =>
-      a.name.charCodeAt(0) - b.name.charCodeAt(0)
-  );
 
   return (
     <>
       <Header userName={user.userName} />
-      <Body collections={sortedData} userDB={projectName} />
+      <Body collectionsList={sortedData} userDB={projectName} />
     </>
   );
 }
 
 export async function getStaticProps(context: any) {
   const client = await clientPromise;
+
   const db = client.db(context.params.projectName);
   const collections = await db.listCollections().toArray();
   const data = JSON.parse(JSON.stringify(collections));
@@ -39,6 +36,9 @@ export async function getStaticProps(context: any) {
     data.splice(schemaIndex, 1);
   }
 
+  let sortedData: string[] = [];
+  data.forEach((el: { name: string }) => sortedData.push(el.name));
+  sortedData.sort();
   const user = JSON.parse(
     JSON.stringify(
       await client
@@ -49,7 +49,7 @@ export async function getStaticProps(context: any) {
   );
 
   return {
-    props: { data, user },
+    props: { sortedData, user },
   };
 }
 export const getStaticPaths: GetStaticPaths<{ slug: string }> = async () => {
