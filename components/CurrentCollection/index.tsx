@@ -9,16 +9,18 @@ import { useRouter } from "next/router";
 const CurrentCollection = ({ data = [], userDB }: any) => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [isDuplicated, setIsDuplicated] = useState(false);
+  const [newCollectionName, setNewCollectionName] = useState("");
   const router = useRouter();
   async function addCollection(e: any) {
     e.preventDefault();
-    const newCollection = document.querySelector("input")!.value;
-    const data = await addCollectionFetch(newCollection, userDB);
+    const data = await addCollectionFetch(newCollectionName, userDB);
     if (data.message === "Collection added!") {
-      window.location.replace(
-        `${router.basePath}${userDB}?collection=${newCollection}`
-      );
+      console.log(data.message);
       setIsDuplicated(false);
+      setShowAddForm(false);
+      router.replace(
+        `${router.basePath}${userDB}?collection=${newCollectionName}`
+      );
     } else {
       setIsDuplicated(true);
     }
@@ -53,6 +55,7 @@ const CurrentCollection = ({ data = [], userDB }: any) => {
               placeholder="New Collection"
               name="newCollection"
               id="newCollection"
+              onChange={(e) => setNewCollectionName(e.target.value)}
               required
             />
             <label htmlFor="newCollection" className="form__label">
