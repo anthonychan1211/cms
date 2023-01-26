@@ -12,7 +12,7 @@ const Body = ({
   collectionsList,
   userDB,
 }: {
-  collectionsList: [];
+  collectionsList: string[];
   userDB: string;
 }) => {
   const [chosenCollection, setChosenCollection] = useState<string>("");
@@ -48,10 +48,12 @@ const Body = ({
         setDoc(values);
       });
       const clicked = document.getElementById(chosenCollection) as HTMLElement;
-      Array.from(clicked?.parentElement!.children).forEach((el) =>
-        el.classList.remove("open")
-      );
-      clicked?.classList.add("open");
+      if (clicked.parentElement) {
+        Array.from(clicked.parentElement.children).forEach((el) =>
+          el.classList.remove("open")
+        );
+        clicked?.classList.add("open");
+      }
     }
   }, [chosenCollection]);
   function handleChooseCollection(chosenCollection: string) {
