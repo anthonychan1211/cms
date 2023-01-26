@@ -17,9 +17,9 @@ export async function handleRegister(
   e.preventDefault();
   // getting form data
   const [userName, projectName, email, password] = [
-    document.querySelector("form")!.userName.value,
-    document.querySelector("form")!.projectName.value,
-    document.querySelector("form")!.email.value,
+    document.querySelector("form")!.userName.value.toLowerCase(),
+    document.querySelector("form")!.projectName.value.toLowerCase(),
+    document.querySelector("form")!.email.value.toLowerCase(),
     document.querySelector("form")!.password.value,
   ];
   // validate the email and password and confirm password
@@ -61,8 +61,6 @@ export async function handleRegister(
       const feedBack = await res.json();
       registerButton.innerText = feedBack.success;
       registerButton.classList.add("shown");
-      const resendLink = document.querySelector(".resend") as HTMLElement;
-      resendLink.style.display = "block";
     }
   }
 }

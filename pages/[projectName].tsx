@@ -32,10 +32,13 @@ export async function getStaticProps(context: any) {
   const db = client.db(context.params.projectName);
   const collections = await db.listCollections().toArray();
   const data = JSON.parse(JSON.stringify(collections));
-  data.splice(
-    data.findIndex((el: { name: string }) => el.name === "Schemas"),
-    1
+  const schemaIndex = data.findIndex(
+    (el: { name: string }) => el.name === "Schemas"
   );
+  if (schemaIndex !== -1) {
+    data.splice(schemaIndex, 1);
+  }
+
   const user = JSON.parse(
     JSON.stringify(
       await client
@@ -44,6 +47,7 @@ export async function getStaticProps(context: any) {
         .findOne({ projectName: context.params.projectName })
     )
   );
+
   return {
     props: { data, user },
   };

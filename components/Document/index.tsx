@@ -54,16 +54,6 @@ const DocumentSection = ({
       );
     });
 
-  async function handleAddHeader(e: { preventDefault: () => void }) {
-    e.preventDefault();
-    const newHeader = await handleAddHeaderForm(e, collectionName);
-    console.log("newHeader", newHeader);
-    addHeader(newHeader, userDB);
-    setAddModal("");
-    console.log(collectionName);
-    window.location.reload();
-  }
-
   return (
     <>
       <div>

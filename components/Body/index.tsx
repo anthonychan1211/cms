@@ -8,32 +8,26 @@ import { useRouter } from "next/router";
  * The main wrapper for the `dashboard` page component.
  * @param {Array} collections The user's collections, expected as an array
  */
-const Body = ({
-  collections = [],
-  userDB,
-}: {
-  collections: [];
-  userDB: string;
-}) => {
+const Body = ({ collections, userDB }: { collections: []; userDB: string }) => {
   const [chosenCollection, setChosenCollection] = useState<string>("");
   const [header, setHeader] = useState({});
   const [doc, setDoc] = useState<string[]>([]);
   const router = useRouter();
   const { query } = useRouter();
   const clickedCollection = query.collection as string;
-  if (clickedCollection !== chosenCollection) {
+
+  if (
+    typeof window === "object" &&
+    clickedCollection &&
+    collections.findIndex((el) => el === clickedCollection) !== -1
+    // clickedCollection !== chosenCollection
+  ) {
     setChosenCollection(clickedCollection);
-    if (typeof window === "object" && clickedCollection) {
-      const clicked = document.getElementById(clickedCollection) as HTMLElement;
-      Array.from(clicked?.parentElement!.children).forEach((el) =>
-        el.classList.remove("open")
-      );
-      clicked?.classList.add("open");
-    }
   }
+
   // onClick Effect
   useEffect(() => {
-    if (chosenCollection) {
+    if (clickedCollection) {
       // get Header
       const header = getHeader(clickedCollection, userDB);
       header.then((res) => {
@@ -53,13 +47,17 @@ const Body = ({
 
         setDoc(values);
       });
+      const clicked = document.getElementById(clickedCollection) as HTMLElement;
+      Array.from(clicked?.parentElement!.children).forEach((el) =>
+        el.classList.remove("open")
+      );
+      clicked?.classList.add("open");
     }
   }, [clickedCollection]);
   function handleChooseCollection(e: { currentTarget: HTMLElement }) {
-    const clicked = e.currentTarget as HTMLElement;
-    setChosenCollection(clicked.innerText);
+    setChosenCollection(e.currentTarget.innerText);
     router.replace(
-      `${router.basePath}${userDB}?collection=${clicked.innerText}`
+      `${router.basePath}${userDB}?collection=${e.currentTarget.innerText}`
     );
   }
   const mappedCollections = collections.map((el: { name: "" }) => (
@@ -78,7 +76,7 @@ const Body = ({
       <Document
         headerObj={header}
         values={doc}
-        collectionName={chosenCollection}
+        collectionName={clickedCollection}
         userDB={userDB}
       />
     </StyledBody>
