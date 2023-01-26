@@ -14,14 +14,16 @@ export async function middleware(req: NextRequest) {
     pathname.startsWith("/api/login") ||
     pathname.startsWith("/api/sendEmail") ||
     pathname.startsWith("/api/signUp") ||
-    pathname.startsWith("/api/verifyEmail")
+    pathname.startsWith("/api/verifyEmail") ||
+    pathname.startsWith("/favicon.ico")
   ) {
-    console.log("run excluded");
+    console.log(req.url);
     return NextResponse.next();
   } else if (!token && req.url !== process.env.BASE_URI) {
     return NextResponse.redirect(req.nextUrl.origin);
   } else {
     console.log("run check");
+    console.log(req.url);
     try {
       const { payload } = await jwtVerify(
         token,
