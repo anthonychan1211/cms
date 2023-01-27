@@ -56,15 +56,15 @@ const Body = ({
       }
     }
   }, [chosenCollection]);
-  function handleChooseCollection(chosenCollection: string) {
-    setChosenCollection(chosenCollection);
-    const clicked = document.getElementById(chosenCollection) as HTMLElement;
-    if (collectionsList.length > 0) {
-      Array.from(clicked.parentElement!.children).forEach((el) =>
+  function handleChooseCollection(clickedCollection: string) {
+    setChosenCollection(clickedCollection);
+    const clicked = document.getElementById(clickedCollection) as HTMLElement;
+    if (collectionsList.length > 0 && clicked.parentElement) {
+      Array.from(clicked.parentElement.children).forEach((el) =>
         el.classList.remove("open")
       );
       clicked?.classList.add("open");
-      window.sessionStorage.setItem("lastSelect", chosenCollection);
+      window.sessionStorage.setItem("lastSelect", clickedCollection);
     }
   }
   const mappedCollections = collectionsList.map((el) => (
