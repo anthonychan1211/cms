@@ -25,40 +25,28 @@ const Body = ({
       handleChooseCollection(lastSelect);
     }
   }, []);
-  // onClick Effect
-  useEffect(() => {
-    if (chosenCollection) {
-      // get Header
-      const header = getHeader(chosenCollection, userDB);
-      header.then((res) => {
-        if (res) {
-          setHeader(res);
-        } else {
-          setHeader([]);
-        }
-      });
-      const data = getDocument(chosenCollection, userDB);
-      data.then((res) => {
-        // get document data
-        let values: any = [];
-        res.forEach((item: {}) => {
-          values.push(Object.values(item));
-        });
 
-        setDoc(values);
-      });
-      const clicked = document.getElementById(chosenCollection) as HTMLElement;
-      if (clicked.parentElement) {
-        Array.from(clicked.parentElement.children).forEach((el) =>
-          el.classList.remove("open")
-        );
-        clicked?.classList.add("open");
-      }
-    }
-  }, [chosenCollection]);
   function handleChooseCollection(clickedCollection: string) {
     setChosenCollection(clickedCollection);
     const clicked = document.getElementById(clickedCollection) as HTMLElement;
+    const header = getHeader(clickedCollection, userDB);
+    header.then((res) => {
+      if (res) {
+        setHeader(res);
+      } else {
+        setHeader([]);
+      }
+    });
+    const data = getDocument(clickedCollection, userDB);
+    data.then((res) => {
+      // get document data
+      let values: any = [];
+      res.forEach((item: {}) => {
+        values.push(Object.values(item));
+      });
+
+      setDoc(values);
+    });
     if (collectionsList.length > 0 && clicked.parentElement) {
       Array.from(clicked.parentElement.children).forEach((el) =>
         el.classList.remove("open")
