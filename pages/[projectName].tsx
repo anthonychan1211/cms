@@ -16,7 +16,7 @@ export default function Home({ sortedData, user }: any) {
   );
 }
 
-export async function getStaticProps(context: any) {
+export async function getServerSideProps(context: any) {
   const client = await clientPromise;
 
   const db = client.db(context.params.projectName);
@@ -45,9 +45,3 @@ export async function getStaticProps(context: any) {
     props: { sortedData, user },
   };
 }
-export const getStaticPaths: GetStaticPaths<{ slug: string }> = async () => {
-  return {
-    paths: [], //indicates that no page needs be created at build time
-    fallback: "blocking", //indicates the type of fallback
-  };
-};
