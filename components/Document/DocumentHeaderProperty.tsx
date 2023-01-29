@@ -1,28 +1,23 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { useState } from "react";
 
 const DocumentHeaderProperty = () => {
-  const types = ["Text", "Number", "Select", "Date", "Image", "File"];
+  const types = [
+    "Text",
+    "TextArea",
+    "Number",
+    "Select",
+    "Date",
+    "Image",
+    "Multiple Images",
+  ];
   const [value, setValue] = useState(types[0]);
   const [choice, setChoice] = useState<unknown[]>([
     <input type="text" className="choices" required />,
     <input type="text" className="choices" required />,
   ]);
-  const [imageSrc, setImageSrc] = useState<React.SetStateAction<any>>();
-  const [uploadData, setUploadData] = useState();
+
   const type = types.map((el) => <option value={el}>{el}</option>);
-  function handleSelect(e: ChangeEvent<HTMLSelectElement>) {
-    setValue(e.target.value);
-  }
 
-  function handleImagePreview(e: any) {
-    const reader = new FileReader();
-
-    reader.onload = function (onLoadEvent) {
-      setImageSrc(onLoadEvent.target?.result);
-      setUploadData(undefined);
-    };
-    reader.readAsDataURL(e.target.files[0]);
-  }
   return (
     <div className="property-box">
       <div className="form__group field">
@@ -39,7 +34,7 @@ const DocumentHeaderProperty = () => {
         </label>
       </div>
 
-      <select onChange={(e) => handleSelect(e)} className="valueType">
+      <select onChange={(e) => setValue(e.target.value)} className="valueType">
         {type}
       </select>
 
@@ -93,13 +88,6 @@ const DocumentHeaderProperty = () => {
             + Option
           </button>
         </div>
-      )}
-      {value === "Image" && (
-        <>
-          <input type="file" name="file" onChange={handleImagePreview} />
-
-          <img src={imageSrc} />
-        </>
       )}
     </div>
   );

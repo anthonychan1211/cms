@@ -11,7 +11,7 @@ export async function middleware(req: NextRequest) {
   let token = req.cookies.get("jwt")?.value as string;
 
   if (
-    pathname.startsWith("/") ||
+    req.nextUrl.href === process.env.BASE_URI ||
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api/login") ||
     pathname.startsWith("/api/sendEmail") ||

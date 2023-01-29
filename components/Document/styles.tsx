@@ -34,13 +34,21 @@ export const StyledDocument = styled.div`
   }
   p {
     font-size: 15px;
+    max-height: 300px;
+    text-overflow: ellipsis;
   }
   .row {
     display: contents;
+
     :hover * {
       cursor: pointer;
       background-color: var(--light-grey);
     }
+  }
+  .collage {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    justify-content: flex-start;
   }
 `;
 
@@ -122,10 +130,6 @@ export const StyledHeaderForm = styled.form`
           padding: 10px;
         }
       }
-      img {
-        max-width: 100%;
-        max-height: 100px;
-      }
     }
   }
 `;
@@ -167,6 +171,17 @@ export const AddEntry = styled.form`
       background-color: var(--green);
       color: white;
       margin-top: 20px;
+    }
+    input[type="file"] {
+      display: block;
+      margin-block: 20px;
+    }
+    img {
+      max-width: 100%;
+      max-height: 150px;
+    }
+    p {
+      font-size: 16px;
     }
   }
 `;

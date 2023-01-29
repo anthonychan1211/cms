@@ -3,7 +3,7 @@ import { getDocument, getHeader } from "../../util/fetcher";
 import CurrentCollection from "../CurrentCollection";
 import Document from "../Document";
 import { StyledBody } from "./styles";
-import { useRouter } from "next/router";
+
 /**
  * The main wrapper for the `dashboard` page component.
  * @param {Array} collections The user's collections, expected as an array
@@ -17,7 +17,7 @@ const Body = ({
 }) => {
   const [chosenCollection, setChosenCollection] = useState<string>("");
   const [header, setHeader] = useState({});
-  const [doc, setDoc] = useState<string[]>([]);
+  const [doc, setDoc] = useState([]);
 
   useEffect(() => {
     const lastSelect = window.sessionStorage.getItem("lastSelect");
@@ -39,15 +39,16 @@ const Body = ({
     });
     const data = getDocument(clickedCollection, userDB);
     data.then((res) => {
-      // get document data
-      let values: any = [];
-      res.forEach((item: {}) => {
-        values.push(Object.values(item));
-      });
-
-      setDoc(values);
+      // // get document data
+      // let values: any = [];
+      // res.forEach((item: { [key: string]: string }) => {
+      //   let { _id, ...delete_id } = item;
+      //   values.push(Object.values(delete_id));
+      // });
+      // console.log(res);
+      setDoc(res);
     });
-    if (collectionsList.length > 0 && clicked.parentElement) {
+    if (collectionsList.length > 0 && clicked && clicked.parentElement) {
       Array.from(clicked.parentElement.children).forEach((el) =>
         el.classList.remove("open")
       );
@@ -70,7 +71,7 @@ const Body = ({
       <CurrentCollection collectionsList={mappedCollections} userDB={userDB} />
       <Document
         headerObj={header}
-        values={doc}
+        documents={doc}
         collectionName={chosenCollection}
         userDB={userDB}
       />

@@ -6,7 +6,13 @@ import {
 } from "../util/validation";
 import { signUpFetch, logInFetch, addHeader } from "../util/fetcher";
 import { forgetPassword } from "../util/fetcher";
-import { FormEvent, MouseEvent } from "react";
+import React, {
+  ChangeEvent,
+  Dispatch,
+  FormEvent,
+  MouseEvent,
+  SetStateAction,
+} from "react";
 
 export async function handleRegister(
   e:
@@ -184,4 +190,48 @@ export async function handleAddHeaderForm(
   };
   properties.forEach((property, index) => (headerObj[property] = type[index]));
   return headerObj;
+}
+
+export function handleImagePreview(
+  e: ChangeEvent<HTMLInputElement>,
+  setImageSrc: any,
+  setUploadData: (arg0: any) => void,
+  newDocument: { [key: string]: string | { image: string } },
+  serNewDocument: React.Dispatch<
+    React.SetStateAction<{ [x: string]: string | {} }>
+  >
+) {
+  if (e.target.files?.length) {
+    console.log(Array.from(e.target.files).length);
+    if (e.target.files!.length === 1) {
+      const reader = new FileReader();
+      reader.onload = function (onLoadEvent) {
+        setImageSrc(onLoadEvent.target?.result);
+        serNewDocument({
+          ...newDocument,
+          [e.target.name]: { image: onLoadEvent.target?.result as string },
+        });
+      };
+    } else if (e.target.files!.length > 1) {
+      let arr: string[] = [];
+      Array.from(e.target.files).forEach((element) => {
+        const reader = new FileReader();
+        reader.onload = function (onLoadEvent) {
+          arr.push(onLoadEvent.target?.result as string);
+          setImageSrc(arr);
+          serNewDocument({
+            ...newDocument,
+            [e.target.name]: {
+              image: arr,
+            },
+          });
+        };
+
+        reader.readAsDataURL(element);
+      });
+    }
+    setUploadData(undefined);
+  } else {
+    setImageSrc(null);
+  }
 }

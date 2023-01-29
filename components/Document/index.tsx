@@ -1,31 +1,20 @@
 import { useEffect, useState } from "react";
-import {
-  NewEntry,
-  DeleteCollection,
-  StyledDocument,
-  StyledHeaderForm,
-  AddEntry,
-} from "./styles";
-import DocumentHeaderProperty from "./DocumentHeaderProperty";
-import { addHeader } from "../../util/fetcher";
-import {
-  extractHeader,
-  handleAddHeaderForm,
-  handleDeleteCollection,
-} from "../../util/handlers";
+import { NewEntry, DeleteCollection, StyledDocument } from "./styles";
+
+import { extractHeader, handleDeleteCollection } from "../../util/handlers";
 import AddNewDocumentModal from "./AddNewDocumentModal";
 import AddNewHeaderModal from "./AddNewHeaderModal";
 
 interface DocumentType {
   headerObj: any;
-  values: string[];
+  documents: any;
   collectionName: string;
   userDB: string;
 }
 
 const DocumentSection = ({
   headerObj = {},
-  values = [],
+  documents = [],
   collectionName,
   userDB,
 }: DocumentType) => {
@@ -43,15 +32,39 @@ const DocumentSection = ({
   });
 
   const mappedValues =
-    values.length > 0 &&
-    values.map((item: any) => {
-      return (
-        <div className="row">
-          {item.map((el: any) => {
-            return <p>{el}</p>;
-          })}
-        </div>
-      );
+    documents.length > 0 &&
+    documents.map((item: { [key: string]: any }) => {
+      console.log(item);
+      if (item) {
+        return (
+          <div className="row">
+            {headerKey.map((el: string) => {
+              if (headerObj[el] === "Image") {
+                return (
+                  <img
+                    style={{ maxWidth: "100%", maxHeight: " 300px" }}
+                    src={item[el]}
+                  />
+                );
+              } else if (headerObj[el] === "Multiple Images") {
+                if (item[el])
+                  return (
+                    <div className="collage">
+                      {item[el].map((image: string) => (
+                        <img
+                          style={{ maxHeight: " 100px" }}
+                          src={image}
+                          alt={image}
+                        ></img>
+                      ))}
+                    </div>
+                  );
+              }
+              return <p>{item[el]?.replace(/(.{200})..+/, "$1...")}</p>;
+            })}
+          </div>
+        );
+      }
     });
 
   return (
@@ -92,13 +105,13 @@ const DocumentSection = ({
         <h1 style={{ marginLeft: "90px" }} className="document-collection-name">
           {collectionName}
         </h1>
-        {mappedValues ||
-          (mappedHeader && (
-            <StyledDocument>
-              {mappedHeader}
-              {mappedValues}
-            </StyledDocument>
-          ))}
+        {/* {mappedValues ||
+          (mappedHeader && ( */}
+        <StyledDocument>
+          {mappedHeader}
+          {mappedValues}
+        </StyledDocument>
+        {/* ))} */}
       </div>
       {addModal === "header" && (
         <AddNewHeaderModal
@@ -109,9 +122,10 @@ const DocumentSection = ({
       )}
       {addModal === "entry" && (
         <AddNewDocumentModal
+          userDB={userDB}
           headerKey={headerKey}
           collectionName={collectionName}
-          values={values}
+          documents={documents}
           headerObj={headerObj}
           setAddModal={setAddModal}
         />
