@@ -34,7 +34,6 @@ const DocumentSection = ({
   const mappedValues =
     documents.length > 0 &&
     documents.map((item: { [key: string]: any }) => {
-      console.log(item);
       if (item) {
         return (
           <div className="row">

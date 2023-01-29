@@ -96,7 +96,6 @@ export async function getDocument(query: string, userDB: string) {
     }
   );
   const data = await res.json();
-  console.log(data);
   return data;
 }
 

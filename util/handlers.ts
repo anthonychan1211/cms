@@ -202,34 +202,23 @@ export function handleImagePreview(
   >
 ) {
   if (e.target.files?.length) {
-    console.log(Array.from(e.target.files).length);
-    if (e.target.files!.length === 1) {
+    let arr: string[] = [];
+    Array.from(e.target.files).forEach((element) => {
       const reader = new FileReader();
       reader.onload = function (onLoadEvent) {
-        setImageSrc(onLoadEvent.target?.result);
+        arr.push(onLoadEvent.target?.result as string);
+        setImageSrc(arr);
         serNewDocument({
           ...newDocument,
-          [e.target.name]: { image: onLoadEvent.target?.result as string },
+          [e.target.name]: {
+            image: arr,
+          },
         });
       };
-    } else if (e.target.files!.length > 1) {
-      let arr: string[] = [];
-      Array.from(e.target.files).forEach((element) => {
-        const reader = new FileReader();
-        reader.onload = function (onLoadEvent) {
-          arr.push(onLoadEvent.target?.result as string);
-          setImageSrc(arr);
-          serNewDocument({
-            ...newDocument,
-            [e.target.name]: {
-              image: arr,
-            },
-          });
-        };
 
-        reader.readAsDataURL(element);
-      });
-    }
+      reader.readAsDataURL(element);
+    });
+
     setUploadData(undefined);
   } else {
     setImageSrc(null);

@@ -21,7 +21,6 @@ const AddNewDocumentModal = ({
   });
   const [imageSrc, setImageSrc] = useState<React.SetStateAction<any>>();
   const [uploadData, setUploadData] = useState();
-  const [imageUrl, setImageUrl] = useState("");
   useEffect(() => {
     const id = document.getElementById(
       `${collectionName}_id`
@@ -107,6 +106,7 @@ const AddNewDocumentModal = ({
         </div>
       );
     } else if (headerObj[el] === "Image") {
+      console.log(newDocument);
       return (
         <>
           <p>{el}</p>
@@ -124,7 +124,7 @@ const AddNewDocumentModal = ({
             }}
           />
 
-          {imageSrc && <img src={imageSrc} />}
+          {newDocument[el] && <img src={newDocument[el].image} />}
         </>
       );
     } else if (headerObj[el] === "Multiple Images") {
@@ -145,8 +145,8 @@ const AddNewDocumentModal = ({
               );
             }}
           />
-          {imageSrc &&
-            imageSrc.map((image: string) => {
+          {newDocument[el] &&
+            newDocument[el].image.map((image: string) => {
               return <img src={image} style={{ margin: "5px" }} />;
             })}
         </>
