@@ -24,6 +24,7 @@ async function signUp(req: NextApiRequest, res: NextApiResponse) {
     password: await bcrypt.hash(password, 10), // hash the password and save to db
     verified: false,
   };
+  await userCollection.insertOne(newUser);
 
   const emailVerificationToken = {
     email: newUser.email,
