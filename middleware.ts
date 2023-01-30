@@ -18,6 +18,7 @@ export async function middleware(req: NextRequest) {
     pathname.startsWith("/api/signUp") ||
     pathname.startsWith("/api/verifyEmail") ||
     pathname.startsWith("/favicon.ico") ||
+    pathname.startsWith("/api/forgetPassword") ||
     pathname.includes("/emailverifyingpage")
   ) {
     return NextResponse.next();
