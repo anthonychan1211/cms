@@ -17,7 +17,8 @@ export async function middleware(req: NextRequest) {
     pathname.startsWith("/api/sendEmail") ||
     pathname.startsWith("/api/signUp") ||
     pathname.startsWith("/api/verifyEmail") ||
-    pathname.startsWith("/favicon.ico")
+    pathname.startsWith("/favicon.ico") ||
+    pathname.startsWith("/emailveridyingpage")
   ) {
     return NextResponse.next();
   } else if (!token && req.url !== process.env.BASE_URI) {
