@@ -12,8 +12,10 @@ export const DeleteCollection = styled.button`
   margin-top: 20px;
   margin-right: 40px;
   float: right;
-  color: white;
   background-color: #ff0000;
+  :hover {
+    cursor: pointer;
+  }
 `;
 
 export const StyledDocument = styled.div`

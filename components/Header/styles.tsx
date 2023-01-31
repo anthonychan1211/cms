@@ -28,6 +28,7 @@ export const StyledMenu = styled.div`
   position: absolute;
   right: 0;
   transition: all 0.2s ease-in-out;
+  transform: translateX(100%);
   button {
     border-radius: 0;
     width: 100%;
@@ -49,13 +50,12 @@ export const StyledMenu = styled.div`
     background-color: #159320;
     color: white;
     display: grid;
-    transform: translateX(0%);
+    transform: translateX(-100%);
     transition: all 0.2s ease-in-out;
   }
   .menu {
     color: white;
     display: grid;
-    transform: translateX(100%);
     transition: all 0.2s ease-in-out;
   }
   .success {
