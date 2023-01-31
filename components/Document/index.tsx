@@ -67,51 +67,48 @@ const DocumentSection = ({
     });
 
   return (
-    <>
-      <div>
-        {collectionName ? (
-          <div>
-            <DeleteCollection
-              onClick={() =>
-                handleDeleteCollection(
-                  userDB as string,
-                  collectionName as string
-                )
-              }
+    <div style={{ maxHeight: "90%" }}>
+      {collectionName && (
+        <div>
+          <DeleteCollection
+            onClick={() =>
+              handleDeleteCollection(userDB as string, collectionName as string)
+            }
+          >
+            Delete Collection
+          </DeleteCollection>
+          {mappedHeader.length > 0 ? (
+            <NewEntry
+              onClick={() => {
+                setAddModal("entry");
+              }}
             >
-              Delete Collection
-            </DeleteCollection>
-            {mappedHeader.length > 0 ? (
-              <NewEntry
-                onClick={() => {
-                  setAddModal("entry");
-                }}
-              >
-                + Add New Entry
-              </NewEntry>
-            ) : (
-              <NewEntry
-                onClick={() => {
-                  setAddModal("header");
-                }}
-              >
-                + Add Header
-              </NewEntry>
-            )}
-          </div>
-        ) : null}
+              + Add New Entry
+            </NewEntry>
+          ) : (
+            <NewEntry
+              onClick={() => {
+                setAddModal("header");
+              }}
+            >
+              + Add Header
+            </NewEntry>
+          )}
+        </div>
+      )}
 
-        <h1 style={{ marginLeft: "90px" }} className="document-collection-name">
-          {collectionName}
-        </h1>
-        {/* {mappedValues ||
-          (mappedHeader && ( */}
-        <StyledDocument>
-          {mappedHeader}
-          {mappedValues}
-        </StyledDocument>
-        {/* ))} */}
-      </div>
+      <h1
+        style={{ marginLeft: "90px", fontSize: "35px" }}
+        className="document-collection-name"
+      >
+        {collectionName}
+      </h1>
+
+      <StyledDocument>
+        {mappedHeader}
+        {mappedValues}
+      </StyledDocument>
+
       {addModal === "header" && (
         <AddNewHeaderModal
           collectionName={collectionName}
@@ -129,7 +126,7 @@ const DocumentSection = ({
           setAddModal={setAddModal}
         />
       )}
-    </>
+    </div>
   );
 };
 

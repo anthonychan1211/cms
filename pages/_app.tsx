@@ -14,7 +14,7 @@ const GlobalStyles = createGlobalStyle`
     --light-grey: #e7e7e7;
     --dark-grey: #c4c4c4;
     --bs: 0 12px 24px 0 rgba(0,0,0,0.09);
-    --primary: #11998e;
+    --primary: #16bb45;
     --secondary: #38ef7d;
     box-sizing: border-box;
     
@@ -101,14 +101,14 @@ const GlobalStyles = createGlobalStyle`
     justify-self: end;
     align-self: center;
     border: none;
-    background-color: var(--light-blue);
-    color: var(--black);
+    background-color: var(--primary);
+    color: white;
     font-size: 15px;
     border-radius: 10px;
+
     height: 40px;
     :hover:not([disabled]) {
-      box-sizing: border-box;
-      box-shadow: 0px 0px 3px black;
+      cursor: pointer;
     }
     :active:not([disabled]){
       box-shadow: none;

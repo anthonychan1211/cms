@@ -5,7 +5,6 @@ import cookie from "cookie";
 
 const verifyEmail = async (req: NextApiRequest, res: NextApiResponse) => {
   const { email, token, purpose } = req.query;
-  console.log(purpose);
   const client = await clientPromise;
   const tokenCollection = client.db("cms-user").collection("token");
   //   check if the user exist and is the token correct
@@ -31,8 +30,6 @@ const verifyEmail = async (req: NextApiRequest, res: NextApiResponse) => {
       await tokenCollection.deleteOne({ token });
     } else if (purpose === "changepassword") {
       const newPassword = user.unverifiedNewPassword;
-      console.log(newPassword);
-      console.log(user);
       await tokenCollection.deleteOne({ token });
 
       await client

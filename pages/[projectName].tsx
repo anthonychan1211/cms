@@ -2,17 +2,15 @@ import clientPromise from "../lib/mongodb";
 import Body from "../components/Body";
 import Header from "../components/Header";
 import { useRouter } from "next/router";
-import { GetStaticPaths } from "next";
-
+import { StyledMainPage } from "../styles/globals";
 export default function Home({ sortedData, user }: any) {
   const router = useRouter();
   const projectName = router.query.projectName as string;
-  console.log(sortedData);
   return (
-    <>
-      <Header userName={user.userName} />
+    <StyledMainPage>
+      <Header userName={user.userName} userDB={projectName} />
       <Body collectionsList={sortedData} userDB={projectName} />
-    </>
+    </StyledMainPage>
   );
 }
 

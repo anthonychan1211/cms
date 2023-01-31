@@ -3,12 +3,12 @@ import styled from "styled-components";
 export const StyledPartition = styled.div`
   background-color: var(--light-grey);
   box-sizing: border-box;
-  height: 100vh;
   text-align: center;
+  height: 100%;
+  overflow: scroll;
   .add-collection {
     width: 80%;
     margin: 20px auto;
-    background-color: var(--green);
     color: white;
     :hover {
       box-sizing: border-box;
@@ -25,6 +25,9 @@ export const StyledPartition = styled.div`
     font-size: 12px;
     color: red;
   }
+  p {
+    font-size: 15px;
+  }
 `;
 
 export const StyledCollection = styled.div`
@@ -33,7 +36,6 @@ export const StyledCollection = styled.div`
   flex-direction: column;
   justify-items: center;
   gap: 3px;
-
   .collection-name {
     width: 100%;
     height: auto;

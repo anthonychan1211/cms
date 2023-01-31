@@ -6,16 +6,16 @@ import { sendEmailHelper } from "../../util/sendEmailHelper";
 
 const forgetPassword = async (req: NextApiRequest, res: NextApiResponse) => {
   const client = await clientPromise;
-  const { email, password } = req.body;
+  const { email } = req.body;
 
   const user = await client
     .db("cms-user")
     .collection("user")
     .findOne({ email });
   if (!user) {
-    res.status(400).send("This email is not registered");
+    res.status(400).json({ message: "This email is not registered" });
   } else if (user.verified === false) {
-    res.status(400).send("This email is not verified");
+    res.status(400).json({ message: "This email is not verified" });
   } else {
     const emailVerificationToken = {
       purpose: "changepassword",
@@ -23,16 +23,13 @@ const forgetPassword = async (req: NextApiRequest, res: NextApiResponse) => {
       project: user.projectName,
       token: crypto.randomBytes(32).toString("hex"),
     };
-    const hashed = await bcrypt.hash(password, 10);
-    await client
-      .db("cms-user")
-      .collection("user")
-      .updateOne({ email }, { $set: { unverifiedNewPassword: hashed } });
+    // const hashed = await bcrypt.hash(password, 10);
+    // await client
+    //   .db("cms-user")
+    //   .collection("user")
+    //   .updateOne({ email }, { $set: { unverifiedNewPassword: hashed } });
 
-    const emailSent = await sendEmailHelper(
-      emailVerificationToken,
-      "changepassword"
-    );
+    const emailSent = await sendEmailHelper(emailVerificationToken);
     if (emailSent.status === 400)
       return res
         .status(400)

@@ -1,7 +1,4 @@
-export async function sendEmailHelper(
-  emailVerificationToken: any,
-  purpose: string
-) {
+export async function sendEmailHelper(emailVerificationToken: any) {
   const emailSent = await fetch(`${process.env.BASE_URI}api/sendEmail`, {
     method: "POST",
     headers: {
@@ -10,5 +7,6 @@ export async function sendEmailHelper(
     body: JSON.stringify(emailVerificationToken),
   });
   const feedBack = await emailSent.json();
+
   return feedBack;
 }

@@ -59,12 +59,12 @@ export async function hashPassword(password: string) {
     }),
   });
 
-  const feedBack = await res.text();
+  const feedBack = await res.json();
 
   return feedBack;
 }
 
-export async function forgetPassword(email: string, password: string) {
+export async function forgetPassword(email: string) {
   const res = await fetch("api/forgetPassword", {
     method: "POST",
     headers: {
@@ -72,11 +72,10 @@ export async function forgetPassword(email: string, password: string) {
     },
     body: JSON.stringify({
       email,
-      password,
     }),
   });
   const feedBack = await res.json();
-  if (feedBack.status === 400) return null;
+  if (res.status === 400) return null;
   return feedBack;
 }
 

@@ -32,7 +32,7 @@ async function signUp(req: NextApiRequest, res: NextApiResponse) {
     token: crypto.randomBytes(32).toString("hex"),
     purpose: "register",
   };
-  const emailSent = await sendEmailHelper(emailVerificationToken, "register");
+  const emailSent = await sendEmailHelper(emailVerificationToken);
   if (emailSent.status === 400)
     return res.status(400).json({ error: "couldn't sign up" });
   res.status(200).json(emailSent);

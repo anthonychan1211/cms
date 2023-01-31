@@ -91,30 +91,21 @@ export async function handleLogIn(e: any) {
   }
 }
 
-export async function handleForgotPassword(e: any) {
+export async function handleForgotPassword(e: any, email: string) {
   e.preventDefault();
-  const [email, password, confirmPassword, warning] = [
-    document.querySelector("form")!.email.value,
-    document.querySelector("form")!.password.value,
-    document.querySelector("form")!.confirmPassword.value,
-    document.querySelector(".warning") as HTMLElement,
-  ];
-  if (password !== confirmPassword) {
-    console.log("run");
-    warning.style.display = "block";
-    return;
-  }
+
   const button = document.querySelector("button") as HTMLElement;
   button.innerText = "Loading...";
   button.setAttribute("disabled", "");
-  const feedBack = await forgetPassword(email, password);
-
+  const feedBack = await forgetPassword(email);
   if (!feedBack) {
     const errorTextBox = document.querySelector(".status-error") as HTMLElement;
     const errorBanner = document.querySelector(".error-banner") as HTMLElement;
     errorTextBox.innerText = "This email is not registered";
     errorBanner.style.height = "fit-content";
     errorTextBox.style.transform = "translateY(0)";
+    button.innerText = "Reset Password";
+    button.removeAttribute("disable");
     return;
   } else {
     button.innerText = feedBack.success;

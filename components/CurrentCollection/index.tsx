@@ -42,7 +42,9 @@ const CurrentCollection = ({
         <button
           className="add-collection"
           style={{ backgroundColor: "red" }}
-          onClick={() => setShowAddForm(!showAddForm)}
+          onClick={() => {
+            setShowAddForm(!showAddForm);
+          }}
         >
           - Close Add Collection
         </button>
@@ -58,6 +60,7 @@ const CurrentCollection = ({
         <StyledNewCollection onSubmit={addCollection} className="add-form">
           <div className="form__group field">
             <input
+              autoFocus
               type="text"
               className="form__field"
               placeholder="New Collection"
