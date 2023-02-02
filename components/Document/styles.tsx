@@ -18,40 +18,49 @@ export const DeleteCollection = styled.button`
   }
 `;
 
-export const StyledDocument = styled.div`
-  display: grid;
-  grid-template-columns: repeat(var(--column-number), minmax(auto, 1fr));
+export const StyledDocument = styled.table`
+  height: auto;
   overflow: scroll;
   text-align: center;
   justify-content: space-evenly;
-  margin: 10px 90px;
+  margin: 0 auto;
+  width: 80%;
+
   * {
-    border-bottom: 1px solid var(--black);
     margin: 0;
     padding-inline: 10px;
   }
-  .header {
+  table {
+  }
+  th {
     background-color: #eeeeee;
     border-bottom: 2px solid var(--black);
+    font-size: 15px;
+    position: sticky;
   }
-  p {
+  td {
     font-size: 15px;
     max-height: 300px;
     text-overflow: ellipsis;
+    border-bottom: 1px solid var(--black);
   }
 
-  .row {
-    display: contents;
-
+  tbody > tr {
+    border-bottom: 1px solid var(--black);
     :hover * {
       cursor: pointer;
       background-color: var(--light-grey);
     }
   }
+
   .collage {
     display: grid;
     grid-template-columns: auto auto auto;
-    justify-content: flex-start;
+    justify-items: center;
+    align-items: center;
+    * {
+      border: none;
+    }
   }
 `;
 
@@ -66,7 +75,7 @@ export const StyledHeaderForm = styled.form`
   transform: translateX(-50%);
   background-color: #00000061;
   h4 {
-    margin: 0;
+    margin-top: 0;
   }
   .inner-modal {
     position: relative;
@@ -130,7 +139,9 @@ export const StyledHeaderForm = styled.form`
           margin-right: 5px;
         }
         button {
+          background-color: var(--green);
           color: white;
+
           font-size: 15px;
           padding: 10px;
         }
@@ -149,8 +160,9 @@ export const AddEntry = styled.form`
   top: 0;
   transform: translateX(-50%);
   background-color: #00000061;
+
   h4 {
-    margin: 0 0 30px 0;
+    margin-top: 0;
   }
   .inner-modal {
     position: relative;
@@ -184,12 +196,107 @@ export const AddEntry = styled.form`
       display: block;
       margin-block: 20px;
     }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: auto auto auto;
+      align-items: center;
+      justify-items: center;
+      gap: 5px;
+    }
+    .image {
+      position: relative;
+      display: inline;
+
+      .delete-image {
+        position: absolute;
+        top: -20px;
+        left: -10px;
+        cursor: pointer;
+      }
+    }
     img {
       max-width: 100%;
       max-height: 150px;
     }
     p {
       font-size: 16px;
+    }
+  }
+`;
+export const StyledEditModal = styled.div`
+  position: absolute;
+  h4 {
+    margin-top: 0;
+  }
+  width: 100vw;
+  height: 100vh;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  background-color: #00000061;
+  .inner-modal {
+    position: relative;
+    height: 80vh;
+    width: 50vw;
+    overflow: scroll;
+    background-color: #fff;
+    margin: 0 auto;
+    margin-top: 2vh;
+    border-radius: 20px;
+    padding: 30px 50px;
+    .control-panel {
+      .delete-button {
+        background-color: red;
+        margin-left: 5px;
+      }
+      float: right;
+    }
+    .input-section {
+      min-height: 80%;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: auto auto auto;
+      align-items: center;
+      justify-items: center;
+      gap: 5px;
+    }
+    .image {
+      position: relative;
+      display: inline;
+
+      .delete-image {
+        position: absolute;
+        top: -20px;
+        left: -10px;
+        cursor: pointer;
+      }
+    }
+
+    .submit-section {
+      float: right;
+      .cancel-button {
+        background-color: white;
+        border: 2px solid var(--black);
+        margin-inline: 8px;
+      }
+    }
+    .cancel-button {
+      color: var(--black);
+      background-color: white;
+      border: 2px solid var(--black);
+    }
+    .add-button {
+      color: white;
+      margin-top: 20px;
+    }
+    img {
+      max-width: 100%;
+      max-height: 150px;
+    }
+    input[type="file"] {
+      display: block;
+      margin-block: 20px;
     }
   }
 `;

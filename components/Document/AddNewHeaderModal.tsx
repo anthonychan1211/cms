@@ -13,14 +13,35 @@ const AddNewHeaderModal = ({
   userDB: string;
   setAddModal: React.Dispatch<React.SetStateAction<string>>;
 }) => {
-  const [propertyCount, setPropertyCount] = useState<unknown[]>([]);
+  const [propertyCount, setPropertyCount] = useState<unknown[]>([
+    <div className="property-box">
+      <div className="form__group field">
+        <input
+          type="text"
+          className="form__field propertyName"
+          placeholder={`${collectionName}_id`}
+          name={`${collectionName}_id`}
+          id={`${collectionName}_id`}
+          value={`${collectionName}_id`}
+          disabled
+        />
+        <label htmlFor={`${collectionName}_id`} className="form__label">
+          Property Name
+        </label>
+      </div>
+
+      <div>
+        <select className="valueType" disabled>
+          <option value="UniqueID">Unique ID</option>
+        </select>
+      </div>
+    </div>,
+  ]);
   async function handleAddHeader(e: { preventDefault: () => void }) {
     e.preventDefault();
     const newHeader = await handleAddHeaderForm(e, collectionName);
-    console.log("newHeader", newHeader);
     addHeader(newHeader, userDB);
     setAddModal("");
-    console.log(collectionName);
     window.location.reload();
   }
 
@@ -29,28 +50,6 @@ const AddNewHeaderModal = ({
       <form className="inner-modal">
         <h4>Add New Header</h4>
         <div className="input-section">
-          <div className="property-box">
-            <div className="form__group field">
-              <input
-                type="text"
-                className="form__field propertyName"
-                placeholder={`${collectionName}_id`}
-                name={`${collectionName}_id`}
-                id={`${collectionName}_id`}
-                value={`${collectionName}_id`}
-                disabled
-              />
-              <label htmlFor={`${collectionName}_id`} className="form__label">
-                Property Name
-              </label>
-            </div>
-
-            <div>
-              <select className="valueType" disabled>
-                <option value="UniqueID">Unique ID</option>
-              </select>
-            </div>
-          </div>
           {propertyCount}
           <button
             className="add-button"

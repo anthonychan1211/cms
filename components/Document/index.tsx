@@ -4,6 +4,7 @@ import { NewEntry, DeleteCollection, StyledDocument } from "./styles";
 import { extractHeader, handleDeleteCollection } from "../../util/handlers";
 import AddNewDocumentModal from "./AddNewDocumentModal";
 import AddNewHeaderModal from "./AddNewHeaderModal";
+import EditModal from "./EditModal";
 
 interface DocumentType {
   headerObj: any;
@@ -18,50 +19,81 @@ const DocumentSection = ({
   collectionName,
   userDB,
 }: DocumentType) => {
-  // extract header
+  // extract header and put id at first
   const headerKey = extractHeader(headerObj);
 
+  if (headerKey[0]) {
+    if (!headerKey[0].includes("_id")) {
+      const id = headerKey.splice(
+        headerKey.findIndex((el) => el.includes("_id")),
+        1
+      );
+      headerKey.unshift(id[0]);
+    }
+  }
   // set column number
   useEffect(() => {
     const root = document.querySelector(":root") as HTMLElement;
     root.style.setProperty("--column-number", `${headerKey.length}`);
   });
+
+  const [editModal, setEditModal] = useState("");
   const [addModal, setAddModal] = useState<string>("");
   const mappedHeader = headerKey.map((el: string) => {
-    return <p className="header">{el}</p>;
+    return <th className="header">{el}</th>;
   });
-
   const mappedValues =
     documents.length > 0 &&
     documents.map((item: { [key: string]: any }) => {
       if (item) {
         return (
-          <div className="row">
+          <tr
+            className="row"
+            onClick={(e) =>
+              setEditModal(
+                e.currentTarget.firstElementChild?.innerHTML as string
+              )
+            }
+          >
             {headerKey.map((el: string) => {
-              if (headerObj[el] === "Image") {
-                return (
-                  <img
-                    style={{ maxWidth: "100%", maxHeight: " 300px" }}
-                    src={item[el]}
-                  />
-                );
-              } else if (headerObj[el] === "Multiple Images") {
-                if (item[el])
-                  return (
-                    <div className="collage">
-                      {item[el].map((image: string) => (
-                        <img
-                          style={{ maxHeight: " 100px" }}
-                          src={image}
-                          alt={image}
-                        ></img>
-                      ))}
-                    </div>
-                  );
+              if (headerObj[el] === "Image(s)") {
+                if (item[el]) {
+                  if (item[el].length <= 9) {
+                    return (
+                      <td>
+                        <div className="collage">
+                          {item[el].map((image: string) => (
+                            <img
+                              style={{ maxHeight: " 100px" }}
+                              src={image}
+                              alt={image}
+                            ></img>
+                          ))}
+                        </div>
+                      </td>
+                    );
+                  } else {
+                    const cutVersion = item[el].slice(0, 8);
+                    return (
+                      <td>
+                        <div className="gallery-grid">
+                          {cutVersion.map((image: string) => (
+                            <img
+                              style={{ maxHeight: " 100px" }}
+                              src={image}
+                              alt={image}
+                            ></img>
+                          ))}
+                          <p style={{ alignSelf: "center" }}>...and more</p>
+                        </div>
+                      </td>
+                    );
+                  }
+                }
               }
-              return <p>{item[el]?.replace(/(.{200})..+/, "$1...")}</p>;
+              return <td>{item[el]?.replace(/(.{200})..+/, "$1...")}</td>;
             })}
-          </div>
+          </tr>
         );
       }
     });
@@ -105,8 +137,10 @@ const DocumentSection = ({
       </h1>
 
       <StyledDocument>
-        {mappedHeader}
-        {mappedValues}
+        <thead>
+          <tr>{mappedHeader}</tr>
+        </thead>
+        <tbody>{mappedValues}</tbody>
       </StyledDocument>
 
       {addModal === "header" && (
@@ -124,6 +158,17 @@ const DocumentSection = ({
           documents={documents}
           headerObj={headerObj}
           setAddModal={setAddModal}
+        />
+      )}
+      {editModal !== "" && (
+        <EditModal
+          clickedDoc={editModal}
+          documents={documents}
+          collectionName={collectionName}
+          headerObj={headerObj}
+          headerKey={headerKey}
+          setEditModal={setEditModal}
+          userDB={userDB}
         />
       )}
     </div>

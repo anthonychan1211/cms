@@ -125,9 +125,9 @@ const index = () => {
                     Password
                   </label>
                 </div>
-                <button onClick={handleClick} className="forgot-password">
+                <a onClick={handleClick} className="forgot-password">
                   Forgot your password?
-                </button>
+                </a>
               </div>
               <button type="submit">Sign In</button>
             </form>

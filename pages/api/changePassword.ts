@@ -3,10 +3,10 @@ import clientPromise from "../../lib/mongodb";
 import bcrypt from "bcrypt";
 const checkPassword = async (req: NextApiRequest, res: NextApiResponse) => {
   const { userDB, newPassword } = req.body;
-  console.log(userDB, newPassword);
+
   const client = await clientPromise;
   const hashPassword = await bcrypt.hash(newPassword, 10);
-  console.log(hashPassword);
+
   try {
     await client
       .db("cms-user")

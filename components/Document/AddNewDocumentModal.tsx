@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { AddEntry } from "./styles";
-import { handleImagePreview } from "../../util/handlers";
+import {
+  handleImagePreview,
+  handleSubmitAddDocument,
+} from "../../util/handlers";
+import { deleteButton } from "../../util/button";
 const AddNewDocumentModal = ({
   headerKey,
   collectionName,
@@ -19,15 +23,37 @@ const AddNewDocumentModal = ({
   const [newDocument, setNewDocument] = useState<React.SetStateAction<any>>({
     [`${collectionName}_id`]: "",
   });
-  const [imageSrc, setImageSrc] = useState<React.SetStateAction<any>>();
-  const [uploadData, setUploadData] = useState();
+  const [newIdNumber, setNewIdNumber] = useState(1);
   useEffect(() => {
-    const id = document.getElementById(
-      `${collectionName}_id`
-    ) as HTMLInputElement;
-    setNewDocument({ ...newDocument, [`${collectionName}_id`]: id.value });
+    if (documents.length > 0) {
+      documents.forEach((el: { [x: string]: string }) => {
+        const number = parseInt(el[`${collectionName}_id`].split("_")[1]);
+        if (number >= newIdNumber) {
+          setNewIdNumber(number + 1);
+        }
+      });
+    }
   }, []);
+  useEffect(() => {
+    const newId = (
+      document.getElementById(`${collectionName}_id`) as HTMLInputElement
+    )?.value;
+    setNewDocument({ ...newDocument, [`${collectionName}_id`]: newId });
+  }, [newIdNumber]);
 
+  function handleDeleteImage(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    const imageDiv = (e.target as HTMLButtonElement).closest(
+      ".image"
+    ) as HTMLElement;
+    const removeItem = imageDiv.querySelector("a")?.href;
+    const propertyName: string = imageDiv.parentElement?.parentElement
+      ?.id as string;
+    const filteredArr = newDocument[propertyName].filter(
+      (el: string) => el != removeItem
+    );
+
+    setNewDocument({ ...newDocument, [propertyName]: filteredArr });
+  }
   const mappedAddNewDocumentForm = headerKey.map((el: string) => {
     // create ID
     if (el.includes("_id")) {
@@ -37,7 +63,7 @@ const AddNewDocumentModal = ({
             type="text"
             className="form__field"
             placeholder={el}
-            value={`${collectionName}_${(documents.length + 1)
+            value={`${collectionName}_${newIdNumber
               .toString()
               .padStart(3, "0")}`}
             name={newDocument[el]}
@@ -105,51 +131,38 @@ const AddNewDocumentModal = ({
           </label>
         </div>
       );
-    } else if (headerObj[el] === "Image") {
-      console.log(newDocument);
+    } else if (headerObj[el] === "Image(s)") {
       return (
-        <>
-          <p>{el}</p>
-          <input
-            type="file"
-            name={el}
-            onChange={(e) => {
-              handleImagePreview(
-                e,
-                setImageSrc,
-                setUploadData,
-                newDocument,
-                setNewDocument
-              );
-            }}
-          />
-
-          {newDocument[el] && <img src={newDocument[el].image} />}
-        </>
-      );
-    } else if (headerObj[el] === "Multiple Images") {
-      return (
-        <>
+        <div id={el}>
           <p>{el}</p>
           <input
             type="file"
             name={el}
             multiple
+            accept=".gif,.jpg,.jpeg,.png"
             onChange={(e) => {
-              handleImagePreview(
-                e,
-                setImageSrc,
-                setUploadData,
-                newDocument,
-                setNewDocument
-              );
+              handleImagePreview(e, newDocument, setNewDocument);
             }}
           />
-          {newDocument[el] &&
-            newDocument[el].image.map((image: string) => {
-              return <img src={image} style={{ margin: "5px" }} />;
-            })}
-        </>
+          <div className="gallery-grid ">
+            {newDocument[el] &&
+              newDocument[el].map((image: string) => {
+                return (
+                  <div className="image">
+                    <div
+                      className="delete-image"
+                      onClick={(e) => handleDeleteImage(e)}
+                    >
+                      {deleteButton}
+                    </div>
+                    <a href={image} target="_blank" rel="noopener noreferrer">
+                      <img src={image} style={{ margin: "5px" }} />
+                    </a>
+                  </div>
+                );
+              })}
+          </div>
+        </div>
       );
     } else {
       return (
@@ -179,79 +192,6 @@ const AddNewDocumentModal = ({
       );
     }
   });
-
-  async function handleSubmitAddDocument(e: { preventDefault: () => void }) {
-    e.preventDefault();
-    const entries = Object.entries(newDocument);
-    entries.forEach(async (el: any) => {
-      if (typeof el[1] === "object") {
-        if (typeof el[1].image === "string") {
-          const data = new FormData();
-          data.append("file", el[1].image);
-          data.append("upload_preset", "qygeysbp");
-          const res = await fetch(
-            "https://api.cloudinary.com/v1_1/doeejabc9/image/upload",
-            {
-              method: "POST",
-              body: data,
-            }
-          );
-          const file = await res.json();
-          el.splice(1, 1, file.secure_url);
-          handleAddDocumentAPIFetch(
-            Object.fromEntries(entries),
-            collectionName,
-            userDB
-          );
-        } else if (Array.isArray(el[1].image)) {
-          let arr: string[] = [];
-          for (let i = 0; i < el[1].image.length; i++) {
-            const data = new FormData();
-            data.append("file", el[1].image[i]);
-            data.append("upload_preset", "qygeysbp");
-            const res = await fetch(
-              "https://api.cloudinary.com/v1_1/doeejabc9/image/upload",
-              {
-                method: "POST",
-                body: data,
-              }
-            );
-            const file = await res.json();
-            arr.push(file.secure_url);
-          }
-          el.splice(1, 1, arr);
-          handleAddDocumentAPIFetch(
-            Object.fromEntries(entries),
-            collectionName,
-            userDB
-          );
-        }
-      }
-    });
-  }
-  async function handleAddDocumentAPIFetch(
-    newDoc: {},
-    collectionName: string,
-    userDB: string
-  ) {
-    console.log(newDoc);
-    const addDocumentFeedBack = await fetch("api/addDocument", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({ newDoc, collectionName, userDB }),
-    });
-    const feedBack = await addDocumentFeedBack.json();
-    console.log(feedBack.status);
-    if (addDocumentFeedBack.status === 400) {
-      console.log("Error on add new document");
-    }
-    if (addDocumentFeedBack.status === 200) {
-      console.log(feedBack.message);
-      window.location.reload();
-    }
-  }
   return (
     <AddEntry>
       <div className="inner-modal">
@@ -268,7 +208,9 @@ const AddNewDocumentModal = ({
           </button>
           <button
             type="submit"
-            onClick={handleSubmitAddDocument}
+            onClick={(e) =>
+              handleSubmitAddDocument(e, newDocument, collectionName, userDB)
+            }
             className="add-button"
           >
             Submit

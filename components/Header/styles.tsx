@@ -58,31 +58,15 @@ export const StyledMenu = styled.div`
     display: grid;
     transition: all 0.2s ease-in-out;
   }
-  .success {
-    position: fixed;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--green);
-    color: white;
-    padding: 15px;
-    border-radius: 20px;
-    font-size: 14px;
-    transform: translateY(-200%);
-    transition: all 0.2s;
-    opacity: 0.8;
-  }
-  .success.active {
-    transform: translateY(200%);
-    transition: all 0.2s;
-  }
 `;
 
 export const StyledChangePassword = styled.div`
+  z-index: 10;
   width: 100vw;
   height: 100vh;
   background-color: #00000061;
   position: absolute;
+
   .inner-modal {
     position: relative;
     height: 60vh;
@@ -224,5 +208,29 @@ export const StyledDeleteConfirm = styled.div`
     }
     h4 {
     }
+  }
+`;
+
+export const StyledSuccess = styled.div`
+  .success {
+    z-index: 20;
+    height: fit-content;
+    width: fit-content;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--green);
+    color: white;
+    padding: 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    transform: translateY(-200%);
+    transition: all 0.2s;
+    opacity: 0.8;
+  }
+  .success.active {
+    transform: translateY(200%);
+    transition: all 0.2s;
   }
 `;

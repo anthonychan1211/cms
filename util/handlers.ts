@@ -13,6 +13,7 @@ import React, {
   MouseEvent,
   SetStateAction,
 } from "react";
+import { resolve } from "path";
 
 export async function handleRegister(
   e:
@@ -185,33 +186,133 @@ export async function handleAddHeaderForm(
 
 export function handleImagePreview(
   e: ChangeEvent<HTMLInputElement>,
-  setImageSrc: any,
-  setUploadData: (arg0: any) => void,
-  newDocument: { [key: string]: string | { image: string } },
-  serNewDocument: React.Dispatch<
+  newDocument: { [x: string]: string[] },
+  setNewDocument: React.Dispatch<
     React.SetStateAction<{ [x: string]: string | {} }>
   >
 ) {
   if (e.target.files?.length) {
     let arr: string[] = [];
+    let originalArr = newDocument[e.target.name] || [];
+
     Array.from(e.target.files).forEach((element) => {
       const reader = new FileReader();
       reader.onload = function (onLoadEvent) {
         arr.push(onLoadEvent.target?.result as string);
-        setImageSrc(arr);
-        serNewDocument({
+
+        setNewDocument({
           ...newDocument,
-          [e.target.name]: {
-            image: arr,
-          },
+          [e.target.name]: [...originalArr, ...arr],
         });
       };
-
       reader.readAsDataURL(element);
     });
 
-    setUploadData(undefined);
-  } else {
-    setImageSrc(null);
+    return arr;
   }
+}
+
+export async function handleSubmitAddDocument(
+  e: { preventDefault: () => void },
+  newDocument: {},
+  collectionName: string,
+  userDB: string
+) {
+  e.preventDefault();
+  const entries = Object.entries(newDocument);
+  entries.forEach(async (el: any) => {
+    if (typeof el[1] === "object") {
+      if (Array.isArray(el[1])) {
+        let arr: string[] = [];
+        for (let i = 0; i < el[1].length; i++) {
+          const data = new FormData();
+          data.append("file", el[1][i]);
+          data.append("upload_preset", "qygeysbp");
+          const res = await fetch(
+            "https://api.cloudinary.com/v1_1/doeejabc9/image/upload",
+            {
+              method: "POST",
+              body: data,
+            }
+          );
+          const file = await res.json();
+          arr.push(file.secure_url);
+        }
+        el.splice(1, 1, arr);
+        handleAddDocumentAPIFetch(
+          Object.fromEntries(entries),
+          collectionName,
+          userDB
+        );
+      }
+    }
+  });
+}
+export async function handleAddDocumentAPIFetch(
+  newDoc: {},
+  collectionName: string,
+  userDB: string
+) {
+  const addDocumentFeedBack = await fetch("api/addDocument", {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({ newDoc, collectionName, userDB }),
+  });
+  const feedBack = await addDocumentFeedBack.json();
+  console.log(feedBack.status);
+  if (addDocumentFeedBack.status === 400) {
+    console.log("Error on add new document");
+  }
+  if (addDocumentFeedBack.status === 200) {
+    console.log(feedBack.message);
+    window.location.reload();
+  }
+}
+
+export async function uploadImage(el: string[]) {
+  const partition = el.reduce(
+    (result: string[][], element: string) => {
+      element.includes("data:image/")
+        ? result[0].push(element)
+        : result[1].push(element);
+
+      return result;
+    },
+    [[], []]
+  );
+  for (let i = 0; i < partition[0].length; i++) {
+    const data = new FormData();
+    data.append("file", partition[0][i]);
+    data.append("upload_preset", "qygeysbp");
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/doeejabc9/image/upload",
+      {
+        method: "POST",
+        body: data,
+      }
+    );
+    const file = await res.json();
+    partition[1].push(file.secure_url);
+  }
+
+  return partition[1];
+}
+
+export async function handleDeleteDocument(
+  userDB: string,
+  collectionName: string,
+  chosenDocument: {}
+) {
+  const res = await fetch("api/deleteDocument", {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({ chosenDocument, collectionName, userDB }),
+  });
+  const feedBack = await res.json();
+  console.log(feedBack);
+  window.location.reload();
 }
