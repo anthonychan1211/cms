@@ -5,6 +5,8 @@ import {
   handleSubmitAddDocument,
 } from "../../util/handlers";
 import { deleteButton } from "../../util/button";
+import nprogress from "nprogress";
+
 const AddNewDocumentModal = ({
   headerKey,
   collectionName,
@@ -24,6 +26,7 @@ const AddNewDocumentModal = ({
     [`${collectionName}_id`]: "",
   });
   const [newIdNumber, setNewIdNumber] = useState(1);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     if (documents.length > 0) {
       documents.forEach((el: { [x: string]: string }) => {
@@ -197,20 +200,36 @@ const AddNewDocumentModal = ({
       <div className="inner-modal">
         <h4>Add New Document</h4>
         <div className="input-section">{mappedAddNewDocumentForm}</div>
+        {loading && (
+          <div className="lds-ellipsis">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        )}
         <div className="submit-section">
           <button
             className="cancel-button"
             onClick={() => {
               setAddModal("");
+              setLoading(false);
             }}
           >
             Cancel
           </button>
           <button
             type="submit"
-            onClick={(e) =>
-              handleSubmitAddDocument(e, newDocument, collectionName, userDB)
-            }
+            onClick={(e) => {
+              handleSubmitAddDocument(
+                e,
+                newDocument,
+                collectionName,
+                userDB,
+                setLoading
+              );
+              setLoading(true);
+            }}
             className="add-button"
           >
             Submit

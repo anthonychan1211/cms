@@ -216,7 +216,8 @@ export async function handleSubmitAddDocument(
   e: { preventDefault: () => void },
   newDocument: {},
   collectionName: string,
-  userDB: string
+  userDB: string,
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>
 ) {
   e.preventDefault();
   const entries = Object.entries(newDocument);
@@ -242,7 +243,8 @@ export async function handleSubmitAddDocument(
         handleAddDocumentAPIFetch(
           Object.fromEntries(entries),
           collectionName,
-          userDB
+          userDB,
+          setLoading
         );
       }
     }
@@ -251,7 +253,8 @@ export async function handleSubmitAddDocument(
 export async function handleAddDocumentAPIFetch(
   newDoc: {},
   collectionName: string,
-  userDB: string
+  userDB: string,
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>
 ) {
   const addDocumentFeedBack = await fetch("api/addDocument", {
     method: "POST",
@@ -267,6 +270,7 @@ export async function handleAddDocumentAPIFetch(
   }
   if (addDocumentFeedBack.status === 200) {
     console.log(feedBack.message);
+    setLoading(false);
     window.location.reload();
   }
 }
@@ -294,7 +298,9 @@ export async function uploadImage(el: string[]) {
       }
     );
     const file = await res.json();
-    partition[1].push(file.secure_url);
+    if (file) {
+      partition[1].push(file.secure_url);
+    }
   }
 
   return partition[1];

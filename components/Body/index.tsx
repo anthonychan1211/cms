@@ -39,13 +39,6 @@ const Body = ({
     });
     const data = getDocument(clickedCollection, userDB);
     data.then((res) => {
-      // // get document data
-      // let values: any = [];
-      // res.forEach((item: { [key: string]: string }) => {
-      //   let { _id, ...delete_id } = item;
-      //   values.push(Object.values(delete_id));
-      // });
-      // console.log(res);
       setDoc(res);
     });
     if (collectionsList.length > 0 && clicked && clicked.parentElement) {

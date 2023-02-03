@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { NewEntry, DeleteCollection, StyledDocument } from "./styles";
-
 import { extractHeader, handleDeleteCollection } from "../../util/handlers";
 import AddNewDocumentModal from "./AddNewDocumentModal";
 import AddNewHeaderModal from "./AddNewHeaderModal";

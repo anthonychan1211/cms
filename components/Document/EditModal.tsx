@@ -28,14 +28,18 @@ const EditModal = ({
   >({
     [`${collectionName}_id`]: "",
   });
+  const [loading, setLoading] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const chosenDoc = Array.from(documents).filter((el: any) => {
     return el[`${collectionName}_id`] === clickedDoc;
   });
+  const [finalVersionDoc, setFinalVersionDoc] = useState(null);
   useEffect(() => {
     setChosenDocument(chosenDoc[0]);
   }, []);
-  useEffect(() => {});
+  useEffect(() => {
+    console.log(finalVersionDoc);
+  }, [finalVersionDoc]);
   function handleDeleteImage(e: MouseEvent) {
     const imageDiv = (e.target as HTMLButtonElement).closest(
       ".image"
@@ -198,9 +202,14 @@ const EditModal = ({
     entries.forEach(async (el) => {
       if (Array.isArray(el[1])) {
         const uploaded = await uploadImage(el[1]);
-        el[1].splice(0, el[1].length, uploaded);
+        setChosenDocument({
+          ...chosenDocument,
+          [chosenDocument[el[0]]]: uploaded,
+        });
       }
     });
+  }
+  async function updateDocument() {
     const res = await fetch("api/updateDocument", {
       method: "POST",
       headers: {
@@ -215,11 +224,13 @@ const EditModal = ({
     const feedBack = await res.json();
     if (res.status === 200) {
       console.log(feedBack.message);
+      setLoading(false);
       window.location.reload();
     } else {
       console.log("error");
     }
   }
+
   return (
     <StyledEditModal>
       <div className="inner-modal">
@@ -241,17 +252,33 @@ const EditModal = ({
         </div>
         <h4>Edit</h4>
         <div className="input-section">{mappedChosenDocumentForm}</div>
+        {loading && (
+          <div className="lds-ellipsis">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        )}
         <div className="submit-section">
           <button
             className="cancel-button"
             onClick={() => {
               setEditModal("");
+              setLoading(false);
             }}
           >
             Cancel
           </button>
           {editMode && (
-            <button onClick={handleEdit} type="submit" className="add-button">
+            <button
+              onClick={async () => {
+                handleEdit();
+                updateDocument();
+              }}
+              type="submit"
+              className="add-button"
+            >
               Save changes
             </button>
           )}
