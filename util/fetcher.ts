@@ -1,3 +1,5 @@
+import React from "react";
+
 export async function signUpFetch(
   userName: string,
   projectName: string,
@@ -156,4 +158,32 @@ export async function getCollection(userDB: string) {
   });
   const feedBack = await res.json();
   return feedBack.collectionList;
+}
+
+export async function updateDocument(
+  chosenDocument: { [key: string]: string },
+  collectionName: string,
+  userDB: string,
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>
+) {
+  console.log(chosenDocument);
+  const res = await fetch("api/updateDocument", {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({
+      collectionName,
+      userDB,
+      chosenDocument,
+    }),
+  });
+  const feedBack = await res.json();
+  if (res.status === 200) {
+    console.log(feedBack.message);
+    setLoading(false);
+    window.location.reload();
+  } else {
+    console.log("error");
+  }
 }

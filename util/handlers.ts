@@ -4,7 +4,12 @@ import {
   userIsExisted,
   confirmPasswordMatch,
 } from "../util/validation";
-import { signUpFetch, logInFetch, addHeader } from "../util/fetcher";
+import {
+  signUpFetch,
+  logInFetch,
+  addHeader,
+  updateDocument,
+} from "../util/fetcher";
 import { forgetPassword } from "../util/fetcher";
 import React, {
   ChangeEvent,
@@ -207,7 +212,6 @@ export function handleImagePreview(
       };
       reader.readAsDataURL(element);
     });
-
     return arr;
   }
 }
@@ -240,6 +244,7 @@ export async function handleSubmitAddDocument(
           arr.push(file.secure_url);
         }
         el.splice(1, 1, arr);
+        console.log(Object.fromEntries(entries));
         handleAddDocumentAPIFetch(
           Object.fromEntries(entries),
           collectionName,
@@ -264,7 +269,6 @@ export async function handleAddDocumentAPIFetch(
     body: JSON.stringify({ newDoc, collectionName, userDB }),
   });
   const feedBack = await addDocumentFeedBack.json();
-  console.log(feedBack.status);
   if (addDocumentFeedBack.status === 400) {
     console.log("Error on add new document");
   }
@@ -302,7 +306,7 @@ export async function uploadImage(el: string[]) {
       partition[1].push(file.secure_url);
     }
   }
-
+  console.log(partition[1]);
   return partition[1];
 }
 
@@ -321,4 +325,28 @@ export async function handleDeleteDocument(
   const feedBack = await res.json();
   console.log(feedBack);
   window.location.reload();
+}
+
+export async function handleEdit(
+  chosenDocument: { [key: string]: string },
+  collectionName: string,
+  userDB: string,
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>
+) {
+  const entries = Object.entries(chosenDocument);
+
+  for await (const el of entries) {
+    if (Array.isArray(el[1])) {
+      const uploaded = await uploadImage(el[1]);
+      el[1].splice(0, el[1].length, ...uploaded);
+      console.log(Object.fromEntries(entries));
+      updateDocument(
+        Object.fromEntries(entries),
+        collectionName,
+        userDB,
+        setLoading
+      );
+    }
+  }
+  return;
 }

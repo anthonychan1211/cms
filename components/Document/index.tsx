@@ -20,7 +20,6 @@ const DocumentSection = ({
 }: DocumentType) => {
   // extract header and put id at first
   const headerKey = extractHeader(headerObj);
-
   if (headerKey[0]) {
     if (!headerKey[0].includes("_id")) {
       const id = headerKey.splice(
@@ -41,9 +40,11 @@ const DocumentSection = ({
   const mappedHeader = headerKey.map((el: string) => {
     return <th className="header">{el}</th>;
   });
+
   const mappedValues =
     documents.length > 0 &&
     documents.map((item: { [key: string]: any }) => {
+      // item = each document
       if (item) {
         return (
           <tr
@@ -57,17 +58,14 @@ const DocumentSection = ({
             {headerKey.map((el: string) => {
               if (headerObj[el] === "Image(s)") {
                 if (item[el]) {
+                  console.log(item[el]);
                   if (item[el].length <= 9) {
                     return (
                       <td>
                         <div className="collage">
-                          {item[el].map((image: string) => (
-                            <img
-                              style={{ maxHeight: " 100px" }}
-                              src={image}
-                              alt={image}
-                            ></img>
-                          ))}
+                          {item[el].map((image: string) => {
+                            return <img src={image} alt={image} />;
+                          })}
                         </div>
                       </td>
                     );

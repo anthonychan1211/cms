@@ -2,10 +2,12 @@ import { StyledEditModal } from "./styles";
 import { MouseEvent, useEffect, useState } from "react";
 import {
   handleDeleteDocument,
+  handleEdit,
   handleImagePreview,
   uploadImage,
 } from "../../util/handlers";
 import { deleteButton } from "../../util/button";
+import { updateDocument } from "../../util/fetcher";
 const EditModal = ({
   documents,
   collectionName,
@@ -33,13 +35,11 @@ const EditModal = ({
   const chosenDoc = Array.from(documents).filter((el: any) => {
     return el[`${collectionName}_id`] === clickedDoc;
   });
-  const [finalVersionDoc, setFinalVersionDoc] = useState(null);
+  // set the chosen document after clicked
   useEffect(() => {
     setChosenDocument(chosenDoc[0]);
   }, []);
-  useEffect(() => {
-    console.log(finalVersionDoc);
-  }, [finalVersionDoc]);
+
   function handleDeleteImage(e: MouseEvent) {
     const imageDiv = (e.target as HTMLButtonElement).closest(
       ".image"
@@ -197,39 +197,6 @@ const EditModal = ({
       );
     }
   });
-  async function handleEdit() {
-    const entries = Object.entries(chosenDocument);
-    entries.forEach(async (el) => {
-      if (Array.isArray(el[1])) {
-        const uploaded = await uploadImage(el[1]);
-        setChosenDocument({
-          ...chosenDocument,
-          [chosenDocument[el[0]]]: uploaded,
-        });
-      }
-    });
-  }
-  async function updateDocument() {
-    const res = await fetch("api/updateDocument", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        collectionName,
-        userDB,
-        chosenDocument,
-      }),
-    });
-    const feedBack = await res.json();
-    if (res.status === 200) {
-      console.log(feedBack.message);
-      setLoading(false);
-      window.location.reload();
-    } else {
-      console.log("error");
-    }
-  }
 
   return (
     <StyledEditModal>
@@ -273,8 +240,9 @@ const EditModal = ({
           {editMode && (
             <button
               onClick={async () => {
-                handleEdit();
-                updateDocument();
+                console.log(chosenDocument);
+                setLoading(true);
+                handleEdit(chosenDocument, collectionName, userDB, setLoading);
               }}
               type="submit"
               className="add-button"
