@@ -4,10 +4,8 @@ import {
   handleDeleteDocument,
   handleEdit,
   handleImagePreview,
-  uploadImage,
 } from "../../util/handlers";
 import { deleteButton } from "../../util/button";
-import { updateDocument } from "../../util/fetcher";
 const EditModal = ({
   documents,
   collectionName,
@@ -31,6 +29,7 @@ const EditModal = ({
     [`${collectionName}_id`]: "",
   });
   const [loading, setLoading] = useState(false);
+  const [warning, setWarning] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const chosenDoc = Array.from(documents).filter((el: any) => {
     return el[`${collectionName}_id`] === clickedDoc;
@@ -55,8 +54,43 @@ const EditModal = ({
   }
   const mappedChosenDocumentForm = headerKey.map((el: string) => {
     // ID
-    if (el.includes("_id")) {
-      return (
+    if (headerObj[el] === "UniqueID") {
+      return editMode ? (
+        <>
+          <div className="form__group field">
+            <input
+              type="text"
+              className="form__field"
+              placeholder={el}
+              onChange={(e) => {
+                documents.forEach((doc: { [key: string]: string }) => {
+                  if (doc[el] === e.target.value) {
+                    setWarning(true);
+                  } else {
+                    setWarning(false);
+                  }
+                });
+
+                setChosenDocument({
+                  ...chosenDocument,
+                  [e.target.name]: e.target.value,
+                });
+              }}
+              value={chosenDocument[el]}
+              id={el}
+              name={el}
+            />
+            <label htmlFor={el} className="form__label">
+              {el}
+            </label>
+          </div>
+          {warning && (
+            <p style={{ color: "red", fontSize: "12px" }}>
+              This ID has been used.
+            </p>
+          )}
+        </>
+      ) : (
         <div className="form__group field">
           <input
             type="text"

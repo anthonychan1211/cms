@@ -22,8 +22,7 @@ const AddNewHeaderModal = ({
           placeholder={`${collectionName}_id`}
           name={`${collectionName}_id`}
           id={`${collectionName}_id`}
-          value={`${collectionName}_id`}
-          disabled
+          defaultValue={`${collectionName}_id`}
         />
         <label htmlFor={`${collectionName}_id`} className="form__label">
           Property Name
@@ -36,6 +35,9 @@ const AddNewHeaderModal = ({
         </select>
       </div>
     </div>,
+    <p style={{ fontSize: "12px" }}>
+      This can be set as any property e.g. Name/Email. But it must be unique.
+    </p>,
   ]);
   async function handleAddHeader(e: { preventDefault: () => void }) {
     e.preventDefault();

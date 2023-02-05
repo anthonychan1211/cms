@@ -5,7 +5,6 @@ import {
   handleSubmitAddDocument,
 } from "../../util/handlers";
 import { deleteButton } from "../../util/button";
-import nprogress from "nprogress";
 
 const AddNewDocumentModal = ({
   headerKey,
@@ -22,27 +21,9 @@ const AddNewDocumentModal = ({
   userDB: string;
   setAddModal: React.Dispatch<React.SetStateAction<string>>;
 }) => {
-  const [newDocument, setNewDocument] = useState<React.SetStateAction<any>>({
-    [`${collectionName}_id`]: "",
-  });
-  const [newIdNumber, setNewIdNumber] = useState(1);
+  const [newDocument, setNewDocument] = useState<React.SetStateAction<any>>({});
+  const [warning, setWarning] = useState(false);
   const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    if (documents.length > 0) {
-      documents.forEach((el: { [x: string]: string }) => {
-        const number = parseInt(el[`${collectionName}_id`].split("_")[1]);
-        if (number >= newIdNumber) {
-          setNewIdNumber(number + 1);
-        }
-      });
-    }
-  }, []);
-  useEffect(() => {
-    const newId = (
-      document.getElementById(`${collectionName}_id`) as HTMLInputElement
-    )?.value;
-    setNewDocument({ ...newDocument, [`${collectionName}_id`]: newId });
-  }, [newIdNumber]);
 
   function handleDeleteImage(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     const imageDiv = (e.target as HTMLButtonElement).closest(
@@ -59,23 +40,38 @@ const AddNewDocumentModal = ({
   }
   const mappedAddNewDocumentForm = headerKey.map((el: string) => {
     // create ID
-    if (el.includes("_id")) {
+    if (headerObj[el] === "UniqueID") {
       return (
         <div className="form__group field">
           <input
             type="text"
             className="form__field"
             placeholder={el}
-            value={`${collectionName}_${newIdNumber
-              .toString()
-              .padStart(3, "0")}`}
-            name={newDocument[el]}
+            onChange={(e) => {
+              documents.forEach((doc) => {
+                if (doc[el] === e.target.value) {
+                  setWarning(true);
+                } else {
+                  setWarning(false);
+                }
+              });
+
+              setNewDocument({
+                ...newDocument,
+                [e.target.name]: e.target.value,
+              });
+            }}
+            name={el}
             id={el}
-            disabled
           />
           <label htmlFor={el} className="form__label">
             {el}
           </label>
+          {warning && (
+            <p style={{ color: "red", fontSize: "12px" }}>
+              This ID has been used.
+            </p>
+          )}
         </div>
       );
     } else if (Array.isArray(headerObj[el])) {
@@ -218,22 +214,28 @@ const AddNewDocumentModal = ({
           >
             Cancel
           </button>
-          <button
-            type="submit"
-            onClick={(e) => {
-              handleSubmitAddDocument(
-                e,
-                newDocument,
-                collectionName,
-                userDB,
-                setLoading
-              );
-              setLoading(true);
-            }}
-            className="add-button"
-          >
-            Submit
-          </button>
+          {warning ? (
+            <button type="submit" disabled className="cancel-button">
+              Submit
+            </button>
+          ) : (
+            <button
+              type="submit"
+              onClick={(e) => {
+                handleSubmitAddDocument(
+                  e,
+                  newDocument,
+                  collectionName,
+                  userDB,
+                  setLoading
+                );
+                setLoading(true);
+              }}
+              className="add-button"
+            >
+              Submit
+            </button>
+          )}
         </div>
       </div>
     </AddEntry>
