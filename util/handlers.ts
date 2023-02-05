@@ -225,9 +225,11 @@ export async function handleSubmitAddDocument(
 ) {
   e.preventDefault();
   const entries = Object.entries(newDocument);
+  console.log(entries);
   entries.forEach(async (el: any) => {
     if (typeof el[1] === "object") {
       if (Array.isArray(el[1])) {
+        console.log("run");
         let arr: string[] = [];
         for (let i = 0; i < el[1].length; i++) {
           const data = new FormData();
@@ -244,7 +246,7 @@ export async function handleSubmitAddDocument(
           arr.push(file.secure_url);
         }
         el.splice(1, 1, arr);
-        console.log(Object.fromEntries(entries));
+
         handleAddDocumentAPIFetch(
           Object.fromEntries(entries),
           collectionName,
@@ -254,6 +256,7 @@ export async function handleSubmitAddDocument(
       }
     }
   });
+  handleAddDocumentAPIFetch(newDocument, collectionName, userDB, setLoading);
 }
 export async function handleAddDocumentAPIFetch(
   newDoc: {},
