@@ -338,6 +338,12 @@ export const StyledEditModal = styled.div`
         margin-inline: 8px;
       }
     }
+    .edit-mode-on {
+      box-shadow: 2px 2px 10px var(--green);
+      border: 2px solid var(--green);
+      color: var(--green);
+      background-color: white;
+    }
     .cancel-button {
       color: var(--black);
       background-color: white;

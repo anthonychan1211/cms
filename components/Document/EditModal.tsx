@@ -203,10 +203,10 @@ const EditModal = ({
       <div className="inner-modal">
         <div className="control-panel">
           <button
-            className="cancel-button"
+            className={editMode ? "edit-mode-on" : "cancel-button"}
             onClick={() => setEditMode(!editMode)}
           >
-            Edit : {editMode ? "On" : "Off"}
+            Edit
           </button>
           <button
             className="delete-button"
@@ -240,7 +240,6 @@ const EditModal = ({
           {editMode && (
             <button
               onClick={async () => {
-                console.log(chosenDocument);
                 setLoading(true);
                 handleEdit(chosenDocument, collectionName, userDB, setLoading);
               }}
