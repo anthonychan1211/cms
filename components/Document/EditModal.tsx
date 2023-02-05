@@ -235,7 +235,7 @@ const EditModal = ({
               setLoading(false);
             }}
           >
-            Cancel
+            {editMode ? "Cancel" : "Close"}
           </button>
           {editMode && (
             <button
