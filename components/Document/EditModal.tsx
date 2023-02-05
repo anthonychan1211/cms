@@ -217,7 +217,7 @@ const EditModal = ({
             Delete Document
           </button>
         </div>
-        <h4>Edit</h4>
+        <h4>{editMode ? "Edit" : "Preview"}</h4>
         <div className="input-section">{mappedChosenDocumentForm}</div>
         {loading && (
           <div className="lds-ellipsis">
