@@ -351,5 +351,6 @@ export async function handleEdit(
       );
     }
   }
+  updateDocument(chosenDocument, collectionName, userDB, setLoading);
   return;
 }
