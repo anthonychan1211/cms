@@ -20,6 +20,21 @@ export const StyledHeader = styled.div`
     align-self: center;
     font-size: 17px;
   }
+  svg {
+    width: 25px;
+  }
+  @media screen and (max-width: 600px) {
+    padding-inline: 15px;
+    h1 {
+      font-size: 20px;
+    }
+    p {
+      font-size: 12px;
+    }
+    svg {
+      width: 20px;
+    }
+  }
 `;
 
 export const StyledMenu = styled.div`
@@ -57,6 +72,13 @@ export const StyledMenu = styled.div`
     color: white;
     display: grid;
     transition: all 0.2s ease-in-out;
+  }
+  @media screen and (max-width: 600px) {
+    width: 160px;
+    button {
+      font-size: 12px;
+      height: 60px;
+    }
   }
 `;
 

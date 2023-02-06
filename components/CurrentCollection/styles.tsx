@@ -36,6 +36,7 @@ export const StyledCollection = styled.div`
   flex-direction: column;
   justify-items: center;
   gap: 3px;
+  font-size: min(4vw, 16px);
   .collection-name {
     width: 100%;
     height: auto;
@@ -43,10 +44,9 @@ export const StyledCollection = styled.div`
     color: var(--balck);
     background-color: var(--light-grey);
     border-radius: 0px;
-    padding: 30px 40px;
-    justify-content: center;
+    padding: 30px 2vw;
     text-align: left;
-    font-size: 18px;
+    justify-content: center;
     cursor: pointer;
   }
   .collection-name.open {
@@ -56,8 +56,8 @@ export const StyledCollection = styled.div`
 
 export const StyledNewCollection = styled.form`
   display: flex;
-  gap: 10px;
-  padding-left: 40px;
+  /* gap: 10px; */
+  padding-left: 2vw;
 
   button {
     margin-block: 20px;
@@ -65,7 +65,6 @@ export const StyledNewCollection = styled.form`
     width: fit-content;
     background-color: var(--green);
     color: white;
-    padding-inline: 15px;
     .form__label {
       font-size: 12px;
     }

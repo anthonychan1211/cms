@@ -55,42 +55,7 @@ const EditModal = ({
   const mappedChosenDocumentForm = headerKey.map((el: string) => {
     // ID
     if (headerObj[el] === "UniqueID") {
-      return editMode ? (
-        <>
-          <div className="form__group field">
-            <input
-              type="text"
-              className="form__field"
-              placeholder={el}
-              onChange={(e) => {
-                documents.forEach((doc: { [key: string]: string }) => {
-                  if (doc[el] === e.target.value) {
-                    setWarning(true);
-                  } else {
-                    setWarning(false);
-                  }
-                });
-
-                setChosenDocument({
-                  ...chosenDocument,
-                  [e.target.name]: e.target.value,
-                });
-              }}
-              value={chosenDocument[el]}
-              id={el}
-              name={el}
-            />
-            <label htmlFor={el} className="form__label">
-              {el}
-            </label>
-          </div>
-          {warning && (
-            <p style={{ color: "red", fontSize: "12px" }}>
-              This ID has been used.
-            </p>
-          )}
-        </>
-      ) : (
+      return (
         <div className="form__group field">
           <input
             type="text"

@@ -1,27 +1,35 @@
 import styled from "styled-components";
 export const StyleHTML = styled.div`
   height: 100vh;
+  display: flex;
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+  }
 
   background: linear-gradient(var(--primary), var(--secondary));
   h1 {
     margin: 0;
     margin-left: 5%;
     color: whitesmoke;
+    width: 70%;
+    font-size: min(8vw, 70px);
   }
 `;
 export const StyledLandingPage = styled.div`
-  position: absolute;
-  text-align: center;
-  top: 0%;
-  right: 0%;
-  height: 100dvh;
+  height: 100vh;
   width: 30%;
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+    width: 100%;
+  }
+  text-align: center;
   background-color: white;
 `;
 
 export const StyledBody = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
+
   box-sizing: border-box;
   h2 {
     margin: 0;
