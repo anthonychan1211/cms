@@ -23,7 +23,7 @@ const DocumentSection = ({
   if (headerKey[0]) {
     if (!headerKey[0].includes("_id")) {
       const id = headerKey.splice(
-        headerKey.findIndex((el) => el.includes("_id")),
+        headerKey.findIndex((el) => headerObj[el] === "UniqueID"),
         1
       );
       headerKey.unshift(id[0]);
