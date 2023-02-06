@@ -58,7 +58,6 @@ const DocumentSection = ({
             {headerKey.map((el: string) => {
               if (headerObj[el] === "Image(s)") {
                 if (item[el]) {
-                  console.log(item[el]);
                   if (item[el].length <= 9) {
                     return (
                       <td>

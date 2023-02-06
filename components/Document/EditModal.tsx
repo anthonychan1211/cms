@@ -53,148 +53,149 @@ const EditModal = ({
     setChosenDocument({ ...chosenDocument, [propertyName]: filteredArr });
   }
   const mappedChosenDocumentForm = headerKey.map((el: string) => {
-    // ID
-    if (headerObj[el] === "UniqueID") {
-      return (
-        <div className="form__group field">
-          <input
-            type="text"
-            className="form__field"
-            placeholder={el}
-            value={chosenDocument[el]}
-            id={el}
-            disabled
-          />
-          <label htmlFor={el} className="form__label">
-            {el}
-          </label>
-        </div>
-      );
-    }
-    // if the type is select and the value is an array
-    else if (Array.isArray(headerObj[el])) {
-      if (!Object.hasOwn(headerObj, el))
-        setChosenDocument({
-          ...chosenDocument,
-          [el]: headerObj[el][0],
-        });
-
-      return (
-        <>
-          <label style={{ fontSize: "18px" }}>{el}: </label>
-          <select
-            disabled={!editMode}
-            defaultValue={headerObj[el][0]}
-            style={{
-              fontSize: "15px",
-              padding: "5px",
-              margin: "10px",
-              marginTop: "30px",
-            }}
-            name={el}
-            onChange={(e) => {
-              setChosenDocument({
-                ...chosenDocument,
-                [e.target.name]: e.target.value,
-              });
-            }}
-          >
-            {headerObj[el].map((option: string) => (
-              <option>{option}</option>
-            ))}
-          </select>
-        </>
-      );
-    } else if (headerObj[el] === "TextArea") {
-      return (
-        <div className="form__group field">
-          <textarea
-            disabled={!editMode}
-            rows={10}
-            style={{ marginTop: "10px" }}
-            className="form__field"
-            placeholder={el}
-            name={el}
-            id={el}
-            onChange={(e) => {
-              setChosenDocument({
-                ...chosenDocument,
-                [e.target.name]: e.target.value,
-              });
-            }}
-            required
-          />
-          <label htmlFor={el} className="form__label">
-            {el}
-          </label>
-        </div>
-      );
-    } else if (headerObj[el] === "Image(s)") {
-      if (chosenDocument[el])
+    if (chosenDocument)
+      if (headerObj[el] === "UniqueID") {
+        // ID
         return (
-          <div id={el}>
-            <p>{el}</p>
-            {editMode && (
-              <input
-                type="file"
-                name={el}
-                multiple
-                accept=".gif,.jpg,.jpeg,.png"
-                onChange={(e) => {
-                  handleImagePreview(e, chosenDocument, setChosenDocument);
-                }}
-              />
-            )}
-            <div className="gallery-grid">
-              {chosenDocument[el].map((image: string) => {
-                return (
-                  <div className="image">
-                    {editMode && (
-                      <div
-                        className="delete-image"
-                        onClick={(e) => handleDeleteImage(e)}
-                      >
-                        {deleteButton}
-                      </div>
-                    )}
-                    <a href={image} target="_blank" rel="noopener noreferrer">
-                      <img src={image} style={{ margin: "5px" }} />
-                    </a>
-                  </div>
-                );
-              })}
-            </div>
+          <div className="form__group field">
+            <input
+              type="text"
+              className="form__field"
+              placeholder={el}
+              value={chosenDocument[el]}
+              id={el}
+              disabled
+            />
+            <label htmlFor={el} className="form__label">
+              {el}
+            </label>
           </div>
         );
-    } else {
-      return (
-        <div className="form__group field">
-          <input
-            disabled={!editMode}
-            type={headerObj[el].toLowerCase()}
-            className="form__field"
-            placeholder={el}
-            value={chosenDocument[el]}
-            name={el}
-            id={el}
-            onWheel={(e) => {
-              if (headerObj[el].toLowerCase() === "number")
-                (e.target as HTMLElement).blur();
-            }}
-            onChange={(e) => {
-              setChosenDocument({
-                ...chosenDocument,
-                [e.target.name]: e.target.value,
-              });
-            }}
-            required
-          />
-          <label htmlFor={el} className="form__label">
-            {el}
-          </label>
-        </div>
-      );
-    }
+      }
+      // if the type is select and the value is an array
+      else if (Array.isArray(headerObj[el])) {
+        if (!Object.hasOwn(headerObj, el))
+          setChosenDocument({
+            ...chosenDocument,
+            [el]: headerObj[el][0],
+          });
+
+        return (
+          <>
+            <label style={{ fontSize: "18px" }}>{el}: </label>
+            <select
+              disabled={!editMode}
+              defaultValue={headerObj[el][0]}
+              style={{
+                fontSize: "15px",
+                padding: "5px",
+                margin: "10px",
+                marginTop: "30px",
+              }}
+              name={el}
+              onChange={(e) => {
+                setChosenDocument({
+                  ...chosenDocument,
+                  [e.target.name]: e.target.value,
+                });
+              }}
+            >
+              {headerObj[el].map((option: string) => (
+                <option>{option}</option>
+              ))}
+            </select>
+          </>
+        );
+      } else if (headerObj[el] === "TextArea") {
+        return (
+          <div className="form__group field">
+            <textarea
+              disabled={!editMode}
+              rows={10}
+              style={{ marginTop: "10px" }}
+              className="form__field"
+              placeholder={el}
+              name={el}
+              id={el}
+              onChange={(e) => {
+                setChosenDocument({
+                  ...chosenDocument,
+                  [e.target.name]: e.target.value,
+                });
+              }}
+              required
+            />
+            <label htmlFor={el} className="form__label">
+              {el}
+            </label>
+          </div>
+        );
+      } else if (headerObj[el] === "Image(s)") {
+        if (chosenDocument[el])
+          return (
+            <div id={el}>
+              <p>{el}</p>
+              {editMode && (
+                <input
+                  type="file"
+                  name={el}
+                  multiple
+                  accept=".gif,.jpg,.jpeg,.png"
+                  onChange={(e) => {
+                    handleImagePreview(e, chosenDocument, setChosenDocument);
+                  }}
+                />
+              )}
+              <div className="gallery-grid">
+                {chosenDocument[el].map((image: string) => {
+                  return (
+                    <div className="image">
+                      {editMode && (
+                        <div
+                          className="delete-image"
+                          onClick={(e) => handleDeleteImage(e)}
+                        >
+                          {deleteButton}
+                        </div>
+                      )}
+                      <a href={image} target="_blank" rel="noopener noreferrer">
+                        <img src={image} style={{ margin: "5px" }} />
+                      </a>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+      } else {
+        return (
+          <div className="form__group field">
+            <input
+              disabled={!editMode}
+              type={headerObj[el].toLowerCase()}
+              className="form__field"
+              placeholder={el}
+              value={chosenDocument[el]}
+              name={el}
+              id={el}
+              onWheel={(e) => {
+                if (headerObj[el].toLowerCase() === "number")
+                  (e.target as HTMLElement).blur();
+              }}
+              onChange={(e) => {
+                setChosenDocument({
+                  ...chosenDocument,
+                  [e.target.name]: e.target.value,
+                });
+              }}
+              required
+            />
+            <label htmlFor={el} className="form__label">
+              {el}
+            </label>
+          </div>
+        );
+      }
   });
 
   return (
