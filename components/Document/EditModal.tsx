@@ -130,23 +130,23 @@ const EditModal = ({
         </div>
       );
     } else if (headerObj[el] === "Image(s)") {
-      return (
-        <div id={el}>
-          <p>{el}</p>
-          {editMode && (
-            <input
-              type="file"
-              name={el}
-              multiple
-              accept=".gif,.jpg,.jpeg,.png"
-              onChange={(e) => {
-                handleImagePreview(e, chosenDocument, setChosenDocument);
-              }}
-            />
-          )}
-          <div className="gallery-grid">
-            {chosenDocument[el] &&
-              chosenDocument[el].map((image: string) => {
+      if (chosenDocument[el])
+        return (
+          <div id={el}>
+            <p>{el}</p>
+            {editMode && (
+              <input
+                type="file"
+                name={el}
+                multiple
+                accept=".gif,.jpg,.jpeg,.png"
+                onChange={(e) => {
+                  handleImagePreview(e, chosenDocument, setChosenDocument);
+                }}
+              />
+            )}
+            <div className="gallery-grid">
+              {chosenDocument[el].map((image: string) => {
                 return (
                   <div className="image">
                     {editMode && (
@@ -163,9 +163,9 @@ const EditModal = ({
                   </div>
                 );
               })}
+            </div>
           </div>
-        </div>
-      );
+        );
     } else {
       return (
         <div className="form__group field">
