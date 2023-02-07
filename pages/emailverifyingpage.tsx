@@ -84,7 +84,7 @@ const emailverifyingpage = () => {
         <p>Not verified</p>
       ) : word === "register" ? (
         <StyledPage>
-          <img src="greenTick.png"></img>
+          <img src="/greenTick.png"></img>
           <h1>Email has been verified</h1>
           <p>This page is going to redirect...</p>
         </StyledPage>

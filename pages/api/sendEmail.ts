@@ -24,8 +24,8 @@ const sendEmail = async (req: NextApiRequest, res: NextApiResponse) => {
       to: email,
       from: `Anthony Chan <${process.env.SENDER_EMAIL}>`,
       subject: "Verify your email",
-      text: `Please verify your email by clicking the following link:
-        ${url}`,
+      html: `<div style="width: 70%; margin: 0 auto; "><h6 style="font-size: 18px">Please verify your email by clicking the button:</h6>
+      <a style="margin-top:1em; padding: 1em; background-color: #33b249; text-decoration: none ; color: white" href="${url}"> Verify You Email</a></div>`,
     });
     return res.status(200).json({
       success: `Email has sent to 
