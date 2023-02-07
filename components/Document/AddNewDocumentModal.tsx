@@ -133,7 +133,7 @@ const AddNewDocumentModal = ({
     } else if (headerObj[el] === "Image(s)") {
       return (
         <div id={el}>
-          <p>{el}</p>
+          <p className="title">{el}</p>
           <input
             type="file"
             name={el}

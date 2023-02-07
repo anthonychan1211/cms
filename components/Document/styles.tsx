@@ -1,11 +1,27 @@
 import styled from "styled-components";
 
+export const StyledDocumentSection = styled.div`
+  width: 100%;
+  overflow: scroll;
+  .document-collection-name {
+    font-size: 35px;
+    @media screen and (max-width: 950px) {
+      font-size: 25px;
+      margin-left: 4vw;
+    }
+  }
+`;
 export const NewEntry = styled.button`
   margin-right: 20px;
   margin-top: 20px;
   float: right;
-
   color: white;
+  font-size: min(3vw, 15px);
+  width: auto;
+  padding-inline: min(4vw, 18px);
+  @media screen and (max-width: 950px) {
+    margin-right: 3vw;
+  }
 `;
 
 export const DeleteCollection = styled.button`
@@ -13,24 +29,31 @@ export const DeleteCollection = styled.button`
   margin-right: 40px;
   float: right;
   background-color: #ff0000;
+  font-size: min(3vw, 15px);
+  width: auto;
+  padding-inline: min(4vw, 18px);
   :hover {
     cursor: pointer;
+  }
+  @media screen and (max-width: 950px) {
+    margin-right: 0;
   }
 `;
 
 export const StyledDocument = styled.table`
-  height: auto;
-  overflow: scroll;
+  flex: 1;
   text-align: center;
   justify-content: space-evenly;
   margin: 0 auto;
-  width: 80%;
-
+  width: 100%;
   * {
     margin: 0;
     padding-inline: 10px;
   }
-
+  table {
+    width: 100%;
+    overflow: scroll;
+  }
   th {
     background-color: #eeeeee;
     border-bottom: 2px solid var(--black);
@@ -62,7 +85,13 @@ export const StyledDocument = styled.table`
     }
     img {
       max-height: 100px;
+      @media screen and (max-width: 950px) {
+        max-height: 60px;
+      }
     }
+  }
+  @media screen and (max-width: 950px) {
+    flex: 1 1 auto;
   }
 `;
 
@@ -170,6 +199,9 @@ export const AddEntry = styled.form`
     position: relative;
     height: 80vh;
     width: 50vw;
+    @media screen and (max-width: 950px) {
+      width: 100vw;
+    }
     overflow: scroll;
     background-color: #fff;
     margin: 0 auto;
@@ -178,22 +210,36 @@ export const AddEntry = styled.form`
     padding: 30px 50px;
     .input-section {
       min-height: 80%;
+      @media screen and (max-width: 950px) {
+        min-height: 50%;
+      }
     }
+
     .submit-section {
       float: right;
+      margin: 0;
       .cancel-button {
         background-color: white;
         border: 2px solid var(--black);
         margin-inline: 8px;
+        @media screen and (max-width: 950px) {
+          margin-inline: 0;
+        }
+        color: var(--black);
+      }
+      .add-button {
+        color: white;
+        margin-top: 20px;
+      }
+      @media screen and (max-width: 950px) {
+        float: none;
+        * {
+          width: 100%;
+          margin-inline: 0;
+        }
       }
     }
-    .cancel-button {
-      color: var(--black);
-    }
-    .add-button {
-      color: white;
-      margin-top: 20px;
-    }
+
     input[type="file"] {
       display: block;
       margin-block: 20px;
@@ -286,7 +332,7 @@ export const StyledEditModal = styled.div`
     margin-top: 0;
   }
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   left: 50%;
   top: 0;
   transform: translateX(-50%);
@@ -295,18 +341,34 @@ export const StyledEditModal = styled.div`
     position: relative;
     height: 80vh;
     width: 50vw;
+    @media screen and (max-width: 950px) {
+      width: 100vw;
+    }
     overflow: scroll;
     background-color: #fff;
     margin: 0 auto;
     margin-top: 2vh;
     border-radius: 20px;
     padding: 30px 50px;
+    @media screen and (max-width: 950px) {
+      padding: 30px 20px;
+    }
     .control-panel {
       .delete-button {
         background-color: red;
         margin-left: 5px;
+        @media screen and (max-width: 950px) {
+          margin-left: 0px;
+        }
       }
       float: right;
+      @media screen and (max-width: 950px) {
+        float: none;
+
+        * {
+          width: 50%;
+        }
+      }
     }
     .input-section {
       min-height: 80%;

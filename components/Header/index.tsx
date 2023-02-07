@@ -47,7 +47,6 @@ const Header = ({ userName, userDB }: { userName: string; userDB: string }) => {
       {/* change Password success banner */}
 
       <StyledSuccess>
-        {" "}
         <p className={success ? "success active" : "success"}>
           Password has been changed!
         </p>

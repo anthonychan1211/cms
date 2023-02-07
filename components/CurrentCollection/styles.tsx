@@ -5,10 +5,12 @@ export const StyledPartition = styled.div`
   box-sizing: border-box;
   text-align: center;
   height: 100%;
+  width: 20%;
   overflow: scroll;
   .add-collection {
     width: 80%;
     margin: 20px auto;
+
     color: white;
     :hover {
       box-sizing: border-box;
@@ -16,6 +18,13 @@ export const StyledPartition = styled.div`
     }
     :active {
       box-shadow: none;
+    }
+    @media screen and (max-width: 950px) {
+      margin: 0;
+      height: 30px;
+      width: 60%;
+      border-radius: 8px;
+      font-size: 12px;
     }
   }
   .no-collection {
@@ -27,6 +36,12 @@ export const StyledPartition = styled.div`
   }
   p {
     font-size: 15px;
+  }
+  @media screen and (max-width: 950px) {
+    margin-block: 0;
+    width: 100%;
+    height: fit-content;
+    overflow: hidden;
   }
 `;
 
@@ -48,15 +63,26 @@ export const StyledCollection = styled.div`
     text-align: left;
     justify-content: center;
     cursor: pointer;
+    @media screen and (max-width: 950px) {
+      margin-block: 0;
+      padding: 10px;
+      font-size: 12px;
+    }
   }
   .collection-name.open {
     background-color: var(--dark-grey);
+  }
+  @media screen and (max-width: 950px) {
+    flex-direction: row;
+    height: fit-content;
+    min-width: fit-content;
+    width: 100%;
+    overflow-x: auto;
   }
 `;
 
 export const StyledNewCollection = styled.form`
   display: flex;
-  /* gap: 10px; */
   padding-left: 2vw;
 
   button {
@@ -67,6 +93,16 @@ export const StyledNewCollection = styled.form`
     color: white;
     .form__label {
       font-size: 12px;
+    }
+  }
+  @media screen and (max-width: 950px) {
+    /* height: 25px; */
+    margin-inline: 3vw;
+    border-radius: 8px;
+    font-size: 12px;
+    button {
+      font-size: 12px;
+      margin: 0;
     }
   }
 `;

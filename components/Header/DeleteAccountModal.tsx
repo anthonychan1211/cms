@@ -27,8 +27,9 @@ const DeleteAccountModal = ({
     if (res.status === 400) {
       return setInvalidCredential(true);
     } else {
+      console.log("run");
       setDeleteConfirm(true);
-      setModal("");
+      // setModal("");
     }
   }
   async function handleDeleteConfirm() {

@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { NewEntry, DeleteCollection, StyledDocument } from "./styles";
+import {
+  NewEntry,
+  DeleteCollection,
+  StyledDocument,
+  StyledDocumentSection,
+} from "./styles";
 import { extractHeader, handleDeleteCollection } from "../../util/handlers";
 import AddNewDocumentModal from "./AddNewDocumentModal";
 import AddNewHeaderModal from "./AddNewHeaderModal";
@@ -49,11 +54,11 @@ const DocumentSection = ({
         return (
           <tr
             className="row"
-            onClick={(e) =>
+            onClick={(e) => {
               setEditModal(
                 e.currentTarget.firstElementChild?.innerHTML as string
-              )
-            }
+              );
+            }}
           >
             {headerKey.map((el: string) => {
               if (headerObj[el] === "Image(s)") {
@@ -95,7 +100,7 @@ const DocumentSection = ({
     });
 
   return (
-    <div style={{ maxHeight: "90%" }}>
+    <StyledDocumentSection>
       {collectionName && (
         <div>
           <DeleteCollection
@@ -125,12 +130,7 @@ const DocumentSection = ({
         </div>
       )}
 
-      <h1
-        style={{ marginLeft: "90px", fontSize: "35px" }}
-        className="document-collection-name"
-      >
-        {collectionName}
-      </h1>
+      <h1 className="document-collection-name">{collectionName}</h1>
 
       <StyledDocument>
         <thead>
@@ -167,7 +167,7 @@ const DocumentSection = ({
           userDB={userDB}
         />
       )}
-    </div>
+    </StyledDocumentSection>
   );
 };
 

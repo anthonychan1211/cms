@@ -93,6 +93,9 @@ export const StyledChangePassword = styled.div`
     position: relative;
     height: 60vh;
     width: 50vw;
+    @media screen and (max-width: 950px) {
+      width: 100%;
+    }
     overflow: scroll;
     background-color: #fff;
     margin: 0 auto;
@@ -102,15 +105,21 @@ export const StyledChangePassword = styled.div`
     .input-section {
       min-height: 80%;
     }
-    .cancel-button {
-      color: var(--black);
-    }
+
     .submit-section {
       float: right;
       .cancel-button {
+        color: var(--black);
         background-color: white;
         border: 2px solid var(--black);
         margin-inline: 8px;
+      }
+      @media screen and (max-width: 950px) {
+        float: none;
+        * {
+          width: 45%;
+          margin: 0 auto;
+        }
       }
     }
     .add-button {
@@ -138,11 +147,15 @@ export const StyledChangePassword = styled.div`
 export const StyledDeleteAccount = styled.div`
   width: 100vw;
   height: 100vh;
+  z-index: 19;
   background-color: #00000061;
   position: absolute;
   .inner-modal {
     position: relative;
     width: 50vw;
+    @media screen and (max-width: 950px) {
+      width: 100%;
+    }
     overflow: scroll;
     background-color: #fff;
     margin: 0 auto;
@@ -164,6 +177,12 @@ export const StyledDeleteAccount = styled.div`
       }
       .delete-button {
         background-color: red;
+      }
+      @media screen and (max-width: 950px) {
+        float: none;
+        * {
+          width: 45%;
+        }
       }
     }
 
@@ -198,20 +217,23 @@ export const StyledDeleteAccount = styled.div`
 `;
 
 export const StyledDeleteConfirm = styled.div`
-  width: 100vw;
-  height: 100vh;
-  background-color: #00000061;
   position: absolute;
+  z-index: 20;
+  width: 100%;
+  height: 100%;
+  background-color: #00000061;
   .inner-modal {
     position: relative;
     height: 40vh;
     width: 50vw;
-    overflow: scroll;
     background-color: #fff;
     margin: 0 auto;
     margin-top: 2vh;
     border-radius: 20px;
     padding: 30px 50px;
+    @media screen and (max-width: 950px) {
+      width: 100%;
+    }
     .input-section {
       min-height: 80%;
     }
@@ -227,8 +249,19 @@ export const StyledDeleteConfirm = styled.div`
       .delete-button {
         background-color: red;
       }
+      @media screen and (max-width: 950px) {
+        float: none;
+        padding: 0;
+        width: 100%;
+        * {
+          width: 45%;
+        }
+      }
     }
-    h4 {
+    @media screen and (max-width: 950px) {
+      h4 {
+        margin-top: 0px;
+      }
     }
   }
 `;
@@ -241,6 +274,9 @@ export const StyledSuccess = styled.div`
     position: fixed;
     top: 0;
     left: 50%;
+    @media screen and (max-width: 950px) {
+      left: 25%;
+    }
     transform: translateX(-50%);
     background-color: var(--green);
     color: white;

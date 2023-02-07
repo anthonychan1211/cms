@@ -43,7 +43,6 @@ const ChangePasswordModal = ({
     });
 
     if (res.status === 400) {
-      console.log("wrong password");
       return setWarning("wrongCurrentPassword");
     } else if (res.status === 200) {
       try {
@@ -93,7 +92,9 @@ const ChangePasswordModal = ({
             Current Password
           </label>
         </div>
-        {warning === "wrongCurrentPassword" && <p>Password incorrect</p>}
+        {warning === "wrongCurrentPassword" && (
+          <p style={{ color: "red" }}>Password incorrect</p>
+        )}
         <div className="form__group field">
           <input
             type="password"

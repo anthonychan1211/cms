@@ -10,7 +10,7 @@ const login = async (req: NextApiRequest, res: NextApiResponse) => {
   const user = await client
     .db("cms-user")
     .collection("user")
-    .findOne({ email });
+    .findOne({ email: email.toLowerCase() });
   if (!user) return res.status(400).json({ error: "Invalid credentials" });
 
   let isPasswordCorrect = await bcrypt.compare(password, user.password);

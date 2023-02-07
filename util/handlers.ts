@@ -334,6 +334,7 @@ export async function handleEdit(
   chosenDocument: { [key: string]: string },
   collectionName: string,
   userDB: string,
+  key: string,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
 ) {
   const entries = Object.entries(chosenDocument);
@@ -347,10 +348,11 @@ export async function handleEdit(
         Object.fromEntries(entries),
         collectionName,
         userDB,
+        key,
         setLoading
       );
     }
   }
-  updateDocument(chosenDocument, collectionName, userDB, setLoading);
+  updateDocument(chosenDocument, collectionName, userDB, key, setLoading);
   return;
 }

@@ -164,9 +164,9 @@ export async function updateDocument(
   chosenDocument: { [key: string]: string },
   collectionName: string,
   userDB: string,
+  key: string,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
 ) {
-  console.log(chosenDocument);
   const res = await fetch("api/updateDocument", {
     method: "POST",
     headers: {
@@ -176,6 +176,7 @@ export async function updateDocument(
       collectionName,
       userDB,
       chosenDocument,
+      key,
     }),
   });
   const feedBack = await res.json();
