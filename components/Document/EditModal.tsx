@@ -389,13 +389,12 @@ const EditModal = ({
       );
     }
   });
-  console.log(newImageURL, chosenDocument);
   return (
     <StyledEditModal
       onSubmit={() => {
         setLoading(true);
         if (Object.keys(newImageURL).length > 0) {
-          let result: { [key: string]: string[] | string } = {};
+          let result = {};
           for (const el in newImageURL) {
             result = {
               ...chosenDocument,
