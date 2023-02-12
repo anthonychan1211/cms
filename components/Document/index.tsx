@@ -25,6 +25,7 @@ const DocumentSection = ({
 }: DocumentType) => {
   // extract header and put id at first
   const headerKey = extractHeader(headerObj);
+  console.log(documents);
   if (headerKey[0]) {
     if (!headerKey[0].includes("_id")) {
       const id = headerKey.splice(
@@ -43,17 +44,22 @@ const DocumentSection = ({
   const [editModal, setEditModal] = useState("");
   const [addModal, setAddModal] = useState<string>("");
   const mappedHeader = headerKey.map((el: string) => {
-    return <th className="header">{el}</th>;
+    return (
+      <th key={el} className="header">
+        {el}
+      </th>
+    );
   });
 
   const mappedValues =
     documents.length > 0 &&
-    documents.map((item: { [key: string]: any }) => {
+    documents.map((item: { [key: string]: any }, i: number) => {
       // item = each document
       if (item) {
         return (
           <tr
             className="row"
+            key={i}
             onClick={(e) => {
               setEditModal(
                 e.currentTarget.firstElementChild?.innerHTML as string
@@ -65,10 +71,10 @@ const DocumentSection = ({
                 if (item[el]) {
                   if (item[el].length <= 9) {
                     return (
-                      <td>
+                      <td key={item[el]}>
                         <div className="collage">
-                          {item[el].map((image: string) => {
-                            return <img src={image} alt={image} />;
+                          {item[el].map((image: string, i: number) => {
+                            return <img key={i} src={image} alt={image} />;
                           })}
                         </div>
                       </td>
@@ -78,9 +84,10 @@ const DocumentSection = ({
                     return (
                       <td>
                         <div className="gallery-grid">
-                          {cutVersion.map((image: string) => (
+                          {cutVersion.map((image: string, i: number) => (
                             <img
                               style={{ maxHeight: " 100px" }}
+                              key={i}
                               src={image}
                               alt={image}
                             ></img>
@@ -91,6 +98,16 @@ const DocumentSection = ({
                     );
                   }
                 }
+              } else if (headerObj[el] === "Image URL(s)") {
+                return (
+                  <td>
+                    <div className="collage">
+                      {item[el].map((image: string, i: number) => {
+                        return <img key={i} src={image} alt={image} />;
+                      })}
+                    </div>
+                  </td>
+                );
               }
               return <td>{item[el]?.replace(/(.{200})..+/, "$1...")}</td>;
             })}

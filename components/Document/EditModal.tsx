@@ -27,7 +27,10 @@ const EditModal = ({
     React.SetStateAction<any>
   >({});
   const [loading, setLoading] = useState(false);
-
+  const [imageURLInput, setImageURLInput] = useState(0);
+  const [newImageURL, setNewImageURL] = useState<{ [key: string]: string[] }>(
+    {}
+  );
   const [editMode, setEditMode] = useState(false);
   const key = headerKey.filter((el) => headerObj[el] === "UniqueID");
 
@@ -53,7 +56,6 @@ const EditModal = ({
     setChosenDocument({ ...chosenDocument, [propertyName]: filteredArr });
   }
   const mappedChosenDocumentForm = headerKey.map((el: string) => {
-    console.log(chosenDocument);
     if (headerObj[el] === "UniqueID") {
       // ID
       return (
@@ -166,6 +168,197 @@ const EditModal = ({
             </div>
           </div>
         );
+    } else if (headerObj[el] === "Image URL(s)") {
+      if (chosenDocument[el]) {
+        const exsitingInputField = chosenDocument[el].map(
+          (image: string, i: number) => {
+            return (
+              <div className="imageURLGrid">
+                <div className="form__group field">
+                  <input
+                    disabled={!editMode}
+                    type="url"
+                    className="form__field"
+                    name={el}
+                    value={image}
+                    onChange={(e) => {
+                      if (chosenDocument[el]) {
+                        if (i == chosenDocument[el].length) {
+                          setChosenDocument({
+                            ...chosenDocument,
+                            [el]: [...chosenDocument[el], e.target.value],
+                          });
+                        } else {
+                          chosenDocument[el].splice(i, 1, e.target.value);
+                          setChosenDocument({
+                            ...chosenDocument,
+                            [el]: chosenDocument[el],
+                          });
+                        }
+                      } else {
+                        console.log("no length");
+
+                        setChosenDocument({
+                          ...chosenDocument,
+                          [el]: [e.target.value],
+                        });
+                      }
+                    }}
+                  />
+                  <label htmlFor={el} className="form__label">
+                    Image URL
+                  </label>
+                </div>
+
+                <div className="image">
+                  <a
+                    href={image && image}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img src={image && image} style={{ margin: "5px" }} />
+                  </a>
+                </div>
+                {editMode && (
+                  <div
+                    className="delete-image"
+                    onClick={(e) => {
+                      const imageDiv = (e.target as HTMLButtonElement).closest(
+                        ".imageURLGrid"
+                      ) as HTMLElement;
+                      console.log(imageDiv);
+                      const filtered = chosenDocument[el].filter(
+                        (deleteImage: string) => {
+                          return (
+                            deleteImage !==
+                            ((
+                              imageDiv.querySelector(
+                                "input"
+                              ) as HTMLInputElement
+                            ).value as string)
+                          );
+                        }
+                      );
+                      setChosenDocument({
+                        ...chosenDocument,
+                        [el]: filtered,
+                      });
+                      // imageDiv.style.display = "none";
+                    }}
+                  >
+                    {deleteButton}
+                  </div>
+                )}
+              </div>
+            );
+          }
+        );
+        let inputField = [];
+        for (let i = 0; i < imageURLInput; i++) {
+          inputField.push(
+            <div className="imageURLGrid">
+              <div className="form__group field">
+                <input
+                  type="url"
+                  className="form__field"
+                  placeholder="Image URL"
+                  name={el}
+                  id={`new_${el}${i}`}
+                  onChange={(e) => {
+                    if (newImageURL[el]) {
+                      if (i == newImageURL[el].length) {
+                        setNewImageURL({
+                          ...newImageURL,
+                          [el]: [...newImageURL[el], e.target.value],
+                        });
+                      } else {
+                        newImageURL[el][i] = e.target.value;
+                        setNewImageURL({
+                          ...newImageURL,
+                          [el]: [...newImageURL[el]],
+                        });
+                      }
+                    } else {
+                      console.log("no length");
+                      setNewImageURL({ [el]: [e.target.value] });
+                    }
+                  }}
+                  required
+                />
+                <label htmlFor={el} className="form__label">
+                  Image URL
+                </label>
+              </div>
+
+              <div className="image">
+                <a
+                  href={
+                    newImageURL[el] &&
+                    (
+                      document.getElementById(
+                        `new_${el}${i}`
+                      ) as HTMLInputElement
+                    )?.value
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    src={
+                      newImageURL[el] &&
+                      (
+                        document.getElementById(
+                          `new_${el}${i}`
+                        ) as HTMLInputElement
+                      )?.value
+                    }
+                    style={{ margin: "5px" }}
+                  />
+                </a>
+              </div>
+
+              <div
+                className="delete-image"
+                onClick={(e) => {
+                  const imageDiv = (e.target as HTMLButtonElement).closest(
+                    ".imageURLGrid"
+                  ) as HTMLElement;
+                  const filtered = newImageURL[el].filter(
+                    (deleteImage: string) => {
+                      return (
+                        deleteImage !==
+                        ((imageDiv.querySelector("input") as HTMLInputElement)
+                          .value as string)
+                      );
+                    }
+                  );
+                  setNewImageURL({
+                    ...newImageURL,
+                    [el]: filtered,
+                  });
+                  imageDiv.remove();
+                }}
+              >
+                {deleteButton}
+              </div>
+            </div>
+          );
+        }
+        return (
+          <div id={el}>
+            <p className="title">{el}</p>
+            {exsitingInputField}
+            {editMode && (
+              <div>
+                {inputField}
+                <button onClick={() => setImageURLInput(imageURLInput + 1)}>
+                  Add URL
+                </button>
+              </div>
+            )}
+          </div>
+        );
+      }
     } else {
       return (
         <div className="form__group field">
@@ -196,18 +389,43 @@ const EditModal = ({
       );
     }
   });
-
+  console.log(newImageURL, chosenDocument);
   return (
-    <StyledEditModal>
+    <StyledEditModal
+      onSubmit={() => {
+        setLoading(true);
+        if (Object.keys(newImageURL).length > 0) {
+          let result: { [key: string]: string[] | string } = {};
+          for (const el in newImageURL) {
+            result = {
+              ...chosenDocument,
+              [el]: [...chosenDocument[el], ...newImageURL[el]],
+            };
+          }
+          handleEdit(result, collectionName, userDB, key[0], setLoading);
+          return;
+        } else {
+          handleEdit(
+            chosenDocument,
+            collectionName,
+            userDB,
+            key[0],
+            setLoading
+          );
+        }
+      }}
+    >
       <div className="inner-modal">
         <div className="control-panel">
           <button
+            type="button"
             className={editMode ? "edit-mode-on" : "cancel-button"}
             onClick={() => setEditMode(!editMode)}
           >
             Edit
           </button>
           <button
+            type="button"
             className="delete-button"
             onClick={() =>
               handleDeleteDocument(userDB, collectionName, chosenDocument)
@@ -228,6 +446,7 @@ const EditModal = ({
         )}
         <div className="submit-section">
           <button
+            type="button"
             className="cancel-button"
             onClick={() => {
               setEditModal("");
@@ -237,20 +456,7 @@ const EditModal = ({
             {editMode ? "Cancel" : "Close"}
           </button>
           {editMode && (
-            <button
-              onClick={async () => {
-                setLoading(true);
-                handleEdit(
-                  chosenDocument,
-                  collectionName,
-                  userDB,
-                  key[0],
-                  setLoading
-                );
-              }}
-              type="submit"
-              className="add-button"
-            >
+            <button type="submit" className="add-button">
               Save changes
             </button>
           )}

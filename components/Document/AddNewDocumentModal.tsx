@@ -24,7 +24,7 @@ const AddNewDocumentModal = ({
   const [newDocument, setNewDocument] = useState<React.SetStateAction<any>>({});
   const [warning, setWarning] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const [imageURLInput, setImageURLInput] = useState(1);
   function handleDeleteImage(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     const imageDiv = (e.target as HTMLButtonElement).closest(
       ".image"
@@ -63,6 +63,7 @@ const AddNewDocumentModal = ({
             }}
             name={el}
             id={el}
+            required
           />
           <label htmlFor={el} className="form__label">
             {el}
@@ -163,6 +164,105 @@ const AddNewDocumentModal = ({
           </div>
         </div>
       );
+    } else if (headerObj[el] === "Image URL(s)") {
+      let inputField = [];
+      console.log(newDocument[el]);
+      for (let i = 0; i < imageURLInput; i++) {
+        inputField.push(
+          <div className="imageURLGrid">
+            <div className="form__group field">
+              <input
+                type="url"
+                className="form__field"
+                placeholder="Image URL"
+                name={el}
+                id={`${el}${i}`}
+                onChange={(e) => {
+                  if (newDocument[el]) {
+                    if (i == newDocument[el].length) {
+                      setNewDocument({
+                        ...newDocument,
+                        [el]: [...newDocument[el], e.target.value],
+                      });
+                    } else {
+                      newDocument[el][i] = e.target.value;
+                      setNewDocument({
+                        ...newDocument,
+                        [el]: newDocument[el],
+                      });
+                    }
+                  } else {
+                    console.log("no length");
+                    setNewDocument({
+                      ...newDocument,
+                      [el]: [e.target.value],
+                    });
+                  }
+                }}
+                required
+              />
+              <label htmlFor={el} className="form__label">
+                Image URL
+              </label>
+            </div>
+
+            <div className="image">
+              <a
+                href={
+                  newDocument[el] &&
+                  (document.getElementById(`${el}${i}`) as HTMLInputElement)
+                    ?.value
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src={
+                    newDocument[el] &&
+                    (document.getElementById(`${el}${i}`) as HTMLInputElement)
+                      ?.value
+                  }
+                  style={{ margin: "5px" }}
+                />
+              </a>
+            </div>
+
+            <div
+              className="delete-image"
+              onClick={(e) => {
+                const imageDiv = (e.target as HTMLButtonElement).closest(
+                  ".imageURLGrid"
+                ) as HTMLElement;
+                const filtered = newDocument[el].filter(
+                  (deleteImage: string) => {
+                    return (
+                      deleteImage !==
+                      ((imageDiv.querySelector("input") as HTMLInputElement)
+                        .value as string)
+                    );
+                  }
+                );
+                setNewDocument({
+                  ...newDocument,
+                  [el]: filtered,
+                });
+                imageDiv.remove();
+              }}
+            >
+              {deleteButton}
+            </div>
+          </div>
+        );
+      }
+      return (
+        <div id={el}>
+          <p className="title">{el}</p>
+          {inputField}
+          <button onClick={() => setImageURLInput(imageURLInput + 1)}>
+            Add URL
+          </button>
+        </div>
+      );
     } else {
       return (
         <div className="form__group field">
@@ -182,7 +282,6 @@ const AddNewDocumentModal = ({
                 [e.target.name]: e.target.value,
               });
             }}
-            required
           />
           <label htmlFor={el} className="form__label">
             {el}
@@ -191,8 +290,20 @@ const AddNewDocumentModal = ({
       );
     }
   });
+  console.log(newDocument);
   return (
-    <AddEntry>
+    <AddEntry
+      onSubmit={(e) => {
+        handleSubmitAddDocument(
+          e,
+          newDocument,
+          collectionName,
+          userDB,
+          setLoading
+        );
+        setLoading(true);
+      }}
+    >
       <div className="inner-modal">
         <h4>Add New Document</h4>
         <div className="input-section">{mappedAddNewDocumentForm}</div>
@@ -219,20 +330,7 @@ const AddNewDocumentModal = ({
               Submit
             </button>
           ) : (
-            <button
-              type="submit"
-              onClick={(e) => {
-                handleSubmitAddDocument(
-                  e,
-                  newDocument,
-                  collectionName,
-                  userDB,
-                  setLoading
-                );
-                setLoading(true);
-              }}
-              className="add-button"
-            >
+            <button type="submit" className="add-button">
               Submit
             </button>
           )}

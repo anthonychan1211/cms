@@ -161,7 +161,7 @@ export async function getCollection(userDB: string) {
 }
 
 export async function updateDocument(
-  chosenDocument: { [key: string]: string },
+  chosenDocument: { [key: string]: string | string[] },
   collectionName: string,
   userDB: string,
   key: string,

@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import { deleteButton } from "../../util/button";
 const DocumentHeaderProperty = () => {
-  const types = ["Text", "TextArea", "Number", "Select", "Date", "Image(s)"];
+  const types = [
+    "Text",
+    "TextArea",
+    "Number",
+    "Select",
+    "Date",
+    "Image(s)",
+    "Image URL(s)",
+  ];
   const [value, setValue] = useState(types[0]);
   const [choice, setChoice] = useState<unknown[]>([
     <input type="text" className="choices" required />,

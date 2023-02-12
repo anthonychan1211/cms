@@ -243,7 +243,7 @@ export async function handleSubmitAddDocument(
             }
           );
           const file = await res.json();
-          arr.push(file.secure_url);
+          if (file) arr.push(file.secure_url);
         }
         el.splice(1, 1, arr);
 

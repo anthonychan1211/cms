@@ -53,6 +53,7 @@ const Body = ({
     <button
       className="collection-name"
       id={el}
+      key={el}
       onClick={(e) => handleChooseCollection(e.currentTarget.innerText)}
     >
       {el}

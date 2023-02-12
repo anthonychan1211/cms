@@ -214,7 +214,13 @@ export const AddEntry = styled.form`
         min-height: 50%;
       }
     }
-
+    .imageURLGrid {
+      display: grid;
+      grid-template-columns: 5fr 2fr 1fr;
+      align-items: center;
+      justify-items: space-around;
+      gap: 10px;
+    }
     .submit-section {
       float: right;
       margin: 0;
@@ -326,7 +332,7 @@ export const AddEntry = styled.form`
     }
   }
 `;
-export const StyledEditModal = styled.div`
+export const StyledEditModal = styled.form`
   position: absolute;
   h4 {
     margin-top: 0;
@@ -379,6 +385,13 @@ export const StyledEditModal = styled.div`
       align-items: center;
       justify-items: center;
       gap: 5px;
+    }
+    .imageURLGrid {
+      display: grid;
+      grid-template-columns: 5fr 2fr 1fr;
+      align-items: center;
+      justify-items: center;
+      gap: 10px;
     }
     .image {
       position: relative;
