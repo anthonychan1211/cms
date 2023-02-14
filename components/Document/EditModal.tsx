@@ -41,7 +41,6 @@ const EditModal = ({
   useEffect(() => {
     setChosenDocument(chosenDoc[0]);
   }, []);
-
   function handleDeleteImage(e: MouseEvent) {
     const imageDiv = (e.target as HTMLButtonElement).closest(
       ".image"
@@ -118,6 +117,7 @@ const EditModal = ({
             placeholder={el}
             name={el}
             id={el}
+            value={chosenDocument[el]}
             onChange={(e) => {
               setChosenDocument({
                 ...chosenDocument,

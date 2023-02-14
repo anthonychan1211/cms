@@ -25,7 +25,6 @@ const DocumentSection = ({
 }: DocumentType) => {
   // extract header and put id at first
   const headerKey = extractHeader(headerObj);
-  console.log(documents);
   if (headerKey[0]) {
     if (!headerKey[0].includes("_id")) {
       const id = headerKey.splice(
@@ -55,7 +54,7 @@ const DocumentSection = ({
     documents.length > 0 &&
     documents.map((item: { [key: string]: any }, i: number) => {
       // item = each document
-      if (item) {
+      if (documents) {
         return (
           <tr
             className="row"
@@ -102,14 +101,23 @@ const DocumentSection = ({
                 return (
                   <td>
                     <div className="collage">
-                      {item[el].map((image: string, i: number) => {
+                      {item[el]?.map((image: string, i: number) => {
                         return <img key={i} src={image} alt={image} />;
                       })}
                     </div>
                   </td>
                 );
+              } else {
+                return (
+                  <td
+                    className={headerObj[el] === "TextArea" ? "text-area" : ""}
+                  >
+                    {item[el]?.length > 300
+                      ? `${item[el]?.substring(0, 300)}...`
+                      : item[el]}
+                  </td>
+                );
               }
-              return <td>{item[el]?.replace(/(.{200})..+/, "$1...")}</td>;
             })}
           </tr>
         );

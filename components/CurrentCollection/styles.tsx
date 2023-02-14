@@ -4,7 +4,7 @@ export const StyledPartition = styled.div`
   background-color: var(--light-grey);
   box-sizing: border-box;
   text-align: center;
-  height: 100%;
+  height: auto;
   width: 20%;
   overflow: scroll;
   .add-collection {
@@ -42,6 +42,11 @@ export const StyledPartition = styled.div`
     width: 100%;
     height: fit-content;
     overflow: hidden;
+    .collection-container {
+      display: block;
+      width: 100vw;
+      overflow-x: scroll;
+    }
   }
 `;
 

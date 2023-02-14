@@ -49,13 +49,16 @@ const CurrentCollection = ({
           - Close Add Collection
         </button>
       )}
-      <StyledCollection>
-        {collectionsList.length > 0 ? (
-          collectionsList
-        ) : (
-          <p>Add your first collection!</p>
-        )}
-      </StyledCollection>
+      <div className="collection-container">
+        <StyledCollection>
+          {collectionsList.length > 0 ? (
+            collectionsList
+          ) : (
+            <p>Add your first collection!</p>
+          )}
+        </StyledCollection>
+      </div>
+
       {showAddForm && (
         <StyledNewCollection onSubmit={addCollection} className="add-form">
           <div className="form__group field">

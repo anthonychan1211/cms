@@ -1,10 +1,11 @@
 import styled from "styled-components";
 
 export const StyledDocumentSection = styled.div`
-  width: 100%;
   overflow: scroll;
+  width: 100%;
   .document-collection-name {
     font-size: 35px;
+    margin-left: 4vw;
     @media screen and (max-width: 950px) {
       font-size: 25px;
       margin-left: 4vw;
@@ -41,18 +42,14 @@ export const DeleteCollection = styled.button`
 `;
 
 export const StyledDocument = styled.table`
-  flex: 1;
-  text-align: center;
-  justify-content: space-evenly;
   margin: 0 auto;
+  display: block;
+  overflow-x: scroll;
   width: 100%;
+
   * {
     margin: 0;
     padding-inline: 10px;
-  }
-  table {
-    width: 100%;
-    overflow: scroll;
   }
   th {
     background-color: #eeeeee;
@@ -61,17 +58,23 @@ export const StyledDocument = styled.table`
     position: sticky;
   }
   td {
+    min-width: fit-content;
     font-size: 15px;
     max-height: 300px;
-    text-overflow: ellipsis;
+    text-align: center;
     border-bottom: 1px solid var(--black);
   }
 
   tbody > tr {
     border-bottom: 1px solid var(--black);
+    max-height: 300px;
+    overflow: hidden;
     :hover * {
       cursor: pointer;
       background-color: var(--light-grey);
+    }
+    .text-area {
+      min-width: 200px;
     }
   }
 
