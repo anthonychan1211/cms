@@ -32,50 +32,93 @@ const EditHeaderModal = ({
 
       const mappedHeaderField = Object.entries(filtered)?.map(
         ([key, value]) => {
-          return (
-            <>
-              <div className="property-box">
-                <div className="form__group field">
-                  <input
-                    type="text"
-                    className="form__field propertyName"
-                    placeholder={key}
-                    name={key}
-                    id={key}
-                    defaultValue={key}
-                  />
-                  <label htmlFor={key} className="form__label">
-                    Property Name
-                  </label>
-                </div>
-                <div>
-                  <select
-                    className="valueType"
-                    value={value as string}
-                    disabled
-                  >
-                    <option>{Array.isArray(value) ? "Select" : value}</option>
-                  </select>
-                </div>
-                <button onClick={(e) => handleDeleteProperty(e)}>
-                  {deleteButton}
-                </button>
-              </div>
-              {Array.isArray(value) && (
-                <div className="add-choices">
-                  <p>Options</p>
-                  {value.map((el) => (
+          if (Array.isArray(value)) {
+            return (
+              <>
+                <div className="property-box">
+                  <div className="form__group field">
                     <input
                       type="text"
-                      className="choices"
-                      required
-                      defaultValue={el}
+                      className="form__field propertyName"
+                      placeholder={key}
+                      name={key}
+                      id={key}
+                      defaultValue={key}
                     />
-                  ))}
+                    <label htmlFor={key} className="form__label">
+                      Property Name
+                    </label>
+                  </div>
+                  <div>
+                    <select className="valueType" value="Select" disabled>
+                      <option>Select</option>
+                    </select>
+                  </div>
+                  <button onClick={(e) => handleDeleteProperty(e)}>
+                    {deleteButton}
+                  </button>
                 </div>
-              )}
-            </>
-          );
+                {Array.isArray(value) && (
+                  <div className="add-choices">
+                    <p>Options</p>
+                    {value.map((el) => (
+                      <input
+                        type="text"
+                        className="choices"
+                        required
+                        defaultValue={el}
+                      />
+                    ))}
+                  </div>
+                )}
+              </>
+            );
+          } else {
+            return (
+              <>
+                <div className="property-box">
+                  <div className="form__group field">
+                    <input
+                      type="text"
+                      className="form__field propertyName"
+                      placeholder={key}
+                      name={key}
+                      id={key}
+                      defaultValue={key}
+                    />
+                    <label htmlFor={key} className="form__label">
+                      Property Name
+                    </label>
+                  </div>
+                  <div>
+                    <select
+                      className="valueType"
+                      value={value as string}
+                      disabled
+                    >
+                      <option>{value}</option>
+                    </select>
+                  </div>
+                  <button onClick={(e) => handleDeleteProperty(e)}>
+                    {deleteButton}
+                  </button>
+                </div>
+                {Array.isArray(value) && (
+                  <div className="add-choices">
+                    <p>Options</p>
+                    {value.map((el) => (
+                      <input
+                        type="text"
+                        className="choices"
+                        required
+                        defaultValue={el}
+                      />
+                    ))}
+                  </div>
+                )}
+              </>
+            );
+          }
         }
       );
 
@@ -87,7 +130,7 @@ const EditHeaderModal = ({
     e.preventDefault();
     const newHeader = await handleAddHeaderForm(e, collectionName);
     console.log(newHeader);
-    editHeader(newHeader, userDB, collectionName);
+    await editHeader(newHeader, userDB, collectionName);
     window.location.reload();
   }
   function handleDeleteProperty(
