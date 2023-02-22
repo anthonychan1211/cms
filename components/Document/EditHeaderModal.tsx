@@ -96,7 +96,7 @@ const EditHeaderModal = ({
                       value={value as string}
                       disabled
                     >
-                      <option>{value}</option>
+                      <option>{value as string}</option>
                     </select>
                   </div>
                   <button onClick={(e) => handleDeleteProperty(e)}>
