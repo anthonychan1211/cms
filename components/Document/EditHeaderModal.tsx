@@ -16,7 +16,7 @@ const EditHeaderModal = ({
   const [propertyCount, setPropertyCount] = useState<unknown[]>([]);
   const [header, setHeader] = useState<unknown>();
   const types = [
-    "Unique ID",
+    "UniqueID",
     "Text",
     "TextArea",
     "Number",

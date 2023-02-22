@@ -31,16 +31,26 @@ const EditModal = ({
   const [newImageURL, setNewImageURL] = useState<{ [key: string]: string[] }>(
     {}
   );
+  const [stateReady, setStateReady] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const key = headerKey.filter((el) => headerObj[el] === "UniqueID");
 
   const chosenDoc = Array.from(documents).filter((el: any) => {
     return el[key[0]] === clickedDoc;
   });
+
   // set the chosen document after clicked
   useEffect(() => {
     setChosenDocument(chosenDoc[0]);
   }, []);
+  useEffect(() => {
+    if (Object.keys(chosenDocument)) {
+      setStateReady(true);
+      console.log(chosenDocument);
+    } else {
+      return;
+    }
+  }, [chosenDocument]);
   function handleDeleteImage(e: MouseEvent) {
     const imageDiv = (e.target as HTMLButtonElement).closest(
       ".image"
@@ -54,7 +64,9 @@ const EditModal = ({
 
     setChosenDocument({ ...chosenDocument, [propertyName]: filteredArr });
   }
-  const mappedChosenDocumentForm = headerKey.map((el: string) => {
+
+  const mappedChosenDocumentForm = headerKey?.map((el: string) => {
+    console.log(el);
     if (headerObj[el] === "UniqueID") {
       // ID
       return (
@@ -85,7 +97,7 @@ const EditModal = ({
           <label style={{ fontSize: "18px" }}>{el}: </label>
           <select
             disabled={!editMode}
-            defaultValue={headerObj[el][0]}
+            defaultValue={chosenDocument[el]}
             style={{
               fontSize: "15px",
               padding: "5px",
@@ -388,6 +400,7 @@ const EditModal = ({
       );
     }
   });
+
   return (
     <StyledEditModal
       onSubmit={(e) => {
@@ -434,7 +447,9 @@ const EditModal = ({
           </button>
         </div>
         <h4>{editMode ? "Edit" : "Preview"}</h4>
-        <div className="input-section">{mappedChosenDocumentForm}</div>
+        <div className="input-section">
+          {stateReady ? mappedChosenDocumentForm : ""}
+        </div>
         {loading && (
           <div className="lds-ellipsis">
             <div></div>

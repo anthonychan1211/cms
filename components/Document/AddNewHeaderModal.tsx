@@ -31,7 +31,7 @@ const AddNewHeaderModal = ({
 
       <div>
         <select className="valueType" disabled>
-          <option value="UniqueID">Unique ID</option>
+          <option value="UniqueID">UniqueID</option>
         </select>
       </div>
     </div>,
