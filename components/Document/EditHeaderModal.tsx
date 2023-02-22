@@ -25,6 +25,7 @@ const EditHeaderModal = ({
     "Image(s)",
     "Image URL(s)",
   ];
+  const type = types.map((el) => <option value={el}>{el}</option>);
   useEffect(() => {
     async function fetchHeader() {
       const headerObj = await getHeader(collectionName, userDB);
@@ -49,28 +50,28 @@ const EditHeaderModal = ({
                       Property Name
                     </label>
                   </div>
-                  <div>
-                    <select className="valueType" value="Select" disabled>
-                      <option>Select</option>
-                    </select>
-                  </div>
+
+                  <select className="valueType" value="Select" disabled>
+                    <option>Select</option>
+                  </select>
+
                   <button onClick={(e) => handleDeleteProperty(e)}>
                     {deleteButton}
                   </button>
+                  {Array.isArray(value) && (
+                    <div className="add-choices">
+                      <p>Options</p>
+                      {value.map((el) => (
+                        <input
+                          type="text"
+                          className="choices"
+                          required
+                          defaultValue={el}
+                        />
+                      ))}
+                    </div>
+                  )}
                 </div>
-                {Array.isArray(value) && (
-                  <div className="add-choices">
-                    <p>Options</p>
-                    {value.map((el) => (
-                      <input
-                        type="text"
-                        className="choices"
-                        required
-                        defaultValue={el}
-                      />
-                    ))}
-                  </div>
-                )}
               </>
             );
           } else {
@@ -90,15 +91,15 @@ const EditHeaderModal = ({
                       Property Name
                     </label>
                   </div>
-                  <div>
-                    <select
-                      className="valueType"
-                      value={value as string}
-                      disabled
-                    >
-                      <option>{value as string}</option>
-                    </select>
-                  </div>
+
+                  <select
+                    className="valueType"
+                    value={value as string}
+                    disabled
+                  >
+                    {type}
+                  </select>
+
                   <button onClick={(e) => handleDeleteProperty(e)}>
                     {deleteButton}
                   </button>
@@ -111,7 +112,7 @@ const EditHeaderModal = ({
                         type="text"
                         className="choices"
                         required
-                        defaultValue={el}
+                        value={el}
                       />
                     ))}
                   </div>
@@ -130,8 +131,8 @@ const EditHeaderModal = ({
     e.preventDefault();
     const newHeader = await handleAddHeaderForm(e, collectionName);
     console.log(newHeader);
-    await editHeader(newHeader, userDB, collectionName);
-    window.location.reload();
+    // await editHeader(newHeader, userDB, collectionName);
+    // window.location.reload();
   }
   function handleDeleteProperty(
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>

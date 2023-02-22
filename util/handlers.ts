@@ -162,6 +162,7 @@ export async function handleAddHeaderForm(
       const options = el.parentElement?.querySelectorAll(
         ".choices"
       ) as NodeListOf<HTMLInputElement>;
+      console.log(el.parentElement);
       options?.forEach((option: HTMLInputElement) =>
         optionArr.push(option.value)
       );
