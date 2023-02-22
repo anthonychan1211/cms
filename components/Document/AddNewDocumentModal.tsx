@@ -124,7 +124,6 @@ const AddNewDocumentModal = ({
                 [e.target.name]: e.target.value,
               });
             }}
-            required
           />
           <label htmlFor={el} className="form__label">
             {el}
@@ -166,7 +165,6 @@ const AddNewDocumentModal = ({
       );
     } else if (headerObj[el] === "Image URL(s)") {
       let inputField = [];
-      console.log(newDocument[el]);
       for (let i = 0; i < imageURLInput; i++) {
         inputField.push(
           <div className="imageURLGrid">
@@ -198,7 +196,6 @@ const AddNewDocumentModal = ({
                     });
                   }
                 }}
-                required
               />
               <label htmlFor={el} className="form__label">
                 Image URL
@@ -289,7 +286,6 @@ const AddNewDocumentModal = ({
       );
     }
   });
-  console.log(newDocument);
   return (
     <AddEntry
       onSubmit={(e) => {
