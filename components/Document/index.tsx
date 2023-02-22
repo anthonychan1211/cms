@@ -38,7 +38,6 @@ const DocumentSection = ({
   }
   // set column number
   useEffect(() => {
-    const root = document.querySelector(":root") as HTMLElement;
     document.documentElement.style.setProperty(
       "--column-number",
       headerKey.length.toString()
@@ -147,7 +146,7 @@ const DocumentSection = ({
               >
                 + Add New Entry
               </NewEntry>
-              <NewEntry onClick={handleChangeHeader}>Change Header</NewEntry>
+              <NewEntry onClick={handleChangeHeader}>Edit Header</NewEntry>
             </>
           ) : (
             <NewEntry

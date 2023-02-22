@@ -2,6 +2,7 @@ import styled from "styled-components";
 export const StyleHTML = styled.div`
   height: 100vh;
   display: flex;
+
   @media screen and (max-width: 600px) {
     flex-direction: column;
   }
@@ -10,9 +11,11 @@ export const StyleHTML = styled.div`
   h1 {
     margin: 0;
     margin-left: 5%;
-    color: whitesmoke;
+    padding-left: 1%;
+    color: #d1eed1;
     width: 70%;
-    font-size: min(8vw, 70px);
+    font-size: min(8vw, 60px);
+    font-weight: 600;
   }
 `;
 export const StyledLandingPage = styled.div`

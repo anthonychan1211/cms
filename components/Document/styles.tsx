@@ -125,6 +125,20 @@ export const StyledHeaderForm = styled.form`
     padding: 30px 50px;
     .input-section {
       min-height: 80%;
+      .add-choices {
+        p {
+          font-size: 15px;
+          margin-bottom: 0;
+          line-height: 0;
+          margin-top: 20px;
+        }
+        input {
+          width: 100px;
+          padding: 5px;
+          margin-inline: 2px;
+          margin-bottom: 15px;
+        }
+      }
     }
     .add-button {
       color: white;
@@ -364,6 +378,7 @@ export const StyledEditModal = styled.form`
     @media screen and (max-width: 950px) {
       padding: 30px 20px;
     }
+
     .control-panel {
       .delete-button {
         background-color: red;
@@ -525,6 +540,7 @@ export const StyledDeleteCollection = styled.div`
     p {
       font-size: 18px;
     }
+
     .submit-section {
       float: right;
       .cancel-button {
