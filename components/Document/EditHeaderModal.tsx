@@ -130,9 +130,8 @@ const EditHeaderModal = ({
   async function handleEditHeaderSubmit(e: { preventDefault: any }) {
     e.preventDefault();
     const newHeader = await handleAddHeaderForm(e, collectionName);
-    console.log(newHeader);
-    // await editHeader(newHeader, userDB, collectionName);
-    // window.location.reload();
+    await editHeader(newHeader, userDB, collectionName);
+    window.location.reload();
   }
   function handleDeleteProperty(
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
