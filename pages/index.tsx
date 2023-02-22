@@ -76,7 +76,7 @@ const index = () => {
 
   return (
     <StyleHTML>
-      <h1>CMS</h1>
+      <h1>BRICK</h1>
       <StyledLandingPage>
         <StyledBody>
           <h2 className="sign-in open-tab" onClick={handleClick}>

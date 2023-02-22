@@ -43,13 +43,19 @@ export const DeleteCollection = styled.button`
 
 export const StyledDocument = styled.table`
   margin: 0 auto;
-  display: block;
+  display: grid;
   overflow-x: scroll;
-  width: 100%;
-
+  min-width: 100%;
+  grid-template-columns: repeat(var(--column-number), 1fr);
   * {
-    margin: 0;
+    margin: 0 auto;
     padding-inline: 10px;
+    width: 100%;
+  }
+  thead,
+  tbody,
+  tr {
+    display: contents;
   }
   th {
     background-color: #eeeeee;
@@ -57,12 +63,14 @@ export const StyledDocument = styled.table`
     font-size: 15px;
     position: sticky;
   }
+  th,
   td {
-    min-width: fit-content;
+    min-width: max-content;
     font-size: 15px;
     max-height: 300px;
     text-align: center;
-    border-bottom: 1px solid var(--black);
+    border: 1px solid var(--light-grey);
+    overflow: hidden;
   }
 
   tbody > tr {
@@ -85,12 +93,6 @@ export const StyledDocument = styled.table`
     align-items: center;
     * {
       border: none;
-    }
-    img {
-      max-height: 100px;
-      @media screen and (max-width: 950px) {
-        max-height: 60px;
-      }
     }
   }
   @media screen and (max-width: 950px) {
@@ -492,6 +494,47 @@ export const StyledEditModal = styled.form`
       }
       100% {
         transform: translate(24px, 0);
+      }
+    }
+  }
+`;
+
+export const StyledDeleteCollection = styled.div`
+  position: absolute;
+  h4 {
+    margin-top: 0;
+  }
+  width: 100vw;
+  height: 100%;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  background-color: #00000061;
+  .inner-modal {
+    position: relative;
+    width: 50vw;
+    @media screen and (max-width: 950px) {
+      width: 100vw;
+    }
+    overflow: scroll;
+    background-color: #fff;
+    margin: 0 auto;
+    margin-top: 2vh;
+    border-radius: 20px;
+    padding: 30px 50px;
+    p {
+      font-size: 18px;
+    }
+    .submit-section {
+      float: right;
+      .cancel-button {
+        background-color: white;
+        border: 2px solid var(--black);
+        margin-inline: 8px;
+        color: var(--black);
+      }
+      .confirm-button {
+        background-color: red;
       }
     }
   }

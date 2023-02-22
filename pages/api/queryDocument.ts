@@ -11,7 +11,7 @@ async function queryDocument(req: NextApiRequest, res: NextApiResponse) {
     .collection(reqDoc as string)
     .find()
     .toArray();
-  res.send(data);
+  res.json({ data });
 }
 
 export default queryDocument;

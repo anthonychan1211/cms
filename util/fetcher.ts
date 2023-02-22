@@ -97,8 +97,7 @@ export async function getDocument(query: string, userDB: string) {
     }
   );
   const data = await res.json();
-
-  return data;
+  return data.data;
 }
 
 export async function addCollectionFetch(
@@ -133,7 +132,6 @@ export async function getHeader(query: string, userDB: string) {
   return feedBack;
 }
 export async function addHeader(headerObj: {}, userDB: string) {
-  console.log("fetcher", headerObj);
   const res = await fetch("api/addHeader", {
     method: "POST",
     headers: {
@@ -147,7 +145,25 @@ export async function addHeader(headerObj: {}, userDB: string) {
 
   const feedBack = await res.json();
 }
+export async function editHeader(
+  headerObj: {},
+  userDB: string,
+  collectionName: string
+) {
+  const res = await fetch("api/editHeader", {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({
+      headerObj,
+      userDB,
+      collectionName,
+    }),
+  });
 
+  const feedBack = await res.json();
+}
 export async function getCollection(userDB: string) {
   const res = await fetch("api/getCollection", {
     method: "POST",

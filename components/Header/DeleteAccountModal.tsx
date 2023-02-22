@@ -113,6 +113,7 @@ const DeleteAccountModal = ({
           <div className="submit-section">
             <button
               className="cancel-button"
+              type="button"
               onClick={() => {
                 setModal("");
                 setDeleteAccount({
@@ -144,6 +145,7 @@ const DeleteAccountModal = ({
             <div className="submit-section">
               <button
                 className="cancel-button"
+                type="button"
                 onClick={() => {
                   setModal("");
                   setDeleteAccount({
@@ -157,7 +159,11 @@ const DeleteAccountModal = ({
               >
                 Cancel
               </button>
-              <button onClick={handleDeleteConfirm} className="delete-button">
+              <button
+                type="submit"
+                onClick={handleDeleteConfirm}
+                className="delete-button"
+              >
                 Delete Account
               </button>
             </div>

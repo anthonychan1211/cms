@@ -243,7 +243,6 @@ const EditModal = ({
                         ...chosenDocument,
                         [el]: filtered,
                       });
-                      // imageDiv.style.display = "none";
                     }}
                   >
                     {deleteButton}
@@ -391,7 +390,8 @@ const EditModal = ({
   });
   return (
     <StyledEditModal
-      onSubmit={() => {
+      onSubmit={(e) => {
+        e.preventDefault();
         setLoading(true);
         if (Object.keys(newImageURL).length > 0) {
           let result = {};

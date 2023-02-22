@@ -34,7 +34,7 @@ const Header = ({ userName, userDB }: { userName: string; userDB: string }) => {
   return (
     <>
       <StyledHeader>
-        <h1>CMS</h1>
+        <h1>BRICK</h1>
         <p>Welcome Back, {nameCapitalize(userName)}</p>
         <button
           style={{ width: "50px", backgroundColor: "transparent" }}

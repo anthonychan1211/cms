@@ -9,6 +9,8 @@ import { extractHeader, handleDeleteCollection } from "../../util/handlers";
 import AddNewDocumentModal from "./AddNewDocumentModal";
 import AddNewHeaderModal from "./AddNewHeaderModal";
 import EditModal from "./EditModal";
+import EditHeaderModal from "./EditHeaderModal";
+import DeleteCollectionWarning from "./DeleteCollectionWarning";
 
 interface DocumentType {
   headerObj: any;
@@ -37,11 +39,16 @@ const DocumentSection = ({
   // set column number
   useEffect(() => {
     const root = document.querySelector(":root") as HTMLElement;
-    root.style.setProperty("--column-number", `${headerKey.length}`);
+    document.documentElement.style.setProperty(
+      "--column-number",
+      headerKey.length.toString()
+    );
   });
 
   const [editModal, setEditModal] = useState("");
   const [addModal, setAddModal] = useState<string>("");
+  const [editHeaderModal, setEditHeaderModal] = useState("");
+  const [deleteCollectionWarning, setDeleteCollectionWarning] = useState(false);
   const mappedHeader = headerKey.map((el: string) => {
     return (
       <th key={el} className="header">
@@ -66,11 +73,13 @@ const DocumentSection = ({
             }}
           >
             {headerKey.map((el: string) => {
-              if (headerObj[el] === "Image(s)") {
+              if (!headerObj[el]) {
+                return;
+              } else if (headerObj[el] === "Image(s)") {
                 if (item[el]) {
                   if (item[el].length <= 9) {
                     return (
-                      <td key={item[el]}>
+                      <td key={item[el]} style={{ minWidth: "300px" }}>
                         <div className="collage">
                           {item[el].map((image: string, i: number) => {
                             return <img key={i} src={image} alt={image} />;
@@ -81,15 +90,10 @@ const DocumentSection = ({
                   } else {
                     const cutVersion = item[el].slice(0, 8);
                     return (
-                      <td>
-                        <div className="gallery-grid">
+                      <td style={{ minWidth: "300px" }}>
+                        <div className="collage">
                           {cutVersion.map((image: string, i: number) => (
-                            <img
-                              style={{ maxHeight: " 100px" }}
-                              key={i}
-                              src={image}
-                              alt={image}
-                            ></img>
+                            <img key={i} src={image} alt={image}></img>
                           ))}
                           <p style={{ alignSelf: "center" }}>...and more</p>
                         </div>
@@ -99,7 +103,7 @@ const DocumentSection = ({
                 }
               } else if (headerObj[el] === "Image URL(s)") {
                 return (
-                  <td>
+                  <td style={{ minWidth: "300px" }}>
                     <div className="collage">
                       {item[el]?.map((image: string, i: number) => {
                         return <img key={i} src={image} alt={image} />;
@@ -124,25 +128,27 @@ const DocumentSection = ({
       }
     });
 
+  function handleChangeHeader() {
+    setEditHeaderModal(collectionName);
+  }
   return (
     <StyledDocumentSection>
       {collectionName && (
         <div>
-          <DeleteCollection
-            onClick={() =>
-              handleDeleteCollection(userDB as string, collectionName as string)
-            }
-          >
+          <DeleteCollection onClick={() => setDeleteCollectionWarning(true)}>
             Delete Collection
           </DeleteCollection>
           {mappedHeader.length > 0 ? (
-            <NewEntry
-              onClick={() => {
-                setAddModal("entry");
-              }}
-            >
-              + Add New Entry
-            </NewEntry>
+            <>
+              <NewEntry
+                onClick={() => {
+                  setAddModal("entry");
+                }}
+              >
+                + Add New Entry
+              </NewEntry>
+              <NewEntry onClick={handleChangeHeader}>Change Header</NewEntry>
+            </>
           ) : (
             <NewEntry
               onClick={() => {
@@ -190,6 +196,20 @@ const DocumentSection = ({
           headerKey={headerKey}
           setEditModal={setEditModal}
           userDB={userDB}
+        />
+      )}
+      {editHeaderModal !== "" && (
+        <EditHeaderModal
+          setEditHeaderModal={setEditHeaderModal}
+          collectionName={collectionName}
+          userDB={userDB}
+        />
+      )}
+      {deleteCollectionWarning && (
+        <DeleteCollectionWarning
+          setDeleteCollectionWarning={setDeleteCollectionWarning}
+          userDB={userDB}
+          collectionName={collectionName}
         />
       )}
     </StyledDocumentSection>

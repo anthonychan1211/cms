@@ -4,21 +4,9 @@ import {
   userIsExisted,
   confirmPasswordMatch,
 } from "../util/validation";
-import {
-  signUpFetch,
-  logInFetch,
-  addHeader,
-  updateDocument,
-} from "../util/fetcher";
+import { signUpFetch, logInFetch, updateDocument } from "../util/fetcher";
 import { forgetPassword } from "../util/fetcher";
-import React, {
-  ChangeEvent,
-  Dispatch,
-  FormEvent,
-  MouseEvent,
-  SetStateAction,
-} from "react";
-import { resolve } from "path";
+import React, { ChangeEvent, FormEvent, MouseEvent } from "react";
 
 export async function handleRegister(
   e:
@@ -247,12 +235,12 @@ export async function handleSubmitAddDocument(
         }
         el.splice(1, 1, arr);
 
-        handleAddDocumentAPIFetch(
-          Object.fromEntries(entries),
-          collectionName,
-          userDB,
-          setLoading
-        );
+        // handleAddDocumentAPIFetch(
+        //   Object.fromEntries(entries),
+        //   collectionName,
+        //   userDB,
+        //   setLoading
+        // );
       }
     }
   });
@@ -338,7 +326,7 @@ export async function handleEdit(
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
 ) {
   const entries = Object.entries(chosenDocument);
-
+  console.log(entries);
   for await (const el of entries) {
     if (Array.isArray(el[1])) {
       const uploaded = await uploadImage(el[1]);
