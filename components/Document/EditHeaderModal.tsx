@@ -45,6 +45,7 @@ const EditHeaderModal = ({
                       name={key}
                       id={key}
                       defaultValue={key}
+                      disabled
                     />
                     <label htmlFor={key} className="form__label">
                       Property Name
@@ -86,6 +87,7 @@ const EditHeaderModal = ({
                       name={key}
                       id={key}
                       defaultValue={key}
+                      disabled
                     />
                     <label htmlFor={key} className="form__label">
                       Property Name
@@ -127,6 +129,7 @@ const EditHeaderModal = ({
                       name={key}
                       id={key}
                       defaultValue={key}
+                      disabled
                     />
                     <label htmlFor={key} className="form__label">
                       Property Name
