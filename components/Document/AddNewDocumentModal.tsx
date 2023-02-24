@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AddEntry } from "./styles";
 import {
   handleImagePreview,
@@ -24,7 +24,9 @@ const AddNewDocumentModal = ({
   const [newDocument, setNewDocument] = useState<React.SetStateAction<any>>({});
   const [warning, setWarning] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [imageURLInput, setImageURLInput] = useState(1);
+  const [imageURLInput, setImageURLInput] = useState<React.SetStateAction<any>>(
+    {}
+  );
   function handleDeleteImage(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     const imageDiv = (e.target as HTMLButtonElement).closest(
       ".image"
@@ -38,7 +40,21 @@ const AddNewDocumentModal = ({
 
     setNewDocument({ ...newDocument, [propertyName]: filteredArr });
   }
+  useEffect(() => {
+    for (const el in headerObj) {
+      const updatedImageURLInput: { [key: string]: number } = {};
+      if (headerObj[el] === "Image URL(s)") {
+        for (const el in headerObj) {
+          if (headerObj[el] === "Image URL(s)") {
+            updatedImageURLInput[el] = 1;
+          }
+        }
+      }
+      setImageURLInput(updatedImageURLInput);
+    }
+  }, [headerObj]);
   const mappedAddNewDocumentForm = headerKey.map((el: string) => {
+    console.log(imageURLInput);
     // create ID
     if (headerObj[el] === "UniqueID") {
       return (
@@ -165,7 +181,7 @@ const AddNewDocumentModal = ({
       );
     } else if (headerObj[el] === "Image URL(s)") {
       let inputField = [];
-      for (let i = 0; i < imageURLInput; i++) {
+      for (let i = 0; i < imageURLInput[el]; i++) {
         inputField.push(
           <div className="imageURLGrid">
             <div className="form__group field">
@@ -254,7 +270,14 @@ const AddNewDocumentModal = ({
         <div id={el}>
           <p className="title">{el}</p>
           {inputField}
-          <button onClick={() => setImageURLInput(imageURLInput + 1)}>
+          <button
+            onClick={() =>
+              setImageURLInput({
+                ...imageURLInput,
+                [el]: imageURLInput[el] + 1,
+              })
+            }
+          >
             Add URL
           </button>
         </div>

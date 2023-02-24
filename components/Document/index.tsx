@@ -99,6 +99,8 @@ const DocumentSection = ({
                       </td>
                     );
                   }
+                } else {
+                  return <td></td>;
                 }
               } else if (headerObj[el] === "Image URL(s)") {
                 return (

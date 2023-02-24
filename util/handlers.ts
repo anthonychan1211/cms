@@ -298,7 +298,7 @@ export async function uploadImage(el: string[]) {
       partition[1].push(file.secure_url);
     }
   }
-  console.log(partition[1]);
+
   return partition[1];
 }
 
@@ -327,7 +327,6 @@ export async function handleEdit(
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
 ) {
   const entries = Object.entries(chosenDocument);
-  console.log(entries);
   for await (const el of entries) {
     if (Array.isArray(el[1])) {
       const uploaded = await uploadImage(el[1]);

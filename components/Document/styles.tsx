@@ -398,6 +398,9 @@ export const StyledEditModal = styled.form`
     }
     .input-section {
       min-height: 80%;
+      p {
+        font-size: 16px;
+      }
     }
     .gallery-grid {
       display: grid;

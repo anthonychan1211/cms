@@ -33,7 +33,48 @@ const EditHeaderModal = ({
 
       const mappedHeaderField = Object.entries(filtered)?.map(
         ([key, value]) => {
-          if (Array.isArray(value)) {
+          if (value === "UniqueID") {
+            return (
+              <>
+                <div className="property-box">
+                  <div className="form__group field">
+                    <input
+                      type="text"
+                      className="form__field propertyName"
+                      placeholder={key}
+                      name={key}
+                      id={key}
+                      defaultValue={key}
+                    />
+                    <label htmlFor={key} className="form__label">
+                      Property Name
+                    </label>
+                  </div>
+
+                  <select
+                    className="valueType"
+                    value={value as string}
+                    disabled
+                  >
+                    {type}
+                  </select>
+                </div>
+                {Array.isArray(value) && (
+                  <div className="add-choices">
+                    <p>Options</p>
+                    {value.map((el) => (
+                      <input
+                        type="text"
+                        className="choices"
+                        required
+                        value={el}
+                      />
+                    ))}
+                  </div>
+                )}
+              </>
+            );
+          } else if (Array.isArray(value)) {
             return (
               <>
                 <div className="property-box">
