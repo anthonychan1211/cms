@@ -82,22 +82,26 @@ export async function forgetPassword(email: string) {
 }
 
 export async function getDocument(query: string, userDB: string) {
-  const res = await fetch(
-    `api/queryDocument/?` +
-      new URLSearchParams({
-        query,
-        userDB,
-      }),
+  try {
+    const res = await fetch(
+      `api/queryDocument/?` +
+        new URLSearchParams({
+          query,
+          userDB,
+        }),
 
-    {
-      method: "GET",
-      headers: {
-        "Content-type": "appliction/json",
-      },
-    }
-  );
-  const data = await res.json();
-  return data.data;
+      {
+        method: "GET",
+        headers: {
+          "Content-type": "appliction/json",
+        },
+      }
+    );
+    const data = await res.json();
+    return data.data;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export async function addCollectionFetch(

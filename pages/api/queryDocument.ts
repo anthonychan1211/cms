@@ -1,6 +1,10 @@
 import clientPromise from "../../lib/mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
-
+export const config = {
+  api: {
+    responseLimit: false,
+  },
+};
 async function queryDocument(req: NextApiRequest, res: NextApiResponse) {
   const client = await clientPromise;
   const reqDoc = req.query.query;
