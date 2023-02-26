@@ -15,6 +15,7 @@ async function queryDocument(req: NextApiRequest, res: NextApiResponse) {
     .collection(reqDoc as string)
     .find()
     .toArray();
+  console.log(data);
   res.json({ data });
 }
 

@@ -213,9 +213,9 @@ export async function handleSubmitAddDocument(
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
 ) {
   e.preventDefault();
+
   const entries = Object.entries(newDocument);
-  console.log(entries);
-  entries.forEach(async (el: any) => {
+  for (const el of entries) {
     if (typeof el[1] === "object") {
       if (Array.isArray(el[1])) {
         console.log("run");
@@ -232,20 +232,20 @@ export async function handleSubmitAddDocument(
             }
           );
           const file = await res.json();
+
           if (file) arr.push(file.secure_url);
         }
         el.splice(1, 1, arr);
-
-        // handleAddDocumentAPIFetch(
-        //   Object.fromEntries(entries),
-        //   collectionName,
-        //   userDB,
-        //   setLoading
-        // );
       }
     }
-  });
-  handleAddDocumentAPIFetch(newDocument, collectionName, userDB, setLoading);
+  }
+
+  handleAddDocumentAPIFetch(
+    Object.fromEntries(entries),
+    collectionName,
+    userDB,
+    setLoading
+  );
 }
 export async function handleAddDocumentAPIFetch(
   newDoc: {},
@@ -282,6 +282,7 @@ export async function uploadImage(el: string[]) {
     },
     [[], []]
   );
+
   for (let i = 0; i < partition[0].length; i++) {
     const data = new FormData();
     data.append("file", partition[0][i]);
@@ -293,12 +294,14 @@ export async function uploadImage(el: string[]) {
         body: data,
       }
     );
+
     const file = await res.json();
-    if (file) {
+    console.log(file, "cloudinary file");
+    if (file.secure_url) {
       partition[1].push(file.secure_url);
     }
   }
-
+  console.log(partition[1], "push result");
   return partition[1];
 }
 
@@ -315,7 +318,6 @@ export async function handleDeleteDocument(
     body: JSON.stringify({ chosenDocument, collectionName, userDB }),
   });
   const feedBack = await res.json();
-  console.log(feedBack);
   window.location.reload();
 }
 
@@ -327,20 +329,18 @@ export async function handleEdit(
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
 ) {
   const entries = Object.entries(chosenDocument);
-  for await (const el of entries) {
+  for (const el of entries) {
     if (Array.isArray(el[1])) {
       const uploaded = await uploadImage(el[1]);
       el[1].splice(0, el[1].length, ...uploaded);
-      console.log(Object.fromEntries(entries));
-      updateDocument(
-        Object.fromEntries(entries),
-        collectionName,
-        userDB,
-        key,
-        setLoading
-      );
     }
   }
-  updateDocument(chosenDocument, collectionName, userDB, key, setLoading);
+  updateDocument(
+    Object.fromEntries(entries),
+    collectionName,
+    userDB,
+    key,
+    setLoading
+  );
   return;
 }

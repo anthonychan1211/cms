@@ -200,8 +200,8 @@ export async function updateDocument(
     }),
   });
   const feedBack = await res.json();
+
   if (res.status === 200) {
-    console.log(feedBack.message);
     setLoading(false);
     window.location.reload();
   } else {

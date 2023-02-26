@@ -78,7 +78,6 @@ const EditModal = ({
   }
 
   const mappedChosenDocumentForm = headerKey?.map((el: string) => {
-    console.log(headerObj[el]);
     if (headerObj[el] === "UniqueID") {
       // ID
       return (

@@ -54,7 +54,6 @@ const AddNewDocumentModal = ({
     }
   }, [headerObj]);
   const mappedAddNewDocumentForm = headerKey.map((el: string) => {
-    console.log(imageURLInput);
     // create ID
     if (headerObj[el] === "UniqueID") {
       return (
