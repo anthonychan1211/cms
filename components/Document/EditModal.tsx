@@ -97,38 +97,94 @@ const EditModal = ({
       );
     }
     // if the type is select and the value is an array
-    else if (Array.isArray(headerObj[el])) {
-      if (!Object.hasOwn(headerObj, el))
-        setChosenDocument({
-          ...chosenDocument,
-          [el]: headerObj[el][0],
-        });
-      return (
-        <>
-          <label style={{ fontSize: "18px" }}>{el}: </label>
-          <select
-            disabled={!editMode}
-            defaultValue={chosenDocument[el]}
-            style={{
-              fontSize: "15px",
-              padding: "5px",
-              margin: "10px",
-              marginTop: "30px",
-            }}
-            name={el}
-            onChange={(e) => {
-              setChosenDocument({
-                ...chosenDocument,
-                [e.target.name]: e.target.value,
-              });
-            }}
-          >
-            {headerObj[el].map((option: string) => (
-              <option>{option}</option>
-            ))}
-          </select>
-        </>
-      );
+    else if (typeof headerObj[el] === "object") {
+      if (headerObj[el]["Select"]) {
+        if (!Object.hasOwn(headerObj, el))
+          setChosenDocument({
+            ...chosenDocument,
+            [el]: headerObj[el][0],
+          });
+        return (
+          <>
+            <label style={{ fontSize: "18px" }}>{el}: </label>
+            <select
+              disabled={!editMode}
+              defaultValue={chosenDocument[el]}
+              style={{
+                fontSize: "15px",
+                padding: "5px",
+                margin: "10px",
+                marginTop: "30px",
+              }}
+              name={el}
+              onChange={(e) => {
+                setChosenDocument({
+                  ...chosenDocument,
+                  [e.target.name]: e.target.value,
+                });
+              }}
+            >
+              {headerObj[el]["Select"].map((option: string) => (
+                <option>{option}</option>
+              ))}
+            </select>
+          </>
+        );
+      } else if (headerObj[el]["CheckBox"]) {
+        console.log(headerObj);
+        return (
+          <div>
+            <label style={{ fontSize: "18px" }}>{el}: </label>
+            <div className="checkbox-container">
+              {headerObj[el]["CheckBox"].map((value: string) => {
+                return (
+                  <div className="checkbox-box">
+                    <input
+                      type="checkbox"
+                      name={value}
+                      value={value}
+                      disabled={editMode ? false : true}
+                      checked={
+                        chosenDocument[el]?.includes(value) ? true : false
+                      }
+                      onChange={(e) => {
+                        if (e.currentTarget.checked) {
+                          if (chosenDocument[el]) {
+                            setChosenDocument({
+                              ...chosenDocument,
+                              [el]: [
+                                ...chosenDocument[el],
+                                e.currentTarget.value,
+                              ],
+                            });
+                          } else {
+                            setChosenDocument({
+                              ...chosenDocument,
+                              [el]: [e.currentTarget.value],
+                            });
+                          }
+                        } else {
+                          setChosenDocument({
+                            ...chosenDocument,
+                            [el]: [
+                              ...chosenDocument[el].filter(
+                                (el: string) => el !== e.currentTarget.value
+                              ),
+                            ],
+                          });
+                        }
+                      }}
+                    />
+                    <label style={{ fontSize: "18px" }} htmlFor={value}>
+                      {value}
+                    </label>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      }
     } else if (headerObj[el] === "TextArea") {
       return (
         <div className="form__group field">
@@ -572,7 +628,7 @@ const EditModal = ({
       );
     }
   });
-
+  console.log(chosenDocument);
   return (
     <StyledEditModal
       onSubmit={(e) => {

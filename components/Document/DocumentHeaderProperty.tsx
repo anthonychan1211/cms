@@ -6,6 +6,7 @@ const DocumentHeaderProperty = () => {
     "TextArea",
     "Number",
     "Select",
+    "CheckBox",
     "Date",
     "Image(s)",
     "Image URL(s)",
@@ -41,7 +42,7 @@ const DocumentHeaderProperty = () => {
       <button onClick={(e) => e.currentTarget.parentElement?.remove()}>
         {deleteButton}
       </button>
-      {value === "Select" && (
+      {(value === "Select" || value === "CheckBox") && (
         <div className="add-choices">
           <p>Options</p>
           {choice}

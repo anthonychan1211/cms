@@ -21,6 +21,7 @@ const EditHeaderModal = ({
     "TextArea",
     "Number",
     "Select",
+    "CheckBox",
     "Date",
     "Image(s)",
     "Image URL(s)",
@@ -32,7 +33,7 @@ const EditHeaderModal = ({
       const { Collection, _id, ...filtered } = headerObj;
 
       const mappedHeaderField = Object.entries(filtered)?.map(
-        ([key, value]) => {
+        ([key, value]: [string, any]) => {
           if (value === "UniqueID") {
             return (
               <>
@@ -75,36 +76,38 @@ const EditHeaderModal = ({
                 )}
               </>
             );
-          } else if (Array.isArray(value)) {
-            return (
-              <>
-                <div className="property-box">
-                  <div className="form__group field">
-                    <input
-                      type="text"
-                      className="form__field propertyName"
-                      placeholder={key}
-                      name={key}
-                      id={key}
-                      defaultValue={key}
-                      disabled
-                    />
-                    <label htmlFor={key} className="form__label">
-                      Property Name
-                    </label>
-                  </div>
+          } else if (typeof value === "object") {
+            console.log(value!["Select"]);
+            if (value!["Select"]) {
+              return (
+                <>
+                  <div className="property-box">
+                    <div className="form__group field">
+                      <input
+                        type="text"
+                        className="form__field propertyName"
+                        placeholder={key}
+                        name={key}
+                        id={key}
+                        defaultValue={key}
+                        disabled
+                      />
+                      <label htmlFor={key} className="form__label">
+                        Property Name
+                      </label>
+                    </div>
 
-                  <select className="valueType" value="Select" disabled>
-                    <option>Select</option>
-                  </select>
+                    <select className="valueType" value="Select" disabled>
+                      <option>Select</option>
+                    </select>
 
-                  <button onClick={(e) => handleDeleteProperty(e)}>
-                    {deleteButton}
-                  </button>
-                  {Array.isArray(value) && (
+                    <button onClick={(e) => handleDeleteProperty(e)}>
+                      {deleteButton}
+                    </button>
+
                     <div className="add-choices">
                       <p>Options</p>
-                      {value.map((el) => (
+                      {value["Select"].map((el: string) => (
                         <input
                           type="text"
                           className="choices"
@@ -113,10 +116,51 @@ const EditHeaderModal = ({
                         />
                       ))}
                     </div>
-                  )}
-                </div>
-              </>
-            );
+                  </div>
+                </>
+              );
+            } else if (value!["CheckBox"]) {
+              return (
+                <>
+                  <div className="property-box">
+                    <div className="form__group field">
+                      <input
+                        type="text"
+                        className="form__field propertyName"
+                        placeholder={key}
+                        name={key}
+                        id={key}
+                        defaultValue={key}
+                        disabled
+                      />
+                      <label htmlFor={key} className="form__label">
+                        Property Name
+                      </label>
+                    </div>
+
+                    <select className="valueType" value="CheckBox" disabled>
+                      <option>CheckBox</option>
+                    </select>
+
+                    <button onClick={(e) => handleDeleteProperty(e)}>
+                      {deleteButton}
+                    </button>
+
+                    <div className="add-choices">
+                      <p>Options</p>
+                      {value["CheckBox"].map((el: string) => (
+                        <input
+                          type="text"
+                          className="choices"
+                          required
+                          defaultValue={el}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </>
+              );
+            }
           } else {
             return (
               <>
@@ -182,6 +226,7 @@ const EditHeaderModal = ({
   ) {
     e.currentTarget.parentElement?.remove();
   }
+
   return (
     <StyledHeaderForm>
       <div className="inner-modal">

@@ -233,6 +233,11 @@ export const AddEntry = styled.form`
         min-height: 50%;
       }
     }
+    .checkbox-container {
+      display: flex;
+      width: 100%;
+      gap: 20px;
+    }
     .imageURLGrid {
       display: grid;
       grid-template-columns: 5fr 2fr 1fr;
@@ -401,6 +406,11 @@ export const StyledEditModal = styled.form`
       p {
         font-size: 16px;
       }
+    }
+    .checkbox-container {
+      display: grid;
+      grid-template-columns: auto auto auto;
+      gap: 20px;
     }
     .gallery-grid {
       display: grid;

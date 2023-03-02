@@ -90,39 +90,86 @@ const AddNewDocumentModal = ({
           )}
         </div>
       );
-    } else if (Array.isArray(headerObj[el])) {
-      // if the type is select and the value is an array
-      if (!Object.hasOwn(newDocument, el))
-        setNewDocument({
-          ...newDocument,
-          [el]: headerObj[el][0],
-        });
-
-      return (
-        <>
-          <label style={{ fontSize: "18px" }}>{el}: </label>
-          <select
-            defaultValue={headerObj[el][0]}
-            style={{
-              fontSize: "15px",
-              padding: "5px",
-              margin: "10px",
-              marginTop: "30px",
-            }}
-            name={el}
-            onChange={(e) => {
-              setNewDocument({
-                ...newDocument,
-                [e.target.name]: e.target.value,
-              });
-            }}
-          >
-            {headerObj[el].map((option: string) => (
-              <option>{option}</option>
-            ))}
-          </select>
-        </>
-      );
+    } else if (typeof headerObj[el] === "object") {
+      // if the type is select and the value is an object
+      if (headerObj[el]["Select"]) {
+        if (!Object.hasOwn(newDocument, el))
+          setNewDocument({
+            ...newDocument,
+            [el]: headerObj[el]["Select"][0],
+          });
+        return (
+          <>
+            <label style={{ fontSize: "18px" }}>{el}: </label>
+            <select
+              defaultValue={headerObj[el][0]}
+              style={{
+                fontSize: "15px",
+                padding: "5px",
+                margin: "10px",
+                marginTop: "30px",
+              }}
+              name={el}
+              onChange={(e) => {
+                setNewDocument({
+                  ...newDocument,
+                  [e.target.name]: e.target.value,
+                });
+              }}
+            >
+              {headerObj[el]["Select"].map((option: string) => (
+                <option>{option}</option>
+              ))}
+            </select>
+          </>
+        );
+      } else if (headerObj[el]["CheckBox"]) {
+        return (
+          <div>
+            <label style={{ fontSize: "18px" }}>{el}: </label>
+            <div className="checkbox-container">
+              {headerObj[el]["CheckBox"].map((value: string) => {
+                return (
+                  <div>
+                    <input
+                      type="checkbox"
+                      name={value}
+                      value={value}
+                      onChange={(e) => {
+                        if (e.currentTarget.checked) {
+                          if (newDocument[el]) {
+                            setNewDocument({
+                              ...newDocument,
+                              [el]: [...newDocument[el], e.currentTarget.value],
+                            });
+                          } else {
+                            setNewDocument({
+                              ...newDocument,
+                              [el]: [e.currentTarget.value],
+                            });
+                          }
+                        } else {
+                          setNewDocument({
+                            ...newDocument,
+                            [el]: [
+                              ...newDocument[el].filter(
+                                (el: string) => el !== e.currentTarget.value
+                              ),
+                            ],
+                          });
+                        }
+                      }}
+                    />
+                    <label style={{ fontSize: "18px" }} htmlFor={value}>
+                      {value}
+                    </label>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      }
     } else if (headerObj[el] === "TextArea") {
       return (
         <div className="form__group field">
@@ -308,6 +355,7 @@ const AddNewDocumentModal = ({
       );
     }
   });
+
   return (
     <AddEntry
       onSubmit={(e) => {
@@ -316,7 +364,8 @@ const AddNewDocumentModal = ({
           newDocument,
           collectionName,
           userDB,
-          setLoading
+          setLoading,
+          headerObj
         );
         setLoading(true);
       }}

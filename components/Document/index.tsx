@@ -112,6 +112,12 @@ const DocumentSection = ({
                     </div>
                   </td>
                 );
+              } else if (
+                typeof headerObj[el] === "object" &&
+                headerObj[el]["CheckBox"]
+              ) {
+                const list = item[el]?.join(", ");
+                return <td>{list}</td>;
               } else {
                 return (
                   <td

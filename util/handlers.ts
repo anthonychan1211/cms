@@ -148,7 +148,7 @@ export async function handleAddHeaderForm(
 ) {
   e.preventDefault();
   let properties: string[] = [];
-  let type: Array<string | string[]> = [];
+  let type: Array<string | { [key: string]: string[] }> = [];
   const input = document.querySelectorAll(
     ".propertyName"
   ) as NodeListOf<HTMLInputElement>;
@@ -157,16 +157,16 @@ export async function handleAddHeaderForm(
   ) as NodeListOf<HTMLInputElement>;
   input.forEach((el) => properties.push(el.value));
   select.forEach((el) => {
-    if (el.value === "Select") {
+    if (el.value === "Select" || el.value === "CheckBox") {
       let optionArr: string[] = [];
       const options = el.parentElement?.querySelectorAll(
         ".choices"
       ) as NodeListOf<HTMLInputElement>;
-      console.log(el.parentElement);
+
       options?.forEach((option: HTMLInputElement) =>
         optionArr.push(option.value)
       );
-      type.push(optionArr);
+      type.push({ [el.value]: optionArr });
     } else {
       type.push(el.value);
     }
@@ -210,15 +210,15 @@ export async function handleSubmitAddDocument(
   newDocument: {},
   collectionName: string,
   userDB: string,
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  headerObj: { [key: string]: string }
 ) {
   e.preventDefault();
 
   const entries = Object.entries(newDocument);
   for (const el of entries) {
     if (typeof el[1] === "object") {
-      if (Array.isArray(el[1])) {
-        console.log("run");
+      if (Array.isArray(el[1]) && headerObj[el[0]] === "Image(s)") {
         let arr: string[] = [];
         for (let i = 0; i < el[1].length; i++) {
           const data = new FormData();
