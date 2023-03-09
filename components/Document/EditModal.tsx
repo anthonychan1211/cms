@@ -63,6 +63,7 @@ const EditModal = ({
       return;
     }
   }, [chosenDocument]);
+
   function handleDeleteImage(e: MouseEvent) {
     const imageDiv = (e.target as HTMLButtonElement).closest(
       ".image"
@@ -437,7 +438,7 @@ const EditModal = ({
                   const imageDiv = (e.target as HTMLButtonElement).closest(
                     ".imageURLGrid"
                   ) as HTMLElement;
-                  const filtered = newImageURL[el].filter(
+                  const filtered = newImageURL[el]?.filter(
                     (deleteImage: string) => {
                       return (
                         deleteImage !==
@@ -468,11 +469,10 @@ const EditModal = ({
                 <button
                   type="button"
                   onClick={() => {
-                    console.log(imageURLInput);
-
+                    console.log("run this");
                     setImageURLInput({
                       ...imageURLInput,
-                      [el]: imageURLInput[el] + 1,
+                      [el]: imageURLInput[el] + 1 || 1,
                     });
                   }}
                 >
@@ -483,7 +483,6 @@ const EditModal = ({
           </div>
         );
       } else if (!chosenDocument[el]) {
-        console.log("run");
         let inputField = [];
         for (let i = 0; i < imageURLInput[el]; i++) {
           inputField.push(
@@ -586,9 +585,10 @@ const EditModal = ({
                 <button
                   type="button"
                   onClick={() => {
+                    console.log("run this");
                     setImageURLInput({
                       ...imageURLInput,
-                      [el]: imageURLInput[el] + 1,
+                      [el]: imageURLInput[el] + 1 || 1,
                     });
                   }}
                 >
@@ -628,7 +628,7 @@ const EditModal = ({
       );
     }
   });
-  console.log(chosenDocument);
+  console.log(imageURLInput);
   return (
     <StyledEditModal
       onSubmit={(e) => {

@@ -291,7 +291,7 @@ const AddNewDocumentModal = ({
                 const imageDiv = (e.target as HTMLButtonElement).closest(
                   ".imageURLGrid"
                 ) as HTMLElement;
-                const filtered = newDocument[el].filter(
+                const filtered = newDocument[el]?.filter(
                   (deleteImage: string) => {
                     return (
                       deleteImage !==
@@ -317,10 +317,11 @@ const AddNewDocumentModal = ({
           <p className="title">{el}</p>
           {inputField}
           <button
+            type="button"
             onClick={() =>
               setImageURLInput({
                 ...imageURLInput,
-                [el]: imageURLInput[el] + 1,
+                [el]: imageURLInput[el] + 1 || 1,
               })
             }
           >
